@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/components/service_option/service_option.dart';
 import 'package:hrm_application/views/employee_inf_manage/employees.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:hrm_application/widgets/widget.dart';
@@ -15,6 +16,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: appIcon(context),
         backgroundColor: authThemeColor,
+        automaticallyImplyLeading: false,
         centerTitle: true,
         actions: [
           IconButton(
