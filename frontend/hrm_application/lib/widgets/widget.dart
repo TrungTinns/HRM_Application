@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide VoidCallback;
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -60,16 +59,11 @@ Widget searchBoxWithFilterTable(BuildContext context, String hintText, Widget fi
         ),
         Positioned(
           right: 0,
-          top: 0,
           child: Container(
             width: 40.0,
             height: 40.0,
             decoration: BoxDecoration(
               color: termTextColor,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(5.0),
-                bottomRight: Radius.circular(5.0),
-              ),
             ),
             child: filter,
           ),
@@ -227,6 +221,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),
+                  width: size.width,
                   child: Text(option, style: TextStyle(color: termTextColor, fontSize: 14)), 
                 ),
               );

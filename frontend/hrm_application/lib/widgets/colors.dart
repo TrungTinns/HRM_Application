@@ -5,5 +5,4 @@ const textColor = Color.fromRGBO(255, 255, 255, 1);
 const primaryColor = Color.fromRGBO(100, 4, 164, 1);
 const secondaryColor = Color.fromRGBO(246, 178, 43, 1);
 const snackBarColor = Color.fromRGBO(38, 42, 54, 1);
-
 const termTextColor = Color.fromRGBO(154, 159, 171, 1);

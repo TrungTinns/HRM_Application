@@ -28,7 +28,6 @@ class _EmpConfigurationState extends State<empConfiguration> {
       _closeDropdown();
     } else {
       _openDropdown();
-
     }
   }
 
@@ -49,9 +48,6 @@ class _EmpConfigurationState extends State<empConfiguration> {
     widget.onClose();
     _isOpen = false;
   }
-
-
-//thêm mouseregion
 
   OverlayEntry _createOverlayEntry(Size size, Offset offset) {
     return OverlayEntry(
@@ -207,7 +203,7 @@ class _EmpConfigurationState extends State<empConfiguration> {
             children: [
               Text(
                 'Configuration',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(color: textColor, fontSize: 16),
               ),
             ]
           ),

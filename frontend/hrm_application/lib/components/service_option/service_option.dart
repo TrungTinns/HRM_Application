@@ -19,7 +19,7 @@ Widget serviceButton(BuildContext context, IconData icon, String label, Widget p
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: secondaryColor, 
-              backgroundColor: primaryColor,
+              backgroundColor: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0), 
               ),
@@ -27,7 +27,7 @@ Widget serviceButton(BuildContext context, IconData icon, String label, Widget p
             child: Center(child: Icon(icon, size: 50)), 
           ),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 8),
         Text(
           label,
           textAlign: TextAlign.center,
