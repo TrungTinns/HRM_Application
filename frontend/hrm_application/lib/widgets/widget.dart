@@ -45,9 +45,10 @@ Widget searchBoxWithFilterTable(BuildContext context, String hintText, Widget fi
             children: [
               Expanded(
                 child: TextField(
+                  style: TextStyle(color: textColor, fontSize: 16.0),
                   decoration: InputDecoration(
                     hintText: hintText,
-                    hintStyle: TextStyle(color: textColor),
+                    hintStyle: TextStyle(color: termTextColor),
                     prefixIcon: Icon(Icons.search, color: textColor),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 14.0),
@@ -148,118 +149,3 @@ Widget customButton(BuildContext context, {IconData? icon, required Widget navig
 }
 
 
-class CustomDropdownButton extends StatefulWidget {
-  final String title;
-  final List<String> options;
-  final void Function(String) onSelect;
-  final bool isActive;
-  final VoidCallback onOpen;
-  final VoidCallback onClose;
-
-  CustomDropdownButton({
-    required this.title,
-    required this.options,
-    required this.onSelect,
-    required this.isActive,
-    required this.onOpen,
-    required this.onClose,
-  });
-
-  @override
-  _CustomDropdownButtonState createState() => _CustomDropdownButtonState();
-}
-
-class _CustomDropdownButtonState extends State<CustomDropdownButton> {
-  GlobalKey _key = GlobalKey();
-  OverlayEntry? _overlayEntry;
-  bool _isHovered = false;
-  bool _isOpen = false;
-
-  void _toggleDropdown() {
-    if (_isOpen) {
-      _closeDropdown();
-    } else {
-      _openDropdown();
-    }
-  }
-
-  void _openDropdown() {
-    RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-
-    _overlayEntry = _createOverlayEntry(size, offset);
-    Overlay.of(context)?.insert(_overlayEntry!);
-    widget.onOpen();
-    _isOpen = true;
-  }
-
-  void _closeDropdown() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-    widget.onClose();
-    _isOpen = false;
-  }
-
-  OverlayEntry _createOverlayEntry(Size size, Offset offset) {
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        width: size.width,
-        left: offset.dx,
-        top: offset.dy + size.height,
-        child: Material(
-          color: snackBarColor,
-          elevation: 4.0,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.options.map((String option) {
-              return InkWell(
-                onTap: () {
-                  widget.onSelect(option);
-                  _closeDropdown();
-                },
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  width: size.width,
-                  child: Text(option, style: TextStyle(color: termTextColor, fontSize: 14)), 
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      key: _key,
-      onTap: _toggleDropdown,
-      child: MouseRegion(
-        onEnter: (_) {
-          setState(() {
-            _isHovered = true;
-          });
-        },
-        onExit: (_) {
-          setState(() {
-            _isHovered = false;
-          });
-        },
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: _isHovered ? Colors.grey : snackBarColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            widget.title,
-            style: TextStyle(color: Colors.white, fontSize: 16), 
-          ),
-        ),
-      ),
-    );
-  }
-}
