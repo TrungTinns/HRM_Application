@@ -1,42 +1,8 @@
+import 'package:flutter/material.dart' hide VoidCallback;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-Widget serviceButton(BuildContext context, IconData icon, String label, Widget page) {
-  return SizedBox(
-    width: 100.0, 
-    height: 100.0, 
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => page),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: secondaryColor, 
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0), 
-              ),
-            ),
-            child: Center(child: Icon(icon, size: 50)), 
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, color: textColor), 
-        ),
-      ],
-    ),
-  );
-}
 
 Widget appIcon(BuildContext context) {
   return RichText(
@@ -63,19 +29,77 @@ Widget appIcon(BuildContext context) {
   );
 }
 
-Widget seachIcon(BuildContext context, String hintText){
+Widget searchBoxWithFilterTable(BuildContext context, String hintText, Widget filter) {
   return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+    padding: const EdgeInsets.all(8.0),
+    child: Stack(
+      children: [
+        Container(
+          height: 40.0,
+          width: 500.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(color: termTextColor),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  style: TextStyle(color: textColor, fontSize: 16.0),
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    hintStyle: TextStyle(color: termTextColor),
+                    prefixIcon: Icon(Icons.search, color: textColor),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(vertical: 14.0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          right: 0,
+          child: Container(
+            width: 40.0,
+            height: 40.0,
+            decoration: BoxDecoration(
+              color: termTextColor,
+            ),
+            child: filter,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget searchBox(BuildContext context, String hintText) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      height: 40.0,
+      width: 500.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        border: Border.all(color: termTextColor),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: hintText,
+                prefixIcon: Icon(Icons.search),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(vertical: 14.0),
               ),
             ),
           ),
-    );
+        ],
+      ),
+    ),
+  );
 }
 
 AppBar customAppBar(BuildContext context) {
@@ -123,4 +147,5 @@ Widget customButton(BuildContext context, {IconData? icon, required Widget navig
     ),
   );
 }
+
 
