@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/views/employee_inf_manage/employees.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class EmployeeForm extends StatefulWidget {
@@ -7,6 +8,7 @@ class EmployeeForm extends StatefulWidget {
 }
 
 class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderStateMixin {
+
   TextEditingController nameController = TextEditingController();
   TextEditingController jobPositionController = TextEditingController();
   TextEditingController workMobileController = TextEditingController();
@@ -20,10 +22,17 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
 
   bool _isSidebarOpen = true;
 
+  bool isNameFilled = false;
+
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
+    nameController.addListener(() {
+      setState(() {
+        isNameFilled = nameController.text.isNotEmpty;
+      });
+    });
   }
 
   @override
@@ -40,9 +49,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
     super.dispose();
   }
 
-  Future<void> _selectImage() async {
-    
-  }
+  Future<void> _selectImage() async {}
 
   Widget buildTextFieldRow(String label, TextEditingController controller) {
     return Row(
@@ -120,7 +127,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                         style: TextStyle(color: textColor, fontSize: 30.0),
                         decoration: InputDecoration(
                           hintText: "Employee's Name",
-                          hintStyle: TextStyle(color: termTextColor, fontSize: 30.0), 
+                          hintStyle: TextStyle(color: termTextColor, fontSize: 30.0),
                         ),
                       ),
                       TextField(
@@ -137,14 +144,14 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 SizedBox(width: 10),
                 Column(
                   children: [
-                    SizedBox(height: 20, ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     IconButton(
                       icon: Icon(Icons.insert_photo),
                       color: textColor,
                       iconSize: 80,
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                       tooltip: "Upload photo",
                     ),
                   ],
@@ -188,7 +195,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
               ],
             ),
             Container(
-              height: 200, 
+              height: 200,
               child: TabBarView(
                 controller: tabController,
                 children: [
@@ -202,6 +209,14 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
           ],
         ),
       ),
+      floatingActionButton: isNameFilled
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage()));
+              },
+              child: Icon(Icons.create),
+            )
+          : null,
     );
   }
 }

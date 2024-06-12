@@ -116,8 +116,6 @@ class _FilterEmployeeState extends State<filterEmployee> {
         ),
       ),
     );
-    
-    // Add the options
     entries.addAll(
       options.map((String option) {
         return PopupMenuItem<String>(

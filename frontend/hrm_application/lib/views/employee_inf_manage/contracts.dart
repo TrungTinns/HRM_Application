@@ -68,7 +68,30 @@ class _ContractsState extends State<Contracts> {
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            ),
+            titles: ['Setting', 'Employee', 'Recruitment'],
+            options: [
+              ['Setting', 'Activity Plan'],
+              ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
+              ['Job Positions', 'Employment Types']
+            ],
+            navigators: [
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+            ],
+          )
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),

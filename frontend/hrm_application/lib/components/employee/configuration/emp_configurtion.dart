@@ -6,11 +6,17 @@ class empConfiguration extends StatefulWidget {
   final bool isActive;
   final VoidCallback onOpen;
   final VoidCallback onClose;
+  final List<String> titles;
+  final List<List<String>> options;
+  final List<List<VoidCallback>> navigators;
 
   empConfiguration({
     required this.isActive,
     required this.onOpen,
     required this.onClose,
+    required this.titles,
+    required this.options,
+    required this.navigators,
   });
 
   @override
@@ -60,48 +66,27 @@ class _EmpConfigurationState extends State<empConfiguration> {
           elevation: 4.0,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
+            children: List.generate(widget.titles.length, (index) {
+              return Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildColumn(
                     context,
-                    '',
-                    ['Setting', 'Activity Plan',],
+                    widget.titles[index],
+                    widget.options[index],
+                    widget.navigators[index],
                   ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildColumn(
-                    context,
-                    'Employee',
-                    [' Departments', ' Work Locations', ' Working Schedules', ' Departure Reasons', ' Skill Types'],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildColumn(
-                    context,
-                    'Recruitment',
-                    [' Job Positions', ' Employment Types'],
-                  ),
-                ),
-              ),
-            ],
+              );
+            }),
           ),
         ),
       ),
     );
   }
 
-  List<PopupMenuEntry<String>> _buildColumn(BuildContext context, String title, List<String> options) {
+  List<PopupMenuEntry<String>> _buildColumn(BuildContext context, String title, List<String> options,List<VoidCallback> navigators,) {
     List<PopupMenuEntry<String>> entries = [];
     entries.add(
       PopupMenuItem<String>(
@@ -121,8 +106,6 @@ class _EmpConfigurationState extends State<empConfiguration> {
         ),
       ),
     );
-
-    // Add the options
     entries.addAll(
       options.map((String option) {
         return PopupMenuItem<String>(
@@ -130,51 +113,17 @@ class _EmpConfigurationState extends State<empConfiguration> {
           child: ListTile(
             title: Text(option, style: TextStyle(color: termTextColor)),
             onTap: () {
-              _handleSelection(context, option);
+              int index = options.indexOf(option);
+              if (index != -1) {
+                navigators[index]();
+              }
               _closeDropdown();
             },
           ),
         );
       }).toList(),
     );
-
     return entries;
-  }
-
-  void _handleSelection(BuildContext context, String option) {
-    // Handle selection
-    switch (option) {
-      case 'Setting':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Activity Plan':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Departments':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Work Locations':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Working Schedules':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Departure Reasons':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Skill Types':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Job Positions':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      case 'Employment Types':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-        break;
-      default:
-        // Handle default case
-        break;
-    }
   }
 
   @override

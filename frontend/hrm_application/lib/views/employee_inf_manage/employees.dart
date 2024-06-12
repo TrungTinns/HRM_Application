@@ -22,6 +22,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
   bool _isSidebarOpen = true;
   bool showEmployeeForm = false;
   String? activeDropdown;
+  final TextEditingController nameController = TextEditingController();
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -30,9 +31,39 @@ class _EmployeeManageState extends State<EmployeeManage> {
   }
 
   void toggleEmployeeForm() {
-    setState(() {
-      showEmployeeForm = !showEmployeeForm;
-    });
+    if (showEmployeeForm) {
+
+      if (nameController.text.isEmpty) {
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Incomplete Form'),
+              content: Text('Please fill out the name field before proceeding.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+
+        setState(() {
+          showEmployeeForm = false;
+          nameController.clear();
+        });
+      }
+    } else {
+      setState(() {
+        showEmployeeForm = true;
+      });
+    }
   }
 
   @override
@@ -40,8 +71,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: 
-        CustomTitleAppbar(
+        title: CustomTitleAppbar(
           ctx: context,
           service: pageName,
           titles: ['Employees', 'Reporting'],
@@ -62,13 +92,39 @@ class _EmployeeManageState extends State<EmployeeManage> {
             ],
           ],
           activeDropdowns: ['Employees', 'Reporting'],
-          setActiveDropdown: (dropdown) {            
-          }, 
+          setActiveDropdown: (dropdown) {
+            setState(() {
+              activeDropdown = dropdown;
+            });
+          },
           config: empConfiguration(
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            ),
+            titles: ['Setting', 'Employee', 'Recruitment'],
+            options: [
+              ['Setting', 'Activity Plan'],
+              ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
+              ['Job Positions', 'Employment Types']
+            ],
+            navigators: [
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+            ],
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
@@ -82,10 +138,10 @@ class _EmployeeManageState extends State<EmployeeManage> {
                   },
                   child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, 
+                    foregroundColor: Colors.white,
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), 
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                 ),
@@ -101,9 +157,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                     IconButton(
                       icon: Icon(Icons.upload),
                       color: Colors.white,
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                       tooltip: "Import records",
                     ),
                   ],
@@ -127,18 +181,19 @@ class _EmployeeManageState extends State<EmployeeManage> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: Row(
-        children: [
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            width: _isSidebarOpen ? 250 : 25,
-            child: Material(
-              color: snackBarColor, 
-              elevation: 4.0,
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: _isSidebarOpen
-                    ? <Widget>[
+      body: showEmployeeForm
+          ? EmployeeForm()
+          : Row(
+              children: [
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  width: _isSidebarOpen ? 250 : 25,
+                  child: Material(
+                    color: snackBarColor,
+                    elevation: 4.0,
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: _isSidebarOpen? <Widget>[
                       SizedBox(height: 30,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -203,28 +258,23 @@ class _EmployeeManageState extends State<EmployeeManage> {
           ),
           
           Expanded(
-            child: IndexedStack(
-              index: showEmployeeForm ? 1 : 0,
-              children: [
-                GridView.builder(
-                  padding: EdgeInsets.all(10),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, 
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: 10, 
-                  itemBuilder: (context, index) {
-                    return EmployeeCard(
-                      name: 'Employee ${index + 1}',
-                      role: 'Role ${index + 1}',
-                      email: 'email${index + 1}@example.com',
-                    );
-                  },
+            child:               
+              GridView.builder(
+                padding: EdgeInsets.all(10),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, 
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                 ),
-                EmployeeForm(),
-              ],
-            ),
+                itemCount: 10, 
+                itemBuilder: (context, index) {
+                  return EmployeeCard(
+                    name: 'Employee ${index + 1}',
+                    role: 'Role ${index + 1}',
+                    email: 'email${index + 1}@example.com',
+                  );
+                },
+              ),
           ),
         ],
       ),
