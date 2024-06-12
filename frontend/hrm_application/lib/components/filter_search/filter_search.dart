@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class empConfiguration extends StatefulWidget {
-  final bool isActive;
-  final VoidCallback onOpen;
-  final VoidCallback onClose;
+class filter extends StatefulWidget {
   final List<String> titles;
+  final List<IconData> icons;
+  final List<Color> iconColors;
   final List<List<String>> options;
   final List<List<VoidCallback>> navigators;
 
-  empConfiguration({
-    required this.isActive,
-    required this.onOpen,
-    required this.onClose,
+  filter({
     required this.titles,
+    required this.icons,
+    required this.iconColors,
     required this.options,
     required this.navigators,
   });
 
   @override
-  _EmpConfigurationState createState() => _EmpConfigurationState();
+  _filterState createState() => _filterState();
 }
 
-class _EmpConfigurationState extends State<empConfiguration> {
-  GlobalKey _key = GlobalKey();
+class _filterState extends State<filter> {
+  final GlobalKey _key = GlobalKey();
   OverlayEntry? _overlayEntry;
-  bool _isHovered = false;
-  bool _isOpen = false;
+  bool _isDropdownOpen = false;
 
   void _toggleDropdown() {
-    if (_isOpen) {
+    if (_isDropdownOpen) {
       _closeDropdown();
     } else {
       _openDropdown();
@@ -38,29 +35,31 @@ class _EmpConfigurationState extends State<empConfiguration> {
   }
 
   void _openDropdown() {
-    RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
+    final renderBox = _key.currentContext!.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
 
     _overlayEntry = _createOverlayEntry(size, offset);
     Overlay.of(context)?.insert(_overlayEntry!);
-    widget.onOpen();
-    _isOpen = true;
+    setState(() {
+      _isDropdownOpen = true;
+    });
   }
 
   void _closeDropdown() {
     _overlayEntry?.remove();
     _overlayEntry = null;
-    widget.onClose();
-    _isOpen = false;
+    setState(() {
+      _isDropdownOpen = false;
+    });
   }
 
   OverlayEntry _createOverlayEntry(Size size, Offset offset) {
     return OverlayEntry(
       builder: (context) => Positioned(
-        width: size.width*4,
-        left: offset.dx,
-        top: offset.dy + size.height,
+        width: size.width * 12, 
+        left: offset.dx - (size.width * 11),
+        top: offset.dy + size.height + 8,
         child: Material(
           color: snackBarColor,
           elevation: 4.0,
@@ -69,12 +68,13 @@ class _EmpConfigurationState extends State<empConfiguration> {
             children: List.generate(widget.titles.length, (index) {
               return Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildColumn(
                     context,
                     widget.titles[index],
+                    widget.icons[index],
                     widget.options[index],
+                    widget.iconColors[index],
                     widget.navigators[index],
                   ),
                 ),
@@ -86,20 +86,21 @@ class _EmpConfigurationState extends State<empConfiguration> {
     );
   }
 
-  List<PopupMenuEntry<String>> _buildColumn(BuildContext context, String title, List<String> options,List<VoidCallback> navigators,) {
+  List<PopupMenuEntry<String>> _buildColumn(BuildContext context, String title, IconData icon, List<String> options, Color iconColor, List<VoidCallback> navigators) {
     List<PopupMenuEntry<String>> entries = [];
     entries.add(
       PopupMenuItem<String>(
         enabled: false,
-        child: Column(
+        child: Row(
           children: [
+            Icon(icon, color: iconColor),
             SizedBox(width: 8),
             Text(
               title,
               style: TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
           ],
@@ -107,16 +108,15 @@ class _EmpConfigurationState extends State<empConfiguration> {
       ),
     );
     entries.addAll(
-      options.map((String option) {
+      options.asMap().entries.map((entry) {
+        int idx = entry.key;
+        String option = entry.value;
         return PopupMenuItem<String>(
           value: option,
           child: ListTile(
-            title: Text(option, style: TextStyle(color: termTextColor)),
+            title: Text(option, style: TextStyle(color: textColor)),
             onTap: () {
-              int index = options.indexOf(option);
-              if (index != -1) {
-                navigators[index]();
-              }
+              navigators[idx]();
               _closeDropdown();
             },
           ),
@@ -133,30 +133,12 @@ class _EmpConfigurationState extends State<empConfiguration> {
       onTap: _toggleDropdown,
       child: MouseRegion(
         onEnter: (_) {
-          setState(() {
-            _isHovered = true;
-          });
+          setState(() {});
         },
         onExit: (_) {
-          setState(() {
-            _isHovered = false;
-          });
+          setState(() {});
         },
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: _isHovered ? Colors.grey : snackBarColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Row(
-            children: [
-              Text(
-                'Configuration',
-                style: TextStyle(color: textColor, fontSize: 16),
-              ),
-            ]
-          ),
-        ),
+        child: Icon(_isDropdownOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: textColor,),
       ),
     );
   }

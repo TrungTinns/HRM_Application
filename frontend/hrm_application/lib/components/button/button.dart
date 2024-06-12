@@ -1,6 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/widgets/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+Widget customButton(BuildContext context, {IconData? icon, required Widget navigateTo, required String text}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => navigateTo),
+      );
+    },
+    child: Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.height * 0.08,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 40,
+            color: textColor,
+          ),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 20,
+              color: textColor,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
 Widget serviceButton(BuildContext context, IconData icon, String label, Widget page) {
   return SizedBox(

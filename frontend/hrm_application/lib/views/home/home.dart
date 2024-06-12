@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/components/service_option/service_option.dart';
+import 'package:hrm_application/components/button/button.dart';
+import 'package:hrm_application/components/iconic/icon.dart';
 import 'package:hrm_application/views/employee_inf_manage/employees.dart';
 import 'package:hrm_application/views/recruitment_process_manage/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
-import 'package:hrm_application/widgets/widget.dart';
 
 class Home extends StatefulWidget {
   @override
