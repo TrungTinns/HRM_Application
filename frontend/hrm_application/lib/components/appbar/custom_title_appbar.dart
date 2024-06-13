@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hrm_application/views/employee_inf_manage/contracts.dart';
-import 'package:hrm_application/views/employee_inf_manage/employees.dart';
-import 'package:hrm_application/views/employee_inf_manage/org_chart.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 

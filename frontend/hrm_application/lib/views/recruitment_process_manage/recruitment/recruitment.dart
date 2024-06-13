@@ -2,27 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
-import 'package:hrm_application/components/employee/detail/employee_card.dart';
 import 'package:hrm_application/components/filter_search/filter_search.dart';
 import 'package:hrm_application/components/search/searchBox.dart';
-import 'package:hrm_application/views/create/employees/employee_form.dart';
-import 'package:hrm_application/views/employee_inf_manage/contracts.dart';
-import 'package:hrm_application/views/employee_inf_manage/org_chart.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
-class EmployeeManage extends StatefulWidget {
+class RecruitmentManage extends StatefulWidget {
   @override
-  _EmployeeManageState createState() => _EmployeeManageState();
+  _RecruitmentManageState createState() => _RecruitmentManageState();
 }
 
-class _EmployeeManageState extends State<EmployeeManage> {
-  String pageName = 'Employees';
+class _RecruitmentManageState extends State<RecruitmentManage> {
+  String pageName = 'Recruitments';
   bool _isHovered = false;
   bool _isSidebarOpen = true;
   bool showEmployeeForm = false;
   String? activeDropdown;
-  final TextEditingController nameController = TextEditingController();
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -31,39 +28,9 @@ class _EmployeeManageState extends State<EmployeeManage> {
   }
 
   void toggleEmployeeForm() {
-    if (showEmployeeForm) {
-
-      if (nameController.text.isEmpty) {
-
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Incomplete Form'),
-              content: Text('Please fill out the name field before proceeding.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-
-        setState(() {
-          showEmployeeForm = false;
-          nameController.clear();
-        });
-      }
-    } else {
-      setState(() {
-        showEmployeeForm = true;
-      });
-    }
+    setState(() {
+      showEmployeeForm = !showEmployeeForm;
+    });
   }
 
   @override
@@ -71,19 +38,19 @@ class _EmployeeManageState extends State<EmployeeManage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: CustomTitleAppbar(
+        title: 
+        CustomTitleAppbar(
           ctx: context,
-          service: pageName,
-          titles: ['Employees', 'Reporting'],
+          service: 'Recruitment',
+          titles: ['Application', 'Reporting'],
           options: [
-            ['Employees', 'Department', 'Org chart', 'Contracts'],
+            ['Employees', 'Department', 'Contracts'],
             ['Contracts', 'Skills']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
             ],
             [
@@ -93,10 +60,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
           ],
           activeDropdowns: ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {
-            setState(() {
-              activeDropdown = dropdown;
-            });
-          },
+          }, 
           config: configuration(
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
@@ -124,7 +88,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                 () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               ],
             ],
-          ),
+          )
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
@@ -138,10 +102,10 @@ class _EmployeeManageState extends State<EmployeeManage> {
                   },
                   child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
+                    foregroundColor: Colors.white, 
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(5), 
                     ),
                   ),
                 ),
@@ -157,7 +121,9 @@ class _EmployeeManageState extends State<EmployeeManage> {
                     IconButton(
                       icon: Icon(Icons.upload),
                       color: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        
+                      },
                       tooltip: "Import records",
                     ),
                   ],
@@ -206,103 +172,8 @@ class _EmployeeManageState extends State<EmployeeManage> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: showEmployeeForm
-          ? EmployeeForm()
-          : Row(
-              children: [
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  width: _isSidebarOpen ? 250 : 25,
-                  child: Material(
-                    color: snackBarColor,
-                    elevation: 4.0,
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: _isSidebarOpen? <Widget>[
-                      SizedBox(height: 30,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(width: 20,),
-                          Icon(Icons.groups, color: secondaryColor, size: 20,),
-                          Text(' DEPARTMENT', style: TextStyle(fontSize: 16, color: textColor, fontWeight: FontWeight.bold),),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isSidebarOpen = !_isSidebarOpen;
-                              });
-                            },
-                            child: Container(
-                              child: Icon(
-                                Icons.keyboard_double_arrow_left ,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                            )
-                          ),
-                          SizedBox(width: 10,),
-                        ]
-                        
-                      ),
-                        ListTile(
-                          title: Text(
-                            'All',
-                            style: TextStyle(color: textColor),),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Department',
-                            style: TextStyle(color: textColor),),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ]
-                    : [SizedBox(height: 30,),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isSidebarOpen = !_isSidebarOpen;
-                          });
-                        },
-                        child: Container(
-                          child: Icon(
-                            Icons.keyboard_double_arrow_right,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                        )
-                      ),
-                    ],
-              ),
-            ),
-          ),
-          
-          Expanded(
-            child:               
-              GridView.builder(
-                padding: EdgeInsets.all(10),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, 
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: 10, 
-                itemBuilder: (context, index) {
-                  return EmployeeCard(
-                    name: 'Employee ${index + 1}',
-                    role: 'Role ${index + 1}',
-                    email: 'email${index + 1}@example.com',
-                  );
-                },
-              ),
-          ),
-        ],
-      ),
+      body: Row(
+      )
     );
   }
 }

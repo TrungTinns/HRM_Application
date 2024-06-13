@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
-import 'package:hrm_application/components/employee/detail/employee_card.dart';
 import 'package:hrm_application/components/filter_search/filter_search.dart';
 import 'package:hrm_application/components/search/searchBox.dart';
-import 'package:hrm_application/views/create/employees/employee_form.dart';
-import 'package:hrm_application/views/employee_inf_manage/contracts.dart';
-import 'package:hrm_application/views/employee_inf_manage/employees.dart';
-import 'package:hrm_application/views/employee_inf_manage/org_chart.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/card/employee_card.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
-class RecruitmentManage extends StatefulWidget {
+class EmployeeManage extends StatefulWidget {
   @override
-  _RecruitmentManageState createState() => _RecruitmentManageState();
+  _EmployeeManageState createState() => _EmployeeManageState();
 }
 
-class _RecruitmentManageState extends State<RecruitmentManage> {
-  String pageName = 'Recruitments';
+class _EmployeeManageState extends State<EmployeeManage> {
+  String pageName = 'Employees';
   bool _isHovered = false;
   bool _isSidebarOpen = true;
   bool showEmployeeForm = false;
   String? activeDropdown;
+  final TextEditingController nameController = TextEditingController();
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -31,9 +32,36 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
   }
 
   void toggleEmployeeForm() {
-    setState(() {
-      showEmployeeForm = !showEmployeeForm;
-    });
+    if (showEmployeeForm) {
+      if (nameController.text.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Incomplete Form'),
+              content: Text('Name field is missing.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        setState(() {
+          showEmployeeForm = false;
+          nameController.clear();
+        });
+      }
+    } else {
+      setState(() {
+        showEmployeeForm = true;
+      });
+    }
   }
 
   @override
@@ -41,20 +69,18 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: 
-        CustomTitleAppbar(
+        title: CustomTitleAppbar(
           ctx: context,
-          service: 'Recruitment',
-          titles: ['Application', 'Reporting'],
+          service: pageName,
+          titles: ['Employees', 'Reporting'],
           options: [
-            ['Employees', 'Department', 'Org chart', 'Contracts'],
+            ['Employees', 'Department', 'Contracts'],
             ['Contracts', 'Skills']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
             ],
             [
@@ -64,7 +90,10 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
           ],
           activeDropdowns: ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {
-          }, 
+            setState(() {
+              activeDropdown = dropdown;
+            });
+          },
           config: configuration(
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
@@ -92,7 +121,7 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
                 () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               ],
             ],
-          )
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
@@ -106,10 +135,10 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
                   },
                   child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, 
+                    foregroundColor: Colors.white,
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), 
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                 ),
@@ -125,9 +154,7 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
                     IconButton(
                       icon: Icon(Icons.upload),
                       color: Colors.white,
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                       tooltip: "Import records",
                     ),
                   ],
@@ -176,18 +203,19 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: Row(
-        children: [
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            width: _isSidebarOpen ? 250 : 25,
-            child: Material(
-              color: snackBarColor, 
-              elevation: 4.0,
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: _isSidebarOpen
-                    ? <Widget>[
+      body: showEmployeeForm
+          ? EmployeeForm()
+          : Row(
+              children: [
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  width: _isSidebarOpen ? 250 : 25,
+                  child: Material(
+                    color: snackBarColor,
+                    elevation: 4.0,
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: _isSidebarOpen? <Widget>[
                       SizedBox(height: 30,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -252,27 +280,31 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
           ),
           
           Expanded(
-            child: IndexedStack(
-              index: showEmployeeForm ? 1 : 0,
-              children: [
-                GridView.builder(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                int crossAxisCount = (_isSidebarOpen) ? 3 : 4;
+                return GridView.builder(
                   padding: EdgeInsets.all(10),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, 
+                    crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
+                    childAspectRatio: 2.4,
                   ),
-                  itemCount: 10, 
+                  itemCount: employees.length,
                   itemBuilder: (context, index) {
+                    final employee = employees[index];
                     return EmployeeCard(
-                      name: 'Employee ${index + 1}',
-                      role: 'Role ${index + 1}',
-                      email: 'email${index + 1}@example.com',
+                      name: employee.name,
+                      role: employee.role,
+                      email: employee.email,
+                      phone: employee.phone,
+                      department: employee.department,
+                      manager: employee.manager,
                     );
                   },
-                ),
-                EmployeeForm(),
-              ],
+                );
+              },
             ),
           ),
         ],

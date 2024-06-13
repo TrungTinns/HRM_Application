@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/employee_inf_manage/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class EmployeeForm extends StatefulWidget {
