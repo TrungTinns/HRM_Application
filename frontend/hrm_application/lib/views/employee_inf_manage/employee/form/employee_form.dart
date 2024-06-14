@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class EmployeeForm extends StatefulWidget {
@@ -10,12 +11,10 @@ class EmployeeForm extends StatefulWidget {
 class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderStateMixin {
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController jobPositionController = TextEditingController();
-  TextEditingController workMobileController = TextEditingController();
-  TextEditingController workPhoneController = TextEditingController();
-  TextEditingController workEmailController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
-  TextEditingController positionController = TextEditingController();
   TextEditingController managerController = TextEditingController();
 
   TabController? tabController;
@@ -38,12 +37,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   @override
   void dispose() {
     nameController.dispose();
-    jobPositionController.dispose();
-    workMobileController.dispose();
-    workPhoneController.dispose();
-    workEmailController.dispose();
+    roleController.dispose();
+    mobileController.dispose();
     departmentController.dispose();
-    positionController.dispose();
     managerController.dispose();
     tabController?.dispose();
     super.dispose();
@@ -87,10 +83,11 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
         ),
         Expanded(
           child: DropdownButtonFormField<String>(
+            dropdownColor: snackBarColor,
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value, style: TextStyle(color: Colors.black)),
+                child: Text(value, style: TextStyle(color: textColor)),
               );
             }).toList(),
             onChanged: (value) {
@@ -105,6 +102,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
       ],
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +129,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                         ),
                       ),
                       TextField(
-                        controller: jobPositionController,
+                        controller: roleController,
                         style: TextStyle(color: textColor, fontSize: 18.0),
                         decoration: InputDecoration(
                           hintText: "Job Position",
@@ -164,9 +162,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildTextFieldRow('Work Mobile', workMobileController),
+                      buildTextFieldRow('Work Mobile', mobileController),
                       SizedBox(height: 10),
-                      buildTextFieldRow('Work Email', workEmailController),
+                      buildTextFieldRow('Work Email', emailController),
                     ],
                   ),
                 ),
@@ -176,7 +174,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                     children: [
                       buildDropdownRow('Department', departmentController, ['Department 1', 'Department 2', 'Department 3']),
                       SizedBox(height: 10),
-                      buildDropdownRow('Position', positionController, ['Position 1', 'Position 2', 'Position 3']),
+                      buildDropdownRow('Position', roleController, ['Position 1', 'Position 2', 'Position 3']),
                       SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, ['Manager 1', 'Manager 2', 'Manager 3']),
                     ],
@@ -187,11 +185,11 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
             SizedBox(height: 20),
             TabBar(
               controller: tabController,
+              labelStyle: TextStyle(color: textColor, fontSize: 16),
               tabs: [
-                Tab(text: 'Tab 1'),
-                Tab(text: 'Tab 2'),
-                Tab(text: 'Tab 3'),
-                Tab(text: 'Tab 4'),
+                Tab(text: 'Work Information'),
+                Tab(text: 'Private Information'),
+                Tab(text: 'Contract'),
               ],
             ),
             Container(
@@ -202,7 +200,6 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                   Center(child: Text('Content for Tab 1')),
                   Center(child: Text('Content for Tab 2')),
                   Center(child: Text('Content for Tab 3')),
-                  Center(child: Text('Content for Tab 4')),
                 ],
               ),
             ),
@@ -212,6 +209,17 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
       floatingActionButton: isNameFilled
           ? FloatingActionButton(
               onPressed: () {
+                final newEmployee = EmployeeInf(
+                  name: nameController.text,
+                  role: roleController.text,
+                  email: emailController.text,
+                  phone: mobileController.text,
+                  department: departmentController.text,
+                  manager: managerController.text,
+                );
+                setState(() {
+                  employees.add(newEmployee);
+                });
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage()));
               },
               child: Icon(Icons.create),

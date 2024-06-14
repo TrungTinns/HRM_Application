@@ -1,4 +1,4 @@
-class Employee {
+class EmployeeInf {
   final String name;
   final String role;
   final String email;
@@ -6,7 +6,7 @@ class Employee {
   final String department;
   final String manager;
 
-  Employee({
+  EmployeeInf({
     required this.name,
     required this.role,
     required this.email,
@@ -16,8 +16,8 @@ class Employee {
   });
 }
 
-final List<Employee> employees = [
-  Employee(
+final List<EmployeeInf> employees = [
+  EmployeeInf(
     name: 'John Doe',
 role: 'Position 1',
     email: 'johndoe@example.com',
@@ -25,7 +25,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Alice Johnson',
 role: 'Position 1',
     email: 'alice.johnson@example.com',
@@ -33,7 +33,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Bob Smith',
 role: 'Position 1',
     email: 'bob.smith@example.com',
@@ -41,7 +41,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Charlie Brown',
 role: 'Position 1',
     email: 'charlie.brown@example.com',
@@ -49,7 +49,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Daisy Ridley',
 role: 'Position 1',
     email: 'daisy.ridley@example.com',
@@ -57,7 +57,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Edward Norton',
 role: 'Position 1',
     email: 'edward.norton@example.com',
@@ -65,7 +65,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Fiona Gallagher',
 role: 'Position 1',
     email: 'fiona.gallagher@example.com',
@@ -73,7 +73,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Gordon Ramsay',
 role: 'Position 1',
     email: 'gordon.ramsay@example.com',
@@ -81,7 +81,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Hannah Montana',
 role: 'Position 1',
     email: 'hannah.montana@example.com',
@@ -89,7 +89,7 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
-  Employee(
+  EmployeeInf(
     name: 'Igor Stravinsky',
     role: 'Position 1',
     email: 'igor.stravinsky@example.com',
@@ -97,4 +97,21 @@ role: 'Position 1',
     department: 'Department 1',
     manager: 'Manager 1',
   ),
+  EmployeeInf(
+    name: 'John Doe',
+role: 'Position 1',
+    email: 'johndoe@example.com',
+    phone: '123-456-7890',
+    department: 'Department 1',
+    manager: 'Manager 1',
+  ),
+  EmployeeInf(
+    name: 'Alice Johnson',
+role: 'Position 1',
+    email: 'alice.johnson@example.com',
+    phone: '234-567-8901',
+    department: 'Department 1',
+    manager: 'Manager 1',
+  ),
+  
 ];

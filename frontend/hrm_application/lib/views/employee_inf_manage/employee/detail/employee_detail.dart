@@ -11,7 +11,7 @@ class EmployeeDetail extends StatefulWidget {
 
   EmployeeDetail({
     required this.name,
-    this.role,
+    required this.role,
     required this.email,
     required this.phone,
     required this.department,
@@ -24,9 +24,9 @@ class EmployeeDetail extends StatefulWidget {
 
 class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProviderStateMixin {
   TextEditingController nameController = TextEditingController();
-  TextEditingController jobPositionController = TextEditingController();
-  TextEditingController workMobileController = TextEditingController();
-  TextEditingController workEmailController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
 
@@ -36,9 +36,9 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   void initState() {
     super.initState();
     nameController.text = widget.name;
-    jobPositionController.text = widget.role ?? '';
-    workMobileController.text = widget.phone;
-    workEmailController.text = widget.email;
+    roleController.text = widget.role ?? '';
+    mobileController.text = widget.phone;
+    emailController.text = widget.email;
     departmentController.text = widget.department;
     managerController.text = widget.manager;
 
@@ -87,11 +87,12 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
         ),
         Expanded(
           child: DropdownButtonFormField<String>(
+            dropdownColor: snackBarColor,
             value: controller.text,
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value, style: TextStyle(color: Colors.black)),
+                child: Text(value, style: TextStyle(color: textColor)),
               );
             }).toList(),
             onChanged: (value) {
@@ -134,7 +135,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                         ),
                       ),
                       TextField(
-                        controller: jobPositionController,
+                        controller: roleController,
                         style: TextStyle(color: textColor, fontSize: 18.0),
                         decoration: InputDecoration(
                           hintText: "Job Position",
@@ -168,9 +169,9 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                 Expanded(
                   child: Column(
                     children: [
-                      buildTextFieldRow('Work Mobile', workMobileController),
+                      buildTextFieldRow('Work Mobile', mobileController),
                       SizedBox(height: 10),
-                      buildTextFieldRow('Work Email', workEmailController),
+                      buildTextFieldRow('Work Email', emailController),
                     ],
                   ),
                 ),
@@ -180,7 +181,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                     children: [
                       buildDropdownRow('Department', departmentController, ['Department 1', 'Department 2', 'Department 3']),
                       SizedBox(height: 10),
-                      buildDropdownRow('Position', jobPositionController, ['Position 1', 'Position 2', 'Position 3']),
+                      buildDropdownRow('Position', roleController, ['Position 1', 'Position 2', 'Position 3']),
                       SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, ['Manager 1', 'Manager 2', 'Manager 3']),
                     ],

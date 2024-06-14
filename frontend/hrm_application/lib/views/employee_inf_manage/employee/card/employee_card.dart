@@ -11,13 +11,13 @@ class EmployeeCard extends StatelessWidget {
 
   EmployeeCard({
     required this.name,
-    this.role,
+    required this.role,
     required this.email,
     required this.phone,
     required this.department,
     required this.manager,
   });
-
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

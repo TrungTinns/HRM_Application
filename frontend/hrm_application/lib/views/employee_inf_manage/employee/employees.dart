@@ -9,6 +9,7 @@ import 'package:hrm_application/views/employee_inf_manage/department/department.
 import 'package:hrm_application/views/employee_inf_manage/employee/card/employee_card.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
+import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
@@ -53,7 +54,6 @@ class _EmployeeManageState extends State<EmployeeManage> {
         );
       } else {
         setState(() {
-          showEmployeeForm = false;
           nameController.clear();
         });
       }
@@ -74,13 +74,14 @@ class _EmployeeManageState extends State<EmployeeManage> {
           service: pageName,
           titles: ['Employees', 'Reporting'],
           options: [
-            ['Employees', 'Department', 'Contracts'],
+            ['Employees', 'Department', 'Org Chart', 'Contracts'],
             ['Contracts', 'Skills']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
             ],
             [
@@ -135,7 +136,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                   },
                   child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
+                    foregroundColor: textColor,
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
@@ -194,7 +195,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                   color: Colors.white,
                   iconSize: 30,
                   onPressed: () {
-                    // Perform an action
+
                   },
                 ),
               Spacer(),
