@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class ContractForm extends StatefulWidget {
@@ -7,60 +8,89 @@ class ContractForm extends StatefulWidget {
 }
 
 class _ContractFormState extends State<ContractForm> with SingleTickerProviderStateMixin {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController jobPositionController = TextEditingController();
-  TextEditingController workMobileController = TextEditingController();
-  TextEditingController workPhoneController = TextEditingController();
-  TextEditingController workEmailController = TextEditingController();
+  TextEditingController referenceController = TextEditingController();
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController endDateController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController positionController = TextEditingController();
-  TextEditingController managerController = TextEditingController();
+  TextEditingController scheduleController = TextEditingController();
+  TextEditingController salaryStructureController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
 
   TabController? tabController;
 
-  bool _isSidebarOpen = true;
+  final List<String> schedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
+  final List<String> salaryStructures = ['Employee', 'Worker'];
+  final List<String> contractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    jobPositionController.dispose();
-    workMobileController.dispose();
-    workPhoneController.dispose();
-    workEmailController.dispose();
+    referenceController.dispose();
+    startDateController.dispose();
+    endDateController.dispose();
     departmentController.dispose();
     positionController.dispose();
-    managerController.dispose();
+    scheduleController.dispose();
+    salaryStructureController.dispose();
+    typeController.dispose();
     tabController?.dispose();
     super.dispose();
   }
 
-  Future<void> _selectImage() async {
-    
+  Future<void> _selectDate(TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        controller.text = picked.toString().substring(0, 10);
+      });
+    }
   }
 
-  Widget buildTextFieldRow(String label, TextEditingController controller) {
+  void _updateEmployeeInfo(EmployeeInf employee) {
+    setState(() {
+      departmentController.text = employee.department;
+      positionController.text = employee.role;
+    });
+  }
+
+  Widget buildTextFieldRow(String label, TextEditingController controller, {bool isDateField = false}) {
     return Row(
       children: [
         SizedBox(
-          width: 100,
+          width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         Expanded(
-          child: TextField(
-            controller: controller,
-            style: TextStyle(color: textColor),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: snackBarColor,
+          child: GestureDetector(
+            onTap: () {
+              if (isDateField) {
+                _selectDate(controller);
+              }
+            },
+            child: AbsorbPointer(
+              child: TextField(
+                controller: controller,
+                style: TextStyle(color: textColor),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: snackBarColor,
+                ),
+              ),
             ),
           ),
         ),
@@ -68,26 +98,34 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
     );
   }
 
-  Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {
+  Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController controller) {
     return Row(
       children: [
         SizedBox(
-          width: 100,
+          width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         Expanded(
-          child: DropdownButtonFormField<String>(
-            items: items.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value, style: TextStyle(color: Colors.black)),
+          child: DropdownButtonFormField<dynamic>(
+            dropdownColor: dropdownColor,
+            value: null,
+            items: items.map((item) {
+              return DropdownMenuItem<dynamic>(
+                value: item,
+                child: Text(item is EmployeeInf ? item.name : item.toString(), style: TextStyle(color: textColor),),
               );
             }).toList(),
-            onChanged: (value) {
-              controller.text = value!;
+            onChanged: (selectedItem) {
+              setState(() {
+                if (selectedItem is EmployeeInf) {
+                  _updateEmployeeInfo(selectedItem);
+                } else {
+                  controller.text = selectedItem.toString();
+                }
+              });
             },
             decoration: InputDecoration(
               filled: true,
@@ -116,11 +154,11 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
-                        controller: nameController,
+                        controller: referenceController,
                         style: TextStyle(color: textColor, fontSize: 30.0),
                         decoration: InputDecoration(
                           hintText: "Contract Reference",
-                          hintStyle: TextStyle(color: termTextColor, fontSize: 30.0), 
+                          hintStyle: TextStyle(color: termTextColor, fontSize: 30.0),
                         ),
                       ),
                     ],
@@ -135,13 +173,13 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Employee', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildDropdownRow('Employee', employees, referenceController),
                       SizedBox(height: 10),
-                      buildDropdownRow('Contract Start Date', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildTextFieldRow('Contract Start Date', startDateController, isDateField: true),
                       SizedBox(height: 10),
-                      buildDropdownRow('Contract End Date', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildTextFieldRow('Contract End Date', endDateController, isDateField: true),
                       SizedBox(height: 10),
-                      buildDropdownRow('Working Schedule', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildDropdownRow('Working Schedule', schedules, scheduleController),
                     ],
                   ),
                 ),
@@ -149,13 +187,13 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Salary Structure Type', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildDropdownRow('Salary Structure Type', salaryStructures, salaryStructureController),
                       SizedBox(height: 10),
-                      buildDropdownRow('Department', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildTextFieldRow('Department', departmentController),
                       SizedBox(height: 10),
-                      buildDropdownRow('Job Position', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildTextFieldRow('Job Position', positionController),
                       SizedBox(height: 10),
-                      buildDropdownRow('Contract Type', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildDropdownRow('Contract Type', contractTypes, typeController),
                     ],
                   ),
                 ),
@@ -170,7 +208,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
               ],
             ),
             Container(
-              height: 200, 
+              height: 200,
               child: TabBarView(
                 controller: tabController,
                 children: [

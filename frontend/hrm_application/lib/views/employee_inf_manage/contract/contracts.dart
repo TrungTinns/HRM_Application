@@ -4,6 +4,7 @@ import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/components/filter_search/filter_search.dart';
 import 'package:hrm_application/components/search/searchBox.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/form/contract_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
@@ -19,7 +20,7 @@ class _ContractsState extends State<Contracts> {
   String pageName = 'Contracts';
   bool _isHovered = false;
   bool _isSidebarOpen = true;
-
+  TextEditingController referenceController = TextEditingController();
   String? activeDropdown;
   bool showContractForm = false;
 
@@ -30,8 +31,40 @@ class _ContractsState extends State<Contracts> {
   }
 
   void toggleContractForm() {
+    if (showContractForm) {
+      if (referenceController.text.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Incomplete Form'),
+              content: Text('Information is missing.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        setState(() {
+          referenceController.clear();
+        });
+      }
+    } else {
+      setState(() {
+        showContractForm = true;
+      });
+    }
+  }
+
+  void clearEmployeeForm() {
     setState(() {
-      showContractForm = !showContractForm;
+      showContractForm = false;
     });
   }
 
@@ -45,15 +78,15 @@ class _ContractsState extends State<Contracts> {
           service: 'Employees',
           titles: ['Employees', 'Reporting'],
           options: [
-            ['Employees', 'Department', 'Org Chart', 'Contracts'],
+            ['Employees', 'Department', 'Contracts', 'Org Chart'],
             ['Contracts', 'Skills']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
@@ -104,10 +137,10 @@ class _ContractsState extends State<Contracts> {
                   },
                   child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, 
+                    foregroundColor: textColor,
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), 
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                 ),
@@ -120,11 +153,28 @@ class _ContractsState extends State<Contracts> {
                       pageName,
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
+                    IconButton(
+                      icon: Icon(Icons.upload),
+                      color: Colors.white,
+                      onPressed: () {},
+                      tooltip: "Import records",
+                    ),
+                    if (showContractForm)
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        color: Colors.white,
+                        iconSize: 24,
+                        tooltip: "Discard all changes",
+                        onPressed: () {
+                          clearEmployeeForm();
+                        },
+                    ),
                   ],
                 ),
               ),
               Spacer(),
-              searchBoxWithFilterTable(context, 'Search...', filter(
+              if (!showContractForm)
+                searchBoxWithFilterTable(context, 'Search...', filter(
                   titles: ['Filter', 'Group By', 'Favorites'],
                   icons: [Icons.filter_alt, Icons.groups, Icons.star_rounded],
                   iconColors: [primaryColor, Colors.greenAccent, Colors.yellow],
@@ -147,17 +197,18 @@ class _ContractsState extends State<Contracts> {
                       () => Navigator.pushNamed(context, '/start_date'), 
                       () => Navigator.pushNamed(context, '/tags')],
                     [() => print('Save Current Search')],
-                  ],
-                )
-              ),
+                  ],)
+                ),
               Spacer(),
             ],
           ),
         ),
         backgroundColor: snackBarColor,
       ),
-      body: Row(
-      ),
+      body:showContractForm
+      // &!showEmployeeDetail
+          ? ContractForm()
+          : Row()
     );
   }
 }
