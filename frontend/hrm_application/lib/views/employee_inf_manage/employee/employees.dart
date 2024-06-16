@@ -23,6 +23,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
   bool _isHovered = false;
   bool _isSidebarOpen = true;
   bool showEmployeeForm = false;
+  // bool showEmployeeDetail = false; //Show EmployeeDetail
   String? activeDropdown;
   final TextEditingController nameController = TextEditingController();
 
@@ -40,7 +41,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
           builder: (context) {
             return AlertDialog(
               title: Text('Incomplete Form'),
-              content: Text('Name field is missing.'),
+              content: Text('Information is missing.'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -62,6 +63,12 @@ class _EmployeeManageState extends State<EmployeeManage> {
         showEmployeeForm = true;
       });
     }
+  }
+
+    void clearEmployeeForm() {
+    setState(() {
+      showEmployeeForm = false;
+    });
   }
 
   @override
@@ -158,6 +165,16 @@ class _EmployeeManageState extends State<EmployeeManage> {
                       onPressed: () {},
                       tooltip: "Import records",
                     ),
+                    if (showEmployeeForm)
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        color: Colors.white,
+                        iconSize: 24,
+                        tooltip: "Discard all changes",
+                        onPressed: () {
+                          clearEmployeeForm();
+                        },
+                    ),
                   ],
                 ),
               ),
@@ -186,17 +203,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                       () => Navigator.pushNamed(context, '/start_date'), 
                       () => Navigator.pushNamed(context, '/tags')],
                     [() => print('Save Current Search')],
-                  ],
-                )
-              ),
-              if (showEmployeeForm)
-                IconButton(
-                  icon: Icon(Icons.person),
-                  color: Colors.white,
-                  iconSize: 30,
-                  onPressed: () {
-
-                  },
+                  ],)
                 ),
               Spacer(),
             ],
@@ -205,6 +212,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
         backgroundColor: snackBarColor,
       ),
       body: showEmployeeForm
+      // &!showEmployeeDetail
           ? EmployeeForm()
           : Row(
               children: [
@@ -299,7 +307,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                       name: employee.name,
                       role: employee.role,
                       email: employee.email,
-                      phone: employee.phone,
+                      mobile: employee.mobile,
                       department: employee.department,
                       manager: employee.manager,
                     );

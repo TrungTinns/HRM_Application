@@ -5,7 +5,7 @@ class EmployeeCard extends StatelessWidget {
   final String name;
   final String? role;
   final String email;
-  final String phone;
+  final String mobile;
   final String department;
   final String manager;
 
@@ -13,7 +13,7 @@ class EmployeeCard extends StatelessWidget {
     required this.name,
     required this.role,
     required this.email,
-    required this.phone,
+    required this.mobile,
     required this.department,
     required this.manager,
   });
@@ -29,7 +29,7 @@ class EmployeeCard extends StatelessWidget {
               name: name,
               role: role,
               email: email,
-              phone: phone,
+              mobile: mobile,
               department: department,
               manager: manager,
             ),
@@ -65,7 +65,7 @@ class EmployeeCard extends StatelessWidget {
                     ),
                     if (role != null) Text(role!),
                     Text(email),
-                    Text(phone),
+                    Text(mobile),
                   ],
                 ),
               ),

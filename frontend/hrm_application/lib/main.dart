@@ -1,4 +1,4 @@
-import 'package:hrm_application/views/employee_inf_manage/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:flutter/material.dart';
 

@@ -172,9 +172,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Department', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildDropdownRow('Department', departmentController, ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial']),
                       SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, ['Position 1', 'Position 2', 'Position 3']),
+                      buildDropdownRow('Position', roleController, ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator']),
                       SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, ['Manager 1', 'Manager 2', 'Manager 3']),
                     ],
@@ -213,7 +213,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                   name: nameController.text,
                   role: roleController.text,
                   email: emailController.text,
-                  phone: mobileController.text,
+                  mobile: mobileController.text,
                   department: departmentController.text,
                   manager: managerController.text,
                 );

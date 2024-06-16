@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
+import 'package:hrm_application/components/configuration/configurtion.dart';
+import 'package:hrm_application/components/filter_search/filter_search.dart';
+import 'package:hrm_application/components/search/searchBox.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
+import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
+import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class EmployeeDetail extends StatefulWidget {
   final String name;
   final String? role;
   final String email;
-  final String phone;
+  final String mobile;
   final String department;
   final String manager;
 
@@ -13,7 +23,7 @@ class EmployeeDetail extends StatefulWidget {
     required this.name,
     required this.role,
     required this.email,
-    required this.phone,
+    required this.mobile,
     required this.department,
     required this.manager,
   });
@@ -29,6 +39,47 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   TextEditingController emailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
+  String pageName = 'Employees';
+  bool showEmployeeForm = false;
+  String? activeDropdown;
+
+  void setActiveDropdown(String? dropdown) {
+    setState(() {
+      activeDropdown = dropdown;
+    });
+  }
+
+  void toggleEmployeeForm() {
+    if (showEmployeeForm) {
+      if (nameController.text.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Incomplete Form'),
+              content: Text('Name field is missing.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        setState(() {
+          nameController.clear();
+        });
+      }
+    } else {
+      setState(() {
+        showEmployeeForm = true;
+      });
+    }
+  }
 
   late TabController tabController;
   String initialDepartment = 'Department 1';
@@ -37,7 +88,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     super.initState();
     nameController.text = widget.name;
     roleController.text = widget.role ?? '';
-    mobileController.text = widget.phone;
+    mobileController.text = widget.mobile;
     emailController.text = widget.email;
     departmentController.text = widget.department;
     managerController.text = widget.manager;
@@ -113,8 +164,118 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: CustomTitleAppbar(
+          ctx: context,
+          service: pageName,
+          titles: ['Employees', 'Reporting'],
+          options: [
+            ['Employees', 'Department', 'Org Chart', 'Contracts'],
+            ['Contracts', 'Skills']
+          ],
+          optionNavigations: [
+            [
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+            ],
+            [
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+            ],
+          ],
+          activeDropdowns: ['Employees', 'Reporting'],
+          setActiveDropdown: (dropdown) {
+            setState(() {
+              activeDropdown = dropdown;
+            });
+          },
+          config: configuration(
+            isActive: activeDropdown == 'Configuration',
+            onOpen: () => setActiveDropdown('Configuration'),
+            onClose: () => setActiveDropdown(null),
+            titles: ['Setting', 'Employee', 'Recruitment'],
+            options: [
+              ['Setting', 'Activity Plan'],
+              ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
+              ['Job Positions', 'Employment Types']
+            ],
+            navigators: [
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+            ],
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    toggleEmployeeForm();
+                  },
+                  child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: textColor,
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      pageName,
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.upload),
+                      color: Colors.white,
+                      onPressed: () {},
+                      tooltip: "Import records",
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.clear),
+                      color: Colors.white,
+                      iconSize: 24,
+                      tooltip: "Delete this employee",
+                      onPressed: () {
+                      
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        backgroundColor: snackBarColor,
+      ),
       backgroundColor: snackBarColor,
-      body: SingleChildScrollView(
+      body: showEmployeeForm
+          ? EmployeeForm()
+      : SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,9 +340,9 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Department', departmentController, ['Department 1', 'Department 2', 'Department 3']),
+                      buildDropdownRow('Department', departmentController, ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial']),
                       SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, ['Position 1', 'Position 2', 'Position 3']),
+                      buildDropdownRow('Position', roleController, ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator']),
                       SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, ['Manager 1', 'Manager 2', 'Manager 3']),
                     ],
