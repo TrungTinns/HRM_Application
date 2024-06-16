@@ -83,7 +83,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
         ),
         Expanded(
           child: DropdownButtonFormField<String>(
-            dropdownColor: snackBarColor,
+            dropdownColor: dropdownColor,
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -122,18 +122,18 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                     children: [
                       TextField(
                         controller: nameController,
-                        style: TextStyle(color: textColor, fontSize: 30.0),
+                        style: TextStyle(color: textColor, fontSize: 40.0),
                         decoration: InputDecoration(
                           hintText: "Employee's Name",
-                          hintStyle: TextStyle(color: termTextColor, fontSize: 30.0),
+                          hintStyle: TextStyle(color: termTextColor, fontSize: 40.0),
                         ),
                       ),
                       TextField(
                         controller: roleController,
-                        style: TextStyle(color: textColor, fontSize: 18.0),
+                        style: TextStyle(color: textColor, fontSize: 20.0),
                         decoration: InputDecoration(
                           hintText: "Job Position",
-                          hintStyle: TextStyle(color: termTextColor, fontSize: 18.0),
+                          hintStyle: TextStyle(color: termTextColor, fontSize: 20.0),
                         ),
                       ),
                     ],
@@ -157,6 +157,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(

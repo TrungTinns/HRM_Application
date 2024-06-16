@@ -4,6 +4,7 @@ import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/components/filter_search/filter_search.dart';
 import 'package:hrm_application/components/search/searchBox.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/datatable/contract_datatable.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/form/contract_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
@@ -208,7 +209,7 @@ class _ContractsState extends State<Contracts> {
       body:showContractForm
       // &!showEmployeeDetail
           ? ContractForm()
-          : Row()
+          : ContractDataTable(),
     );
   }
 }

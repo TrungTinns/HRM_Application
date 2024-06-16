@@ -45,15 +45,15 @@ class _OrgChartState extends State<OrgChart> {
           service: 'Employees',
           titles: ['Employees', 'Reporting'],
           options: [
-            ['Employees', 'Department', 'Org Chart', 'Contracts'],
+            ['Employees', 'Department', 'Contracts', 'Org Chart'],
             ['Contracts', 'Skills']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),

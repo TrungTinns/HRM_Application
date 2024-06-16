@@ -47,7 +47,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
 
