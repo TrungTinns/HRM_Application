@@ -13,7 +13,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   TextEditingController nameController = TextEditingController();
   TextEditingController roleController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController mailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
 
@@ -54,7 +54,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
           width: 100,
           child: Text(
             label,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
@@ -78,7 +78,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
           width: 100,
           child: Text(
             label,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
@@ -148,7 +148,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                     IconButton(
                       icon: Icon(Icons.insert_photo),
                       color: textColor,
-                      iconSize: 80,
+                      iconSize: 120,
                       onPressed: () {},
                       tooltip: "Upload photo",
                     ),
@@ -156,15 +156,14 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 ),
               ],
             ),
-            SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: Column(
                     children: [
-                      buildTextFieldRow('Work Mobile', mobileController),
+                      buildTextFieldRow('Mobile', mobileController),
                       SizedBox(height: 10),
-                      buildTextFieldRow('Work Email', emailController),
+                      buildTextFieldRow('Email', mailController),
                     ],
                   ),
                 ),
@@ -212,7 +211,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 final newEmployee = EmployeeInf(
                   name: nameController.text,
                   role: roleController.text,
-                  email: emailController.text,
+                  mail: mailController.text,
                   mobile: mobileController.text,
                   department: departmentController.text,
                   manager: managerController.text,

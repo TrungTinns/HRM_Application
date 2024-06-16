@@ -4,18 +4,20 @@ import 'package:hrm_application/views/employee_inf_manage/employee/detail/employ
 class EmployeeCard extends StatelessWidget {
   final String name;
   final String? role;
-  final String email;
+  final String mail;
   final String mobile;
   final String department;
   final String manager;
+  final VoidCallback onDelete;
 
   EmployeeCard({
     required this.name,
     required this.role,
-    required this.email,
+    required this.mail,
     required this.mobile,
     required this.department,
     required this.manager,
+    required this.onDelete, 
   });
   
   @override
@@ -28,10 +30,11 @@ class EmployeeCard extends StatelessWidget {
             builder: (context) => EmployeeDetail(
               name: name,
               role: role,
-              email: email,
+              mail: mail,
               mobile: mobile,
               department: department,
               manager: manager,
+              onDelete: onDelete,
             ),
           ),
         );
@@ -64,7 +67,7 @@ class EmployeeCard extends StatelessWidget {
                       ),
                     ),
                     if (role != null) Text(role!),
-                    Text(email),
+                    Text(mail),
                     Text(mobile),
                   ],
                 ),

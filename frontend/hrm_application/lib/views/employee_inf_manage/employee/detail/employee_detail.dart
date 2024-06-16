@@ -14,18 +14,20 @@ import 'package:hrm_application/widgets/colors.dart';
 class EmployeeDetail extends StatefulWidget {
   final String name;
   final String? role;
-  final String email;
+  final String mail;
   final String mobile;
   final String department;
   final String manager;
+  final VoidCallback onDelete; // Thêm callback onDelete
 
   EmployeeDetail({
     required this.name,
     required this.role,
-    required this.email,
+    required this.mail,
     required this.mobile,
     required this.department,
     required this.manager,
+    required this.onDelete, // Thêm callback onDelete
   });
 
   @override
@@ -36,7 +38,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   TextEditingController nameController = TextEditingController();
   TextEditingController roleController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController mailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
   String pageName = 'Employees';
@@ -89,7 +91,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     nameController.text = widget.name;
     roleController.text = widget.role ?? '';
     mobileController.text = widget.mobile;
-    emailController.text = widget.email;
+    mailController.text = widget.mail;
     departmentController.text = widget.department;
     managerController.text = widget.manager;
 
@@ -109,7 +111,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           width: 100,
           child: Text(
             label,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
@@ -133,7 +135,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           width: 100,
           child: Text(
             label,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
@@ -261,7 +263,31 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                       iconSize: 24,
                       tooltip: "Delete this employee",
                       onPressed: () {
-                      
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Do you want to delete this employee?'),
+                              content: Text(''),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    widget.onDelete();
+                                    Navigator.pop(context); 
+                                    Navigator.pop(context); 
+                                  },
+                                  child: Text('OK'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                   ],
@@ -307,7 +333,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                   ),
                 ),
                 SizedBox(width: 10),
-                if (widget.name.isNotEmpty) // Only show IconButton if name is not empty
+                if (widget.name.isNotEmpty) 
                   Column(
                     children: [
                       SizedBox(
@@ -316,7 +342,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                       IconButton(
                         icon: Icon(Icons.insert_photo),
                         color: textColor,
-                        iconSize: 80,
+                        iconSize: 120,
                         onPressed: () {},
                         tooltip: "Upload photo",
                       ),
@@ -324,15 +350,14 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                   ),
               ],
             ),
-            SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: Column(
                     children: [
-                      buildTextFieldRow('Work Mobile', mobileController),
+                      buildTextFieldRow('Mobile', mobileController),
                       SizedBox(height: 10),
-                      buildTextFieldRow('Work Email', emailController),
+                      buildTextFieldRow('Email', mailController),
                     ],
                   ),
                 ),

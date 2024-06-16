@@ -71,6 +71,12 @@ class _EmployeeManageState extends State<EmployeeManage> {
     });
   }
 
+  void deleteEmployee(String name) {
+    setState(() {
+      employees.removeWhere((employee) => employee.name == name );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -306,10 +312,11 @@ class _EmployeeManageState extends State<EmployeeManage> {
                     return EmployeeCard(
                       name: employee.name,
                       role: employee.role,
-                      email: employee.email,
+                      mail: employee.mail,
                       mobile: employee.mobile,
                       department: employee.department,
                       manager: employee.manager,
+                      onDelete: () => deleteEmployee(employee.name),
                     );
                   },
                 );
