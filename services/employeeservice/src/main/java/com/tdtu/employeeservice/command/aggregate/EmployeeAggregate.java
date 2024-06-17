@@ -61,7 +61,7 @@ public class EmployeeAggregate {
     
     // UPDATED EVENT
     @CommandHandler
-    public void handlle (UpdateEmployeeCommand updateEmployeeCommand) {
+    public void handle (UpdateEmployeeCommand updateEmployeeCommand) {
     	EmployeeUpdatedEvent employeeUpdatedEvent =  new EmployeeUpdatedEvent();
     	BeanUtils.copyProperties(updateEmployeeCommand, employeeUpdatedEvent);
         AggregateLifecycle.apply(employeeUpdatedEvent);
@@ -83,7 +83,7 @@ public class EmployeeAggregate {
     
     // DELETE EVENT
     @CommandHandler
-    public void handlle (DeleteEmployeeCommand deleteEmployeeCommand) {
+    public void handle (DeleteEmployeeCommand deleteEmployeeCommand) {
     	EmployeeDeletedEvent employeeDeletedEvent =  new EmployeeDeletedEvent();
     	BeanUtils.copyProperties(deleteEmployeeCommand, employeeDeletedEvent);
         AggregateLifecycle.apply(employeeDeletedEvent);
