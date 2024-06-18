@@ -144,7 +144,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         left: offset.dx,
         top: offset.dy + size.height,
         child: Material(
-          color: snackBarColor,
+          color: dropdownColor,
           elevation: 4.0,
           child: Column(
             mainAxisSize: MainAxisSize.min,

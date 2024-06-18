@@ -140,7 +140,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
         ),
         Expanded(
           child: DropdownButtonFormField<String>(
-            dropdownColor: snackBarColor,
+            dropdownColor: dropdownColor,
             value: controller.text,
             items: items.map((String value) {
               return DropdownMenuItem<String>(
@@ -173,15 +173,15 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           service: pageName,
           titles: ['Employees', 'Reporting'],
           options: [
-            ['Employees', 'Department', 'Org Chart', 'Contracts'],
+            ['Employees', 'Department', 'Contracts', 'Org Chart'],
             ['Contracts', 'Skills']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
@@ -232,6 +232,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                 child: ElevatedButton(
                   onPressed: () {
                     toggleEmployeeForm();
+
                   },
                   child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
@@ -315,18 +316,18 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                     children: [
                       TextField(
                         controller: nameController,
-                        style: TextStyle(color: textColor, fontSize: 30.0),
+                        style: TextStyle(color: textColor, fontSize: 40.0),
                         decoration: InputDecoration(
                           hintText: "Employee's Name",
-                          hintStyle: TextStyle(color: termTextColor, fontSize: 30.0),
+                          hintStyle: TextStyle(color: termTextColor, fontSize: 40.0),
                         ),
                       ),
                       TextField(
                         controller: roleController,
-                        style: TextStyle(color: textColor, fontSize: 18.0),
+                        style: TextStyle(color: textColor, fontSize: 20.0),
                         decoration: InputDecoration(
                           hintText: "Job Position",
-                          hintStyle: TextStyle(color: termTextColor, fontSize: 18.0),
+                          hintStyle: TextStyle(color: termTextColor, fontSize: 20.0),
                         ),
                       ),
                     ],
@@ -351,9 +352,11 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(
+                    
                     children: [
                       buildTextFieldRow('Mobile', mobileController),
                       SizedBox(height: 10),
@@ -378,11 +381,11 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
             SizedBox(height: 20),
             TabBar(
               controller: tabController,
+              labelStyle: TextStyle(color: textColor, fontSize: 16),
               tabs: [
-                Tab(text: 'Tab 1'),
-                Tab(text: 'Tab 2'),
-                Tab(text: 'Tab 3'),
-                Tab(text: 'Tab 4'),
+                Tab(text: 'Work Information'),
+                Tab(text: 'Private Information'),
+                Tab(text: 'Contract'),
               ],
             ),
             Container(
@@ -393,7 +396,6 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                   Center(child: Text('Content for Tab 1')),
                   Center(child: Text('Content for Tab 2')),
                   Center(child: Text('Content for Tab 3')),
-                  Center(child: Text('Content for Tab 4')),
                 ],
               ),
             ),
