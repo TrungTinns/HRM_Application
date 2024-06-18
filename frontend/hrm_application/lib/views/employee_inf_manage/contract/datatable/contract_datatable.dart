@@ -10,22 +10,22 @@ class ContractDataTable extends StatelessWidget {
       PlutoColumn(
         title: 'Employee',
         field: 'Employee',
-        type: PlutoColumnType.select(['John Doe', 'Alice Johnson', 'Bob Smith']),
+        type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         title: 'Reference',
         field: 'Reference',
-        type: PlutoColumnType.select(['REF123', 'REF124', 'REF125']),
+        type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         title: 'Department',
         field: 'Department',
-        type: PlutoColumnType.select(['Administration', 'Research & Development', 'Marketing']),
+        type: PlutoColumnType.select(['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial']),
       ),
       PlutoColumn(
         title: 'Position',
         field: 'Position',
-        type: PlutoColumnType.select(['Director', 'Project Manager', 'Coordinator']),
+        type: PlutoColumnType.select(['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator']),
       ),
       PlutoColumn(
         title: 'Start Date',
@@ -40,7 +40,7 @@ class ContractDataTable extends StatelessWidget {
       PlutoColumn(
         title: 'Contract Type',
         field: 'Contract Type',
-        type: PlutoColumnType.select(['Permanent', 'Temporary', 'Full-time', 'Part-time']),
+        type: PlutoColumnType.select(['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time']),
       ),
       PlutoColumn(
         title: 'Schedule',
@@ -53,7 +53,8 @@ class ContractDataTable extends StatelessWidget {
         type: PlutoColumnType.select(['Running', 'Expired', 'Cancelled']),
       ),
     ];
-    List<PlutoRow> rows = ContractData.getContracts().map((contract) {
+
+    List<PlutoRow> rows = getContracts().map((contract) {
       return PlutoRow(cells: {
         'Employee': PlutoCell(value: contract['Employee']),
         'Reference': PlutoCell(value: contract['Reference']),
@@ -74,10 +75,8 @@ class ContractDataTable extends StatelessWidget {
         
       },
       configuration: const PlutoGridConfiguration(
-
         style: PlutoGridStyleConfig(
-          
-          gridBorderColor:textColor,
+          gridBorderColor: textColor,
           menuBackgroundColor: snackBarColor,
           iconColor: textColor,
           cellColorInEditState: snackBarColor,
