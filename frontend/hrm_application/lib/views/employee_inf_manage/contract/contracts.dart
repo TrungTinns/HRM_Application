@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/components/filter_search/filter_search.dart';
 import 'package:hrm_application/components/search/searchBox.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/datatable/contract_datatable.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/form/contract_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
@@ -11,6 +11,7 @@ import 'package:hrm_application/views/employee_inf_manage/employee/employees.dar
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 class Contracts extends StatefulWidget {
   @override
@@ -19,11 +20,10 @@ class Contracts extends StatefulWidget {
 
 class _ContractsState extends State<Contracts> {
   String pageName = 'Contracts';
-  bool _isHovered = false;
-  bool _isSidebarOpen = true;
   TextEditingController referenceController = TextEditingController();
   String? activeDropdown;
   bool showContractForm = false;
+    List<PlutoRow> rows = [];
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -66,6 +66,26 @@ class _ContractsState extends State<Contracts> {
   void clearEmployeeForm() {
     setState(() {
       showContractForm = false;
+    });
+  }
+
+    void addContract(ContractData newContract) {
+    setState(() {
+      contracts.add(newContract);
+      rows.add(PlutoRow(
+        cells: {
+          'Employee': PlutoCell(value: newContract.employeeName),
+          'Reference': PlutoCell(value: newContract.reference),
+          'Department': PlutoCell(value: newContract.department),
+          'Position': PlutoCell(value: newContract.position),
+          'Start Date': PlutoCell(value: newContract.startDate.toString()),
+          'End Date': PlutoCell(value: newContract.endDate.toString()),
+          'Salary Structure': PlutoCell(value: newContract.salaryStructure),
+          'Contract Type': PlutoCell(value: newContract.contractType),
+          'Schedule': PlutoCell(value: newContract.schedule),
+          'Status': PlutoCell(value: newContract.status),
+        },
+      ));
     });
   }
 
@@ -208,7 +228,9 @@ class _ContractsState extends State<Contracts> {
       ),
       body:showContractForm
       // &!showEmployeeDetail
-          ? ContractForm()
+          ? ContractForm(
+            addContract: addContract,
+          )
           : ContractDataTable(),
     );
   }

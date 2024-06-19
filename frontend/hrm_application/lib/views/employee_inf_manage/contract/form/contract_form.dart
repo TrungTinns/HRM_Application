@@ -1,13 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 class ContractForm extends StatefulWidget {
+    final Function(ContractData) addContract;
+
+  ContractForm({required this.addContract});
   @override
   _ContractFormState createState() => _ContractFormState();
 }
 
 class _ContractFormState extends State<ContractForm> with SingleTickerProviderStateMixin {
+  TextEditingController employeeNameController = TextEditingController();
   TextEditingController referenceController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
@@ -15,10 +24,11 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
   TextEditingController positionController = TextEditingController();
   TextEditingController scheduleController = TextEditingController();
   TextEditingController salaryStructureController = TextEditingController();
-  TextEditingController typeController = TextEditingController();
+  TextEditingController contractTypeController = TextEditingController();
+  TextEditingController statusController = TextEditingController();
 
   TabController? tabController;
-
+  bool isRefFilled = false;
   final List<String> schedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
   final List<String> salaryStructures = ['Employee', 'Worker'];
   final List<String> contractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
@@ -27,6 +37,11 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    referenceController.addListener(() {
+      setState(() {
+        isRefFilled = referenceController.text.isNotEmpty;
+      });
+    });
   }
 
   @override
@@ -38,7 +53,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
     positionController.dispose();
     scheduleController.dispose();
     salaryStructureController.dispose();
-    typeController.dispose();
+    contractTypeController.dispose();
     tabController?.dispose();
     super.dispose();
   }
@@ -63,6 +78,23 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
       departmentController.text = employee.department;
       positionController.text = employee.role;
     });
+  }
+
+  void _addContract() {
+    final newContract = ContractData(
+      employeeName: employeeNameController.text,
+      reference: referenceController.text,
+      department: departmentController.text,
+      position: positionController.text,
+      startDate: DateTime.parse(startDateController.text),
+      endDate: DateTime.parse(endDateController.text),
+      schedule: scheduleController.text,
+      salaryStructure: salaryStructureController.text,
+      contractType: contractTypeController.text,
+      status: statusController.text,                
+    );
+    widget.addContract(newContract);
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts()));
   }
 
   Widget buildTextFieldRow(String label, TextEditingController controller, {bool isDateField = false}) {
@@ -193,7 +225,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                       SizedBox(height: 10),
                       buildTextFieldRow('Job Position', positionController),
                       SizedBox(height: 10),
-                      buildDropdownRow('Contract Type', contractTypes, typeController),
+                      buildDropdownRow('Contract Type', contractTypes, contractTypeController),
                     ],
                   ),
                 ),
@@ -202,6 +234,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
             SizedBox(height: 20),
             TabBar(
               controller: tabController,
+              labelStyle: TextStyle(color: textColor, fontSize: 16),
               tabs: [
                 Tab(text: 'Salary Information'),
                 Tab(text: 'Contract Details'),
@@ -220,6 +253,12 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
           ],
         ),
       ),
+      floatingActionButton: isRefFilled
+          ? FloatingActionButton(
+      onPressed: _addContract,
+      child: Icon(Icons.create),
+    )
+          : null,
     );
   }
 }

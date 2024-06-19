@@ -1,13 +1,14 @@
 class ContractData {
-  String employeeName;
-  String reference;
-  String department;
-  String position;
-  String startDate;
-  String endDate;
-  String contractType;
-  String schedule;
-  String status;
+  final String employeeName;
+  final String reference;
+  final String department;
+  final String position;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String schedule;
+  final String salaryStructure;
+  final String contractType;
+  final String status;
 
   ContractData({
     required this.employeeName,
@@ -16,8 +17,9 @@ class ContractData {
     required this.position,
     required this.startDate,
     required this.endDate,
-    required this.contractType,
     required this.schedule,
+    required this.salaryStructure,
+    required this.contractType,
     required this.status,
   });
 
@@ -29,6 +31,7 @@ class ContractData {
       position: data['Position'],
       startDate: data['Start Date'],
       endDate: data['End Date'],
+      salaryStructure: data['Salary Structure'],
       contractType: data['Contract Type'],
       schedule: data['Schedule'],
       status: data['Status'],
@@ -43,6 +46,7 @@ class ContractData {
       'Position': position,
       'Start Date': startDate,
       'End Date': endDate,
+      'Salary Structure': salaryStructure,
       'Contract Type': contractType,
       'Schedule': schedule,
       'Status': status,
@@ -66,8 +70,9 @@ List<ContractData> contracts = [
     reference: 'REF123',
     department: 'Administration',
     position: 'Director',
-    startDate: '2022-01-01',
-    endDate: '2023-01-01',
+    startDate: DateTime(2021-06-15),
+    endDate: DateTime(2021-06-15),
+    salaryStructure: 'Employee',
     contractType: 'Permanent',
     schedule: 'Full-time',
     status: 'Running',
@@ -77,8 +82,9 @@ List<ContractData> contracts = [
     reference: 'REF124',
     department: 'Research & Development',
     position: 'Project Manager',
-    startDate: '2021-06-15',
-    endDate: '2022-06-15',
+    startDate: DateTime(2021-06-15),
+    endDate: DateTime(2021-06-15),
+    salaryStructure: 'Employee',
     contractType: 'Temporary',
     schedule: 'Part-time',
     status: 'Expired',
@@ -88,8 +94,9 @@ List<ContractData> contracts = [
     reference: 'REF003',
     department: 'Research & Development',
     position: 'Dev',
-    startDate: '2023-11-12',
-    endDate: '2025-11-12',
+    startDate: DateTime(2021-06-15),
+    endDate: DateTime(2021-06-15),
+    salaryStructure: 'Employee',
     contractType: 'Full-time',
     schedule: 'Part-time',
     status: 'Running',
