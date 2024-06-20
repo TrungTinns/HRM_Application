@@ -40,7 +40,7 @@ public class EmployeeCommandController {
             model.getImg()
         );
         commandGateway.sendAndWait(command);
-        return "Added an Employee with ID: " + command;
+        return "Added an Employee with ID: " + command.getId();
     }
     
     @PutMapping

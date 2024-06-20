@@ -1,6 +1,7 @@
 package com.tdtu.employeeservice.command.event;
 
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;
@@ -9,24 +10,25 @@ import org.springframework.stereotype.Component;
 
 import com.tdtu.employeeservice.command.data.Employee;
 import com.tdtu.employeeservice.command.data.EmployeeRepository;
+import com.tdtu.employeeservice.command.data.EmployeeService;
 
 
 @Component
 public class EmployeeEventsHandler {
 
 	@Autowired
-	private EmployeeRepository empRepository;
-
+	private EmployeeService empService;
+	
 	@EventHandler
-	public void on(EmployeeCreatedEvent event) {
+	public void on(EmployeeCreatedEvent event) throws InterruptedException, ExecutionException {
 		Employee emp = new Employee();
 		BeanUtils.copyProperties(event, emp);
-		empRepository.save(emp);
+		empService.save(emp);
 	}
 	
 	@EventHandler
-	public void on(EmployeeUpdatedEvent event) {
-		Optional<Employee> empOptional = empRepository.findById(event.getId());
+	public void on(EmployeeUpdatedEvent event) throws InterruptedException, ExecutionException {
+		Optional<Employee> empOptional = Optional.ofNullable(empService.findById(event.getId()));
 		if (empOptional.isPresent()) {
 			Employee emp = empOptional.get();
 			emp.setFirstName(event.getFirstName());
@@ -38,7 +40,7 @@ public class EmployeeEventsHandler {
 			emp.setPosition(event.getPosition());
 			emp.setSalary(event.getSalary());
 			emp.setEmail(event.getEmail());
-			empRepository.save(emp);
+			empService.save(emp);
 		}
 		else {
 		}
@@ -46,6 +48,6 @@ public class EmployeeEventsHandler {
 	
 	@EventHandler
 	public void on(EmployeeDeletedEvent event) {
-		empRepository.deleteById(event.getId());
+		empService.deleteById(event.getId());
 	}
 }
