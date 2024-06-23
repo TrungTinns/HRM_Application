@@ -1,5 +1,4 @@
-import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
-import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: SignIn(),
-      home: Contracts(),
+      home: Department(),
     );
   }
 }

@@ -74,7 +74,7 @@ List<ContractData> contracts = [
     endDate: DateTime(2021-06-15),
     salaryStructure: 'Employee',
     contractType: 'Permanent',
-    schedule: 'Full-time',
+    schedule: 'Standard 40 hours/week',
     status: 'Running',
   ),
   ContractData(
@@ -86,7 +86,7 @@ List<ContractData> contracts = [
     endDate: DateTime(2021-06-15),
     salaryStructure: 'Employee',
     contractType: 'Temporary',
-    schedule: 'Part-time',
+    schedule: 'Part-time 25 hours/week-',
     status: 'Expired',
   ),
   ContractData(
@@ -98,7 +98,7 @@ List<ContractData> contracts = [
     endDate: DateTime(2021-06-15),
     salaryStructure: 'Employee',
     contractType: 'Full-time',
-    schedule: 'Part-time',
+    schedule: 'Standard 40 hours/week',
     status: 'Running',
   ),
 ];

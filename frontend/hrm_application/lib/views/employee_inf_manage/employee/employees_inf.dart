@@ -16,6 +16,10 @@ class EmployeeInf {
   });
 }
 
+int countEmployeesInDepartment(List<EmployeeInf> employees, String department) {
+  return employees.where((employee) => employee.department == department).length;
+}
+
 final List<EmployeeInf> employees = [
   EmployeeInf(
     name: 'John Doe',
@@ -170,7 +174,7 @@ final List<EmployeeInf> employees = [
     manager: 'Manager 1',
   ),
   EmployeeInf(
-    name: 'Trung Tin',
+    name: 'Minh Tien',
     role: 'Collaborator',
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',

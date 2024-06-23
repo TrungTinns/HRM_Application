@@ -9,7 +9,6 @@ class EmployeeForm extends StatefulWidget {
 }
 
 class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderStateMixin {
-
   TextEditingController nameController = TextEditingController();
   TextEditingController roleController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
@@ -17,10 +16,11 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
 
+  final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
+  final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
+  final List<String> managers = ['Manager 1', 'Manager 2', 'Manager 3'];
+
   TabController? tabController;
-
-  bool _isSidebarOpen = true;
-
   bool isNameFilled = false;
 
   @override
@@ -75,7 +75,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
     return Row(
       children: [
         SizedBox(
-          width: 100,
+          width: 150,
           child: Text(
             label,
             style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -102,7 +102,6 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
       ],
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -172,11 +171,11 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Department', departmentController, ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial']),
+                      buildDropdownRow('Department', departmentController, departments),
                       SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator']),
+                      buildDropdownRow('Position', roleController, roles),
                       SizedBox(height: 10),
-                      buildDropdownRow('Manager', managerController, ['Manager 1', 'Manager 2', 'Manager 3']),
+                      buildDropdownRow('Manager', managerController, managers),
                     ],
                   ),
                 ),

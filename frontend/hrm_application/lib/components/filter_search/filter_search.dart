@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/widgets/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class filter extends StatefulWidget {
   final List<String> titles;

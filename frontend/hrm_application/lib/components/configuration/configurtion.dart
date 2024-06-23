@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class configuration extends StatefulWidget {

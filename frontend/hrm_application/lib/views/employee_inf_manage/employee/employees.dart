@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/components/filter_search/filter_search.dart';
@@ -20,7 +19,6 @@ class EmployeeManage extends StatefulWidget {
 
 class _EmployeeManageState extends State<EmployeeManage> {
   String pageName = 'Employees';
-  bool _isHovered = false;
   bool _isSidebarOpen = true;
   bool showEmployeeForm = false;
   // bool showEmployeeDetail = false; //Show EmployeeDetail

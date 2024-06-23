@@ -63,7 +63,7 @@ class _ContractsState extends State<Contracts> {
     }
   }
 
-  void clearEmployeeForm() {
+  void clearContractForm() {
     setState(() {
       showContractForm = false;
     });
@@ -187,7 +187,7 @@ class _ContractsState extends State<Contracts> {
                         iconSize: 24,
                         tooltip: "Discard all changes",
                         onPressed: () {
-                          clearEmployeeForm();
+                          clearContractForm();
                         },
                     ),
                   ],
@@ -227,7 +227,6 @@ class _ContractsState extends State<Contracts> {
         backgroundColor: snackBarColor,
       ),
       body:showContractForm
-      // &!showEmployeeDetail
           ? ContractForm(
             addContract: addContract,
           )

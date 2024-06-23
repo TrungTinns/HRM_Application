@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/detail/contract_detail.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -51,7 +52,7 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Employee',
         field: 'Employee',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.select(employees),
       ),
       PlutoColumn(
         title: 'Reference',
@@ -108,7 +109,6 @@ class _ContractDataTableState extends State<ContractDataTable> {
       },
       onRowDoubleTap: (event) {
         final row = event.row;
-    // Lưu index của row
         final index = rows.indexOf(row);
         Navigator.push(
           context,

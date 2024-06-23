@@ -171,41 +171,6 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     );
   }
 
-  Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 150,
-          child: Text(
-            label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-        ),
-        Expanded(
-          child: DropdownButtonFormField<dynamic>(
-            dropdownColor: dropdownColor,
-            value: null,
-            items: items.map((item) {
-              return DropdownMenuItem<dynamic>(
-                value: item,
-                child: Text(item.toString(), style: TextStyle(color: textColor)),
-              );
-            }).toList(),
-            onChanged: (selectedItem) {
-              setState(() {
-                controller.text = selectedItem.toString();
-              });
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: snackBarColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -304,13 +269,13 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                       icon: Icon(Icons.clear),
                       color: Colors.white,
                       iconSize: 24,
-                      tooltip: "Delete this employee",
+                      tooltip: "Delete this contract",
                       onPressed: () {
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Do you want to delete this employee?'),
+                              title: Text('Do you want to delete this contract?'),
                               content: Text(''),
                               actions: [
                                 TextButton(

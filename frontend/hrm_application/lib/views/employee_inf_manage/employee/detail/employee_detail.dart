@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
-import 'package:hrm_application/components/filter_search/filter_search.dart';
-import 'package:hrm_application/components/search/searchBox.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
@@ -18,7 +16,7 @@ class EmployeeDetail extends StatefulWidget {
   final String mobile;
   final String department;
   final String manager;
-  final VoidCallback onDelete; // Thêm callback onDelete
+  final VoidCallback onDelete;
 
   EmployeeDetail({
     required this.name,
@@ -27,7 +25,7 @@ class EmployeeDetail extends StatefulWidget {
     required this.mobile,
     required this.department,
     required this.manager,
-    required this.onDelete, // Thêm callback onDelete
+    required this.onDelete,
   });
 
   @override
@@ -41,6 +39,10 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   TextEditingController mailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
+  final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
+  final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
+  final List<String> managers = ['Manager 1', 'Manager 2', 'Manager 3'];
+
   String pageName = 'Employees';
   bool showEmployeeForm = false;
   String? activeDropdown;
@@ -108,7 +110,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     return Row(
       children: [
         SizedBox(
-          width: 100,
+          width: 150,
           child: Text(
             label,
             style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -132,7 +134,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     return Row(
       children: [
         SizedBox(
-          width: 100,
+          width: 150,
           child: Text(
             label,
             style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -368,11 +370,11 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Department', departmentController, ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial']),
+                      buildDropdownRow('Department', departmentController, departments),
                       SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator']),
+                      buildDropdownRow('Position', roleController, roles),
                       SizedBox(height: 10),
-                      buildDropdownRow('Manager', managerController, ['Manager 1', 'Manager 2', 'Manager 3']),
+                      buildDropdownRow('Manager', managerController, managers),
                     ],
                   ),
                 ),

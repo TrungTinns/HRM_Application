@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/components/filter_search/filter_search.dart';
@@ -16,8 +15,6 @@ class RecruitmentManage extends StatefulWidget {
 
 class _RecruitmentManageState extends State<RecruitmentManage> {
   String pageName = 'Recruitments';
-  bool _isHovered = false;
-  bool _isSidebarOpen = true;
   bool showEmployeeForm = false;
   String? activeDropdown;
 

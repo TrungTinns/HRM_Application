@@ -5,10 +5,9 @@ import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dar
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
-import 'package:pluto_grid/pluto_grid.dart';
 
 class ContractForm extends StatefulWidget {
-    final Function(ContractData) addContract;
+  final Function(ContractData) addContract;
 
   ContractForm({required this.addContract});
   @override
@@ -205,7 +204,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Employee', employees, referenceController),
+                      buildDropdownRow('Employee', employees, employeeNameController),
                       SizedBox(height: 10),
                       buildTextFieldRow('Contract Start Date', startDateController, isDateField: true),
                       SizedBox(height: 10),
@@ -255,9 +254,9 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
       ),
       floatingActionButton: isRefFilled
           ? FloatingActionButton(
-      onPressed: _addContract,
-      child: Icon(Icons.create),
-    )
+            onPressed: _addContract,
+            child: Icon(Icons.create),
+          )
           : null,
     );
   }
