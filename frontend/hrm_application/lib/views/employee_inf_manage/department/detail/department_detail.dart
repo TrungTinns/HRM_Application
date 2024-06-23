@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
-import 'package:hrm_application/components/filter_search/filter_search.dart';
-import 'package:hrm_application/components/search/searchBox.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
-import 'package:hrm_application/views/employee_inf_manage/department/card/department_card.dart';
-import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart'; 
-import 'package:hrm_application/views/employee_inf_manage/department/form/department_form.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
-class Department extends StatefulWidget {
+class DepartmentDetail extends StatefulWidget {final String department;
+  final String manager;
+  final String superior;
+  final VoidCallback onDelete;
+
+  DepartmentDetail({
+    required this.department,
+    required this.manager,
+    required this.superior,
+    required this.onDelete,
+  });
+
   @override
-  _DepartmentState createState() => _DepartmentState();
+  _DepartmentDetailState createState() => _DepartmentDetailState();
 }
 
-class _DepartmentState extends State<Department> {
-  String pageName = 'Department';
+class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerProviderStateMixin {
   TextEditingController departmentController = TextEditingController();
-  String? activeDropdown;
-  bool showDepartmentForm = false;
+  TextEditingController managerController = TextEditingController();
+  TextEditingController superiorController = TextEditingController();
+  final List<String> superiors = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
 
+  String pageName = 'Department';
+  bool showDepartmentForm = false;
+  String? activeDropdown;
   void setActiveDropdown(String? dropdown) {
     setState(() {
       activeDropdown = dropdown;
@@ -60,25 +70,70 @@ class _DepartmentState extends State<Department> {
       });
     }
   }
-
-  void addDepartment(DepartmentInf newDepartment) {
-    setState(() {
-      departments.add(newDepartment);
-      showDepartmentForm = false;
-    });
+  
+    @override
+  void initState() {
+    super.initState();
+    departmentController.text = widget.department;
+    managerController.text = widget.manager;
+    superiorController.text = widget.superior;
   }
 
-  void clearDepartmentForm() {
-    setState(() {
-      departmentController.clear();
-      showDepartmentForm = false;
-    });
+  Widget buildTextFieldRow(String label, TextEditingController controller) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 200,
+          child: Text(
+            label,
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+        ),
+        Expanded(
+          child: TextField(
+            controller: controller,
+            readOnly: true,
+            style: TextStyle(color: textColor),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: snackBarColor,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  void deleteDepartment(String department) {
-    setState(() {
-      departments.removeWhere((deparment) => deparment.department == department);
-    });
+  Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 200,
+          child: Text(
+            label,
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+        ),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            dropdownColor: dropdownColor,
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value, style: TextStyle(color: textColor)),
+              );
+            }).toList(),
+            onChanged: (value) {
+              controller.text = value!;
+            },
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: snackBarColor,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -88,7 +143,7 @@ class _DepartmentState extends State<Department> {
         automaticallyImplyLeading: false,
         title: CustomTitleAppbar(
           ctx: context,
-          service: 'Employees',
+          service: pageName,
           titles: ['Employees', 'Reporting'],
           options: [
             ['Employees', 'Department', 'Contracts', 'Org Chart'],
@@ -107,8 +162,11 @@ class _DepartmentState extends State<Department> {
             ],
           ],
           activeDropdowns: ['Employees', 'Reporting'],
-          setActiveDropdown: (dropdown) {            
-          }, 
+          setActiveDropdown: (dropdown) {
+            setState(() {
+              activeDropdown = dropdown;
+            });
+          },
           config: configuration(
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
@@ -136,7 +194,7 @@ class _DepartmentState extends State<Department> {
                 () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               ],
             ],
-          )
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
@@ -147,6 +205,7 @@ class _DepartmentState extends State<Department> {
                 child: ElevatedButton(
                   onPressed: () {
                     toggleDepartmentForm();
+
                   },
                   child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
@@ -172,90 +231,73 @@ class _DepartmentState extends State<Department> {
                       onPressed: () {},
                       tooltip: "Import records",
                     ),
-                    if (showDepartmentForm)
-                      IconButton(
-                        icon: Icon(Icons.clear),
-                        color: Colors.white,
-                        iconSize: 24,
-                        tooltip: "Discard all changes",
-                        onPressed: () {
-                          clearDepartmentForm();
-                        },
+                    IconButton(
+                      icon: Icon(Icons.clear),
+                      color: Colors.white,
+                      iconSize: 24,
+                      tooltip: "Delete this Department",
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Do you want to delete this Department?'),
+                              content: Text(''),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    widget.onDelete();
+                                    Navigator.pop(context); 
+                                    Navigator.pop(context); 
+                                  },
+                                  child: Text('OK'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
-              Spacer(),
-              if (!showDepartmentForm)
-                searchBoxWithFilterTable(context, 'Search...', filter(
-                  titles: ['Filter', 'Group By', 'Favorites'],
-                  icons: [Icons.filter_alt, Icons.groups, Icons.star_rounded],
-                  iconColors: [primaryColor, Colors.greenAccent, Colors.yellow],
-                  options: [
-                    ['My Team', 'My Department', 'Newly Hired', 'Achieved'],
-                    ['Manager', 'Department', 'Job', 'Skill', 'Start Date', 'Tags'],
-                    ['Save Current Search']
-                  ],
-                  navigators: [
-                    [
-                      () => Navigator.pushNamed(context, '/my_team'), 
-                      () => Navigator.pushNamed(context, '/my_department'), 
-                      () => Navigator.pushNamed(context, '/newly_hired'), 
-                      () => Navigator.pushNamed(context, '/achieved')],
-                    [
-                      () => Navigator.pushNamed(context, '/manager'), 
-                      () => Navigator.pushNamed(context, '/department'), 
-                      () => Navigator.pushNamed(context, '/job'), 
-                      () => Navigator.pushNamed(context, '/skill'), 
-                      () => Navigator.pushNamed(context, '/start_date'), 
-                      () => Navigator.pushNamed(context, '/tags')],
-                    [() => print('Save Current Search')],
-                  ],)
-                ),
-              Spacer(),
             ],
           ),
         ),
         backgroundColor: snackBarColor,
       ),
-      body: showDepartmentForm
-          ? DepartmentForm(onAddDepartment: addDepartment) 
-          : Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                int crossAxisCount;
-                if (constraints.maxWidth >= 1200) {
-                  // Desktop
-                  crossAxisCount = 3;
-                } else if (constraints.maxWidth >= 800) {
-                  // Tablet
-                  crossAxisCount = 2;
-                } else {
-                  // Mobile
-                  crossAxisCount = 1;
-                }
-                return GridView.builder(
-                  padding: EdgeInsets.all(10),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 3.8,
-                  ),
-                  itemCount: departments.length,
-                  itemBuilder: (context, index) {
-                    final department = departments[index];
-                    return DepartmentCard(
-                      department: department.department,
-                      manager: department.manager,
-                      superior: department.superior,
-                      onDelete: () => deleteDepartment(department.department)
-                    );
-                  },
-                );
-              },
+      backgroundColor: snackBarColor,
+      body:  SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: departmentController,
+              style: TextStyle(color: textColor, fontSize: 30.0),
+              decoration: InputDecoration(
+                hintText: "Name of Department",
+                hintStyle: TextStyle(color: termTextColor, fontSize: 30.0), 
+              ),
             ),
-          ),
-        );
+            SizedBox(height: 20),
+            Column(
+              children: [
+                buildTextFieldRow('Manage', managerController),
+                SizedBox(height: 10),
+                buildTextFieldRow('Superior Department', superiorController),
+                SizedBox(height: 10),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
