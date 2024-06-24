@@ -18,7 +18,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
 
   final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
   final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
-  final List<String> managers = ['Manager 1', 'Manager 2', 'Manager 3'];
+  final List<String> managers = ['John Doe', 'Gordon Ramsay', 'Manager 3'];
 
   TabController? tabController;
   bool isNameFilled = false;
@@ -54,14 +54,14 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
           width: 100,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
           child: TextField(
             controller: controller,
-            style: TextStyle(color: textColor),
-            decoration: InputDecoration(
+            style: const TextStyle(color: textColor),
+            decoration: const InputDecoration(
               filled: true,
               fillColor: snackBarColor,
             ),
@@ -78,7 +78,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
           width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
@@ -87,13 +87,13 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value, style: TextStyle(color: textColor)),
+                child: Text(value, style: const TextStyle(color: textColor)),
               );
             }).toList(),
             onChanged: (value) {
               controller.text = value!;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               filled: true,
               fillColor: snackBarColor,
             ),
@@ -108,7 +108,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: snackBarColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -121,16 +121,16 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                     children: [
                       TextField(
                         controller: nameController,
-                        style: TextStyle(color: textColor, fontSize: 40.0),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: textColor, fontSize: 40.0),
+                        decoration: const InputDecoration(
                           hintText: "Employee's Name",
                           hintStyle: TextStyle(color: termTextColor, fontSize: 40.0),
                         ),
                       ),
                       TextField(
                         controller: roleController,
-                        style: TextStyle(color: textColor, fontSize: 20.0),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: textColor, fontSize: 20.0),
+                        decoration: const InputDecoration(
                           hintText: "Job Position",
                           hintStyle: TextStyle(color: termTextColor, fontSize: 20.0),
                         ),
@@ -138,14 +138,14 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                     ],
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     IconButton(
-                      icon: Icon(Icons.insert_photo),
+                      icon: const Icon(Icons.insert_photo),
                       color: textColor,
                       iconSize: 120,
                       onPressed: () {},
@@ -162,40 +162,40 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                   child: Column(
                     children: [
                       buildTextFieldRow('Mobile', mobileController),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildTextFieldRow('Email', mailController),
                     ],
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     children: [
                       buildDropdownRow('Department', departmentController, departments),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildDropdownRow('Position', roleController, roles),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, managers),
                     ],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TabBar(
               controller: tabController,
-              labelStyle: TextStyle(color: textColor, fontSize: 16),
-              tabs: [
+              labelStyle: const TextStyle(color: textColor, fontSize: 16),
+              tabs: const [
                 Tab(text: 'Work Information'),
                 Tab(text: 'Private Information'),
                 Tab(text: 'Contract'),
               ],
             ),
-            Container(
+            SizedBox(
               height: 200,
               child: TabBarView(
                 controller: tabController,
-                children: [
+                children: const [
                   Center(child: Text('Content for Tab 1')),
                   Center(child: Text('Content for Tab 2')),
                   Center(child: Text('Content for Tab 3')),
@@ -221,7 +221,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 });
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage()));
               },
-              child: Icon(Icons.create),
+              child: const Icon(Icons.create),
             )
           : null,
     );

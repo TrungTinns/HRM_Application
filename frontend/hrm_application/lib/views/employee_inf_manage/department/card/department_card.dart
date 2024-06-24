@@ -22,7 +22,7 @@ class DepartmentCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,          
           children: [
@@ -32,7 +32,7 @@ class DepartmentCard extends StatelessWidget {
                 children: [
                   Text(
                     department,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -47,14 +47,13 @@ class DepartmentCard extends StatelessWidget {
                         onDelete: onDelete,
                       )));
                     }, 
-                    icon: Icon(Icons.more_vert)
+                    icon: const Icon(Icons.more_vert)
                   )
                 ],
               ),
             ),
             ElevatedButton(
               onPressed: () {},
-              child: Text('$employeeCount Employees', style: TextStyle(color: Colors.white, fontSize: 16)),
               style: ElevatedButton.styleFrom(
                 foregroundColor: textColor,
                 backgroundColor: primaryColor,
@@ -62,6 +61,7 @@ class DepartmentCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
+              child: Text('$employeeCount Employees', style: const TextStyle(color: Colors.white, fontSize: 16)),
             ),
           ],
         ),

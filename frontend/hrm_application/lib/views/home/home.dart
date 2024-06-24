@@ -15,9 +15,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
             centerTitle: true,
             actions: [
               IconButton(
-                icon: Icon(Icons.wechat),
+                icon: const Icon(Icons.wechat),
                 color: textColor,
                 iconSize: 30,
                 onPressed: () {
@@ -42,20 +42,20 @@ class _HomeState extends State<Home> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
                 color: textColor,
                 iconSize: 30,
                 onPressed: () {
                 
                 },
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
             ],
           ),
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
@@ -79,11 +79,11 @@ class _HomeState extends State<Home> {
                 // Mobile
                 crossAxisCount = 2;
               }
-              return Container(
+              return SizedBox(
                 width: crossAxisCount * 130.0,
                 height: (6 / crossAxisCount).ceil() * 130.0,
                 child: GridView.builder(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 30.0,

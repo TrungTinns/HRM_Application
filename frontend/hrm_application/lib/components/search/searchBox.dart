@@ -17,13 +17,13 @@ Widget searchBoxWithFilterTable(BuildContext context, String hintText, Widget fi
             children: [
               Expanded(
                 child: TextField(
-                  style: TextStyle(color: textColor, fontSize: 16.0),
+                  style: const TextStyle(color: textColor, fontSize: 16.0),
                   decoration: InputDecoration(
                     hintText: hintText,
-                    hintStyle: TextStyle(color: termTextColor),
-                    prefixIcon: Icon(Icons.search, color: textColor),
+                    hintStyle: const TextStyle(color: termTextColor),
+                    prefixIcon: const Icon(Icons.search, color: textColor),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 14.0),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 14.0),
                   ),
                 ),
               ),
@@ -35,7 +35,7 @@ Widget searchBoxWithFilterTable(BuildContext context, String hintText, Widget fi
           child: Container(
             width: 40.0,
             height: 40.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: termTextColor,
             ),
             child: filter,
@@ -62,9 +62,9 @@ Widget searchBox(BuildContext context, String hintText) {
             child: TextField(
               decoration: InputDecoration(
                 hintText: hintText,
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 14.0),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14.0),
               ),
             ),
           ),

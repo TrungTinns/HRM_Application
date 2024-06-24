@@ -37,14 +37,14 @@ class _OrgChartState extends State<OrgChartManage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Incomplete Form'),
-              content: Text('Information is missing.'),
+              title: const Text('Incomplete Form'),
+              content: const Text('Information is missing.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -106,8 +106,8 @@ class _OrgChartState extends State<OrgChartManage> {
         title: CustomTitleAppbar(
           ctx: context,
           service: 'Employees',
-          titles: ['Employees', 'Reporting'],
-          options: [
+          titles: const ['Employees', 'Reporting'],
+          options: const [
             ['Employees', 'Department', 'Contracts', 'Org Chart'],
             ['Contracts', 'Skills']
           ],
@@ -123,7 +123,7 @@ class _OrgChartState extends State<OrgChartManage> {
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
           ],
-          activeDropdowns: ['Employees', 'Reporting'],
+          activeDropdowns: const ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {
             setState(() {
               activeDropdown = dropdown;
@@ -133,8 +133,8 @@ class _OrgChartState extends State<OrgChartManage> {
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            titles: ['Setting', 'Employee', 'Recruitment'],
-            options: [
+            titles: const ['Setting', 'Employee', 'Recruitment'],
+            options: const [
               ['Setting', 'Activity Plan'],
               ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
               ['Job Positions', 'Employment Types']
@@ -159,16 +159,15 @@ class _OrgChartState extends State<OrgChartManage> {
           ),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
                     toggleEmployeeForm();
                   },
-                  child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: textColor,
                     backgroundColor: primaryColor,
@@ -176,25 +175,26 @@ class _OrgChartState extends State<OrgChartManage> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
+                  child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     Text(
                       pageName,
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     IconButton(
-                      icon: Icon(Icons.upload),
+                      icon: const Icon(Icons.upload),
                       color: Colors.white,
                       onPressed: () {},
                       tooltip: "Import records",
                     ),
                     if (showEmployeeForm)
                       IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         color: Colors.white,
                         iconSize: 24,
                         tooltip: "Discard all changes",
@@ -205,13 +205,13 @@ class _OrgChartState extends State<OrgChartManage> {
                   ],
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               if (!showEmployeeForm)
                 searchBoxWithFilterTable(context, 'Search...', filter(
-                  titles: ['Filter', 'Group By', 'Favorites'],
-                  icons: [Icons.filter_alt, Icons.groups, Icons.star_rounded],
-                  iconColors: [primaryColor, Colors.greenAccent, Colors.yellow],
-                  options: [
+                  titles: const ['Filter', 'Group By', 'Favorites'],
+                  icons: const [Icons.filter_alt, Icons.groups, Icons.star_rounded],
+                  iconColors: const [primaryColor, Colors.greenAccent, Colors.yellow],
+                  options: const [
                     ['My Team', 'My Department', 'Newly Hired', 'Achieved'],
                     ['Manager', 'Department', 'Job', 'Skill', 'Start Date', 'Tags'],
                     ['Save Current Search']
@@ -232,7 +232,7 @@ class _OrgChartState extends State<OrgChartManage> {
                     [() => print('Save Current Search')],
                   ],)
                 ),
-              Spacer(),
+              const Spacer(),
             ],
           ),
         ),

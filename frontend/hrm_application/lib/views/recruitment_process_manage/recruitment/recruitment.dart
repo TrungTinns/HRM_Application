@@ -39,8 +39,8 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
         CustomTitleAppbar(
           ctx: context,
           service: 'Recruitment',
-          titles: ['Application', 'Reporting'],
-          options: [
+          titles: const ['Application', 'Reporting'],
+          options: const [
             ['Employees', 'Department', 'Contracts'],
             ['Contracts', 'Skills']
           ],
@@ -55,15 +55,15 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
           ],
-          activeDropdowns: ['Employees', 'Reporting'],
+          activeDropdowns: const ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {
           }, 
           config: configuration(
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            titles: ['Setting', 'Employee', 'Recruitment'],
-            options: [
+            titles: const ['Setting', 'Employee', 'Recruitment'],
+            options: const [
               ['Setting', 'Activity Plan'],
               ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
               ['Job Positions', 'Employment Types']
@@ -88,16 +88,15 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
           )
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
                     toggleEmployeeForm();
                   },
-                  child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white, 
                     backgroundColor: primaryColor,
@@ -105,18 +104,19 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
                       borderRadius: BorderRadius.circular(5), 
                     ),
                   ),
+                  child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     Text(
                       pageName,
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     IconButton(
-                      icon: Icon(Icons.upload),
+                      icon: const Icon(Icons.upload),
                       color: Colors.white,
                       onPressed: () {
                         
@@ -126,13 +126,13 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
                   ],
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               if (!showEmployeeForm)
                 searchBoxWithFilterTable(context, 'Search...', filter(
-                  titles: ['Filter', 'Group By', 'Favorites'],
-                  icons: [Icons.filter_alt, Icons.groups, Icons.star_rounded],
-                  iconColors: [primaryColor, Colors.greenAccent, Colors.yellow],
-                  options: [
+                  titles: const ['Filter', 'Group By', 'Favorites'],
+                  icons: const [Icons.filter_alt, Icons.groups, Icons.star_rounded],
+                  iconColors: const [primaryColor, Colors.greenAccent, Colors.yellow],
+                  options: const [
                     ['My Team', 'My Department', 'Newly Hired', 'Achieved'],
                     ['Manager', 'Department', 'Job', 'Skill', 'Start Date', 'Tags'],
                     ['Save Current Search']
@@ -156,20 +156,20 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
               ),
               if (showEmployeeForm)
                 IconButton(
-                  icon: Icon(Icons.person),
+                  icon: const Icon(Icons.person),
                   color: Colors.white,
                   iconSize: 30,
                   onPressed: () {
                     // Perform an action
                   },
                 ),
-              Spacer(),
+              const Spacer(),
             ],
           ),
         ),
         backgroundColor: snackBarColor,
       ),
-      body: Row(
+      body: const Row(
       )
     );
   }

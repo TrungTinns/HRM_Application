@@ -43,7 +43,7 @@ class _DepartmentFormState extends State<DepartmentForm> with SingleTickerProvid
           width: 200,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
@@ -52,13 +52,13 @@ class _DepartmentFormState extends State<DepartmentForm> with SingleTickerProvid
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value, style: TextStyle(color: textColor)),
+                child: Text(value, style: const TextStyle(color: textColor)),
               );
             }).toList(),
             onChanged: (value) {
               controller.text = value!;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               filled: true,
               fillColor: snackBarColor,
             ),
@@ -73,25 +73,25 @@ class _DepartmentFormState extends State<DepartmentForm> with SingleTickerProvid
     return Scaffold(
       backgroundColor: snackBarColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: departmentController,
-              style: TextStyle(color: textColor, fontSize: 30.0),
-              decoration: InputDecoration(
+              style: const TextStyle(color: textColor, fontSize: 30.0),
+              decoration: const InputDecoration(
                 hintText: "Name of Department",
                 hintStyle: TextStyle(color: termTextColor, fontSize: 30.0), 
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Column(
               children: [
                 buildDropdownRow('Manage', managerController, employees.map((employee) => employee.name).toList()),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 buildDropdownRow('Superior Department', superiorController, superiors),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -107,7 +107,7 @@ class _DepartmentFormState extends State<DepartmentForm> with SingleTickerProvid
                 );
                 widget.onAddDepartment(newDepartment);
               },
-              child: Icon(Icons.create),
+              child: const Icon(Icons.create),
             )
           : null,
     );

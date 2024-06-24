@@ -42,7 +42,7 @@ class _configurationState extends State<configuration> {
     var offset = renderBox.localToGlobal(Offset.zero);
 
     _overlayEntry = _createOverlayEntry(size, offset);
-    Overlay.of(context)?.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
     widget.onOpen();
     _isOpen = true;
   }
@@ -92,10 +92,10 @@ class _configurationState extends State<configuration> {
         enabled: false,
         child: Column(
           children: [
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -110,7 +110,7 @@ class _configurationState extends State<configuration> {
         return PopupMenuItem<String>(
           value: option,
           child: ListTile(
-            title: Text(option, style: TextStyle(color: termTextColor)),
+            title: Text(option, style: const TextStyle(color: termTextColor)),
             onTap: () {
               int index = options.indexOf(option);
               if (index != -1) {
@@ -142,12 +142,12 @@ class _configurationState extends State<configuration> {
           });
         },
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: _isHovered ? Colors.grey : snackBarColor,
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Row(
+          child: const Row(
             children: [
               Text(
                 'Configuration',

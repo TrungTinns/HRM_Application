@@ -9,7 +9,6 @@ class Calendar extends StatelessWidget {
 
   final DateTime _selectedDate = DateTime.now();
   final Map<DateTime, List<dynamic>> _events = {};
-  final List<dynamic> _selectedEvents = [];
 
   void _onDaySelected(BuildContext context, DateTime day, List<dynamic> events) {
 
@@ -30,7 +29,7 @@ class Calendar extends StatelessWidget {
       onDaySelected: (selectedDay, focusedDay) {
         _onDaySelected(context, selectedDay, _events[selectedDay] ?? []);
       },
-      calendarStyle: CalendarStyle(
+      calendarStyle: const CalendarStyle(
         todayDecoration: BoxDecoration(
           color: Color.fromARGB(255, 209, 58, 12),
           shape: BoxShape.circle,
@@ -42,7 +41,7 @@ class Calendar extends StatelessWidget {
           shape: BoxShape.circle,
         ),
       ),
-      headerStyle: HeaderStyle(
+      headerStyle: const HeaderStyle(
         titleTextStyle: TextStyle(
           fontSize: 20,
           color: textColor,
@@ -61,6 +60,8 @@ class Calendar extends StatelessWidget {
 }
 
 class CalendarFrame extends StatelessWidget {
+  const CalendarFrame({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -82,14 +83,14 @@ class CalendarFrame extends StatelessWidget {
               bottom: 40,
               child: IconButton(
                 iconSize: 100,
-                icon: Icon(Icons.calendar_month),
+                icon: const Icon(Icons.calendar_month),
                 color: textColor,
                 onPressed: () {
             
                 },
               ),
             ),
-            Positioned(
+            const Positioned(
               bottom: 20,
               child: Text(
                     'Work Harder!!!', 

@@ -30,7 +30,7 @@ class CustomTitleAppbar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           color: textColor,
           iconSize: 25,
           onPressed: () {
@@ -45,7 +45,7 @@ class CustomTitleAppbar extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         for (int i = 0; i < titles.length; i++) ...[
           CustomDropdownButton(
             title: titles[i],
@@ -59,12 +59,12 @@ class CustomTitleAppbar extends StatelessWidget {
             onOpen: () => setActiveDropdown(titles[i]),
             onClose: () => setActiveDropdown(''),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
         ],
         config,  
-        Spacer(),
+        const Spacer(),
         IconButton(
-          icon: Icon(Icons.wechat),
+          icon: const Icon(Icons.wechat),
           color: textColor,
           iconSize: 30,
           onPressed: () {
@@ -72,7 +72,7 @@ class CustomTitleAppbar extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: Icon(Icons.settings),
+          icon: const Icon(Icons.settings),
           color: textColor,
           iconSize: 30,
           onPressed: () {
@@ -125,7 +125,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
     var offset = renderBox.localToGlobal(Offset.zero);
 
     _overlayEntry = _createOverlayEntry(size, offset);
-    Overlay.of(context)?.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
     widget.onOpen();
     _isOpen = true;
   }
@@ -156,9 +156,9 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                   _closeDropdown();
                 },
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   width: size.width,
-                  child: Text(option, style: TextStyle(color: termTextColor, fontSize: 14)), 
+                  child: Text(option, style: const TextStyle(color: termTextColor, fontSize: 14)), 
                 ),
               );
             }).toList(),
@@ -185,14 +185,14 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
           });
         },
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: _isHovered ? Colors.grey : snackBarColor,
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
             widget.title,
-            style: TextStyle(color: Colors.white, fontSize: 16), 
+            style: const TextStyle(color: Colors.white, fontSize: 16), 
           ),
         ),
       ),

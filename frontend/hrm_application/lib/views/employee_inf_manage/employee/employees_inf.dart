@@ -27,7 +27,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Administration',
-    manager: 'Manager 1',
+    manager: 'Gordon Ramsay',
   ),
   EmployeeInf(
     name: 'Alice Johnson',
@@ -35,7 +35,7 @@ final List<EmployeeInf> employees = [
     mail: 'alice.johnson@example.com',
     mobile: '234-567-8901',
     department: 'Research & Development',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Bob Smith',
@@ -43,7 +43,7 @@ final List<EmployeeInf> employees = [
     mail: 'bob.smith@example.com',
     mobile: '345-678-9012',
     department: 'Research & Development',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Charlie Brown',
@@ -51,7 +51,7 @@ final List<EmployeeInf> employees = [
     mail: 'charlie.brown@example.com',
     mobile: '456-789-0123',
     department: 'Research & Development',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Daisy Ridley',
@@ -59,7 +59,7 @@ final List<EmployeeInf> employees = [
     mail: 'daisy.ridley@example.com',
     mobile: '567-890-1234',
     department: 'Quality',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Edward Norton',
@@ -67,7 +67,7 @@ final List<EmployeeInf> employees = [
     mail: 'edward.norton@example.com',
     mobile: '678-901-2345',
     department: 'Human Resources',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Fiona Gallagher',
@@ -75,7 +75,7 @@ final List<EmployeeInf> employees = [
     mail: 'fiona.gallagher@example.com',
     mobile: '789-012-3456',
     department: 'Human Resources',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Gordon Ramsay',
@@ -83,7 +83,7 @@ final List<EmployeeInf> employees = [
     mail: 'gordon.ramsay@example.com',
     mobile: '890-123-4567',
     department: 'Administration',
-    manager: 'Manager 1',
+    manager: '',
   ),
   EmployeeInf(
     name: 'Hannah Montana',
@@ -91,7 +91,7 @@ final List<EmployeeInf> employees = [
     mail: 'hannah.montana@example.com',
     mobile: '901-234-5678',
     department: 'Sales',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Igor Stravinsky',
@@ -99,7 +99,7 @@ final List<EmployeeInf> employees = [
     mail: 'igor.stravinsky@example.com',
     mobile: '012-345-6789',
     department: 'Sales',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Huynh Hau',
@@ -107,7 +107,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Accounting',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Nhat Hao',
@@ -115,7 +115,7 @@ final List<EmployeeInf> employees = [
     mail: 'alice.johnson@example.com',
     mobile: '234-567-8901',
     department: 'Quality',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Chanh Tin',
@@ -123,7 +123,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Financial',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Tuan An',
@@ -131,7 +131,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Research & Development',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Hoang Kien',
@@ -139,7 +139,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Research & Development',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Huu Khanh',
@@ -147,7 +147,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Administration',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Gia Khang',
@@ -155,7 +155,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Sales',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Trieu Vy',
@@ -163,7 +163,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Sales',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Gia Bao',
@@ -171,7 +171,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Administration',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Minh Tien',
@@ -179,7 +179,7 @@ final List<EmployeeInf> employees = [
     mail: 'johndoe@example.com',
     mobile: '123-456-7890',
     department: 'Research & Development',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
   EmployeeInf(
     name: 'Trung Tin',
@@ -187,6 +187,6 @@ final List<EmployeeInf> employees = [
     mail: 'tfwq@example.com',
     mobile: '123-456-7890',
     department: 'Sales',
-    manager: 'Manager 1',
+    manager: 'John Doe',
   ),
 ];

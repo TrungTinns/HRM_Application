@@ -39,7 +39,7 @@ class _filterState extends State<filter> {
     final offset = renderBox.localToGlobal(Offset.zero);
 
     _overlayEntry = _createOverlayEntry(size, offset);
-    Overlay.of(context)?.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
     setState(() {
       _isDropdownOpen = true;
     });
@@ -93,10 +93,10 @@ class _filterState extends State<filter> {
         child: Row(
           children: [
             Icon(icon, color: iconColor),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -113,7 +113,7 @@ class _filterState extends State<filter> {
         return PopupMenuItem<String>(
           value: option,
           child: ListTile(
-            title: Text(option, style: TextStyle(color: textColor)),
+            title: Text(option, style: const TextStyle(color: textColor)),
             onTap: () {
               navigators[idx]();
               _closeDropdown();

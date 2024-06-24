@@ -103,7 +103,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
           width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         Expanded(
@@ -116,8 +116,8 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
             child: AbsorbPointer(
               child: TextField(
                 controller: controller,
-                style: TextStyle(color: textColor),
-                decoration: InputDecoration(
+                style: const TextStyle(color: textColor),
+                decoration: const InputDecoration(
                   filled: true,
                   fillColor: snackBarColor,
                 ),
@@ -136,7 +136,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
           width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         Expanded(
@@ -146,7 +146,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
             items: items.map((item) {
               return DropdownMenuItem<dynamic>(
                 value: item,
-                child: Text(item is EmployeeInf ? item.name : item.toString(), style: TextStyle(color: textColor),),
+                child: Text(item is EmployeeInf ? item.name : item.toString(), style: const TextStyle(color: textColor),),
               );
             }).toList(),
             onChanged: (selectedItem) {
@@ -158,7 +158,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 }
               });
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               filled: true,
               fillColor: snackBarColor,
             ),
@@ -173,7 +173,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: snackBarColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -186,8 +186,8 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                     children: [
                       TextField(
                         controller: referenceController,
-                        style: TextStyle(color: textColor, fontSize: 30.0),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: textColor, fontSize: 30.0),
+                        decoration: const InputDecoration(
                           hintText: "Contract Reference",
                           hintStyle: TextStyle(color: termTextColor, fontSize: 30.0),
                         ),
@@ -195,55 +195,55 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                     ],
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: Column(
                     children: [
                       buildDropdownRow('Employee', employees, employeeNameController),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildTextFieldRow('Contract Start Date', startDateController, isDateField: true),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildTextFieldRow('Contract End Date', endDateController, isDateField: true),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildDropdownRow('Working Schedule', schedules, scheduleController),
                     ],
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     children: [
                       buildDropdownRow('Salary Structure Type', salaryStructures, salaryStructureController),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildTextFieldRow('Department', departmentController),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildTextFieldRow('Job Position', positionController),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildDropdownRow('Contract Type', contractTypes, contractTypeController),
                     ],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TabBar(
               controller: tabController,
-              labelStyle: TextStyle(color: textColor, fontSize: 16),
-              tabs: [
+              labelStyle: const TextStyle(color: textColor, fontSize: 16),
+              tabs: const [
                 Tab(text: 'Salary Information'),
                 Tab(text: 'Contract Details'),
               ],
             ),
-            Container(
+            SizedBox(
               height: 200,
               child: TabBarView(
                 controller: tabController,
-                children: [
+                children: const [
                   Center(child: Text('Content for Tab 1')),
                   Center(child: Text('Content for Tab 2')),
                 ],
@@ -255,7 +255,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
       floatingActionButton: isRefFilled
           ? FloatingActionButton(
             onPressed: _addContract,
-            child: Icon(Icons.create),
+            child: const Icon(Icons.create),
           )
           : null,
     );

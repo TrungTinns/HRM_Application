@@ -36,8 +36,8 @@ class _DepartmentState extends State<Department> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Incomplete Form'),
-              content: Text('Information is missing.'),
+              title: const Text('Incomplete Form'),
+              content: const Text('Information is missing.'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -89,8 +89,8 @@ class _DepartmentState extends State<Department> {
         title: CustomTitleAppbar(
           ctx: context,
           service: 'Employees',
-          titles: ['Employees', 'Reporting'],
-          options: [
+          titles: const ['Employees', 'Reporting'],
+          options: const [
             ['Employees', 'Department', 'Contracts', 'Org Chart'],
             ['Contracts', 'Skills']
           ],
@@ -99,22 +99,22 @@ class _DepartmentState extends State<Department> {
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
           ],
-          activeDropdowns: ['Employees', 'Reporting'],
+          activeDropdowns: const ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {            
           }, 
           config: configuration(
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            titles: ['Setting', 'Employee', 'Recruitment'],
-            options: [
+            titles: const ['Setting', 'Employee', 'Recruitment'],
+            options: const [
               ['Setting', 'Activity Plan'],
               ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
               ['Job Positions', 'Employment Types']
@@ -139,16 +139,15 @@ class _DepartmentState extends State<Department> {
           )
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
                     toggleDepartmentForm();
                   },
-                  child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: textColor,
                     backgroundColor: primaryColor,
@@ -156,25 +155,26 @@ class _DepartmentState extends State<Department> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
+                  child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     Text(
                       pageName,
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     IconButton(
-                      icon: Icon(Icons.upload),
+                      icon: const Icon(Icons.upload),
                       color: Colors.white,
                       onPressed: () {},
                       tooltip: "Import records",
                     ),
                     if (showDepartmentForm)
                       IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         color: Colors.white,
                         iconSize: 24,
                         tooltip: "Discard all changes",
@@ -185,13 +185,13 @@ class _DepartmentState extends State<Department> {
                   ],
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               if (!showDepartmentForm)
                 searchBoxWithFilterTable(context, 'Search...', filter(
-                  titles: ['Filter', 'Group By', 'Favorites'],
-                  icons: [Icons.filter_alt, Icons.groups, Icons.star_rounded],
-                  iconColors: [primaryColor, Colors.greenAccent, Colors.yellow],
-                  options: [
+                  titles: const ['Filter', 'Group By', 'Favorites'],
+                  icons: const [Icons.filter_alt, Icons.groups, Icons.star_rounded],
+                  iconColors: const [primaryColor, Colors.greenAccent, Colors.yellow],
+                  options: const [
                     ['My Team', 'My Department', 'Newly Hired', 'Achieved'],
                     ['Manager', 'Department', 'Job', 'Skill', 'Start Date', 'Tags'],
                     ['Save Current Search']
@@ -212,7 +212,7 @@ class _DepartmentState extends State<Department> {
                     [() => print('Save Current Search')],
                   ],)
                 ),
-              Spacer(),
+              const Spacer(),
             ],
           ),
         ),
@@ -235,7 +235,7 @@ class _DepartmentState extends State<Department> {
                   crossAxisCount = 1;
                 }
                 return GridView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 10,

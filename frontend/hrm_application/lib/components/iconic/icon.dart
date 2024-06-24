@@ -31,7 +31,7 @@ AppBar customAppBar(BuildContext context) {
   return AppBar(
     title: appIcon(context),
     backgroundColor: Colors.transparent,
-    iconTheme: IconThemeData(color: Colors.black87),
+    iconTheme: const IconThemeData(color: Colors.black87),
     centerTitle: true,
     elevation: 0.0,
   );

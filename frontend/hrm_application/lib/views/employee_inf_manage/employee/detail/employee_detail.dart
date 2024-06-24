@@ -41,7 +41,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   TextEditingController managerController = TextEditingController();
   final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
   final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
-  final List<String> managers = ['Manager 1', 'Manager 2', 'Manager 3'];
+  final List<String> managers = ['John Doe', 'Gordon Ramsay', 'Manager 3'];
 
   String pageName = 'Employees';
   bool showEmployeeForm = false;
@@ -60,14 +60,14 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Incomplete Form'),
-              content: Text('Name field is missing.'),
+              title: const Text('Incomplete Form'),
+              content: const Text('Name field is missing.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -113,14 +113,14 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
           child: TextField(
             controller: controller,
-            style: TextStyle(color: textColor),
-            decoration: InputDecoration(
+            style: const TextStyle(color: textColor),
+            decoration: const InputDecoration(
               filled: true,
               fillColor: snackBarColor,
             ),
@@ -137,7 +137,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
@@ -147,7 +147,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value, style: TextStyle(color: textColor)),
+                child: Text(value, style: const TextStyle(color: textColor)),
               );
             }).toList(),
             onChanged: (value) {
@@ -155,7 +155,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                 controller.text = value!;
               });
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               filled: true,
               fillColor: snackBarColor,
             ),
@@ -173,8 +173,8 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
         title: CustomTitleAppbar(
           ctx: context,
           service: pageName,
-          titles: ['Employees', 'Reporting'],
-          options: [
+          titles: const ['Employees', 'Reporting'],
+          options: const [
             ['Employees', 'Department', 'Contracts', 'Org Chart'],
             ['Contracts', 'Skills']
           ],
@@ -183,14 +183,14 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
           ],
-          activeDropdowns: ['Employees', 'Reporting'],
+          activeDropdowns: const ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {
             setState(() {
               activeDropdown = dropdown;
@@ -200,8 +200,8 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            titles: ['Setting', 'Employee', 'Recruitment'],
-            options: [
+            titles: const ['Setting', 'Employee', 'Recruitment'],
+            options: const [
               ['Setting', 'Activity Plan'],
               ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
               ['Job Positions', 'Employment Types']
@@ -226,17 +226,16 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           ),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
                     toggleEmployeeForm();
 
                   },
-                  child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: textColor,
                     backgroundColor: primaryColor,
@@ -244,24 +243,25 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
+                  child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     Text(
                       pageName,
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     IconButton(
-                      icon: Icon(Icons.upload),
+                      icon: const Icon(Icons.upload),
                       color: Colors.white,
                       onPressed: () {},
                       tooltip: "Import records",
                     ),
                     IconButton(
-                      icon: Icon(Icons.clear),
+                      icon: const Icon(Icons.clear),
                       color: Colors.white,
                       iconSize: 24,
                       tooltip: "Delete this employee",
@@ -270,8 +270,8 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Do you want to delete this employee?'),
-                              content: Text(''),
+                              title: const Text('Do you want to delete this employee?'),
+                              content: const Text(''),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -279,13 +279,13 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                                     Navigator.pop(context); 
                                     Navigator.pop(context); 
                                   },
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Cancel'),
+                                  child: const Text('Cancel'),
                                 ),
                               ],
                             );
@@ -305,7 +305,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
       body: showEmployeeForm
           ? EmployeeForm()
       : SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -318,16 +318,16 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                     children: [
                       TextField(
                         controller: nameController,
-                        style: TextStyle(color: textColor, fontSize: 40.0),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: textColor, fontSize: 40.0),
+                        decoration: const InputDecoration(
                           hintText: "Employee's Name",
                           hintStyle: TextStyle(color: termTextColor, fontSize: 40.0),
                         ),
                       ),
                       TextField(
                         controller: roleController,
-                        style: TextStyle(color: textColor, fontSize: 20.0),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: textColor, fontSize: 20.0),
+                        decoration: const InputDecoration(
                           hintText: "Job Position",
                           hintStyle: TextStyle(color: termTextColor, fontSize: 20.0),
                         ),
@@ -335,15 +335,13 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                     ],
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 if (widget.name.isNotEmpty) 
                   Column(
                     children: [
-                      SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20,),
                       IconButton(
-                        icon: Icon(Icons.insert_photo),
+                        icon: const Icon(Icons.insert_photo),
                         color: textColor,
                         iconSize: 120,
                         onPressed: () {},
@@ -361,40 +359,40 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                     
                     children: [
                       buildTextFieldRow('Mobile', mobileController),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildTextFieldRow('Email', mailController),
                     ],
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     children: [
                       buildDropdownRow('Department', departmentController, departments),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildDropdownRow('Position', roleController, roles),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, managers),
                     ],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TabBar(
               controller: tabController,
-              labelStyle: TextStyle(color: textColor, fontSize: 16),
-              tabs: [
+              labelStyle: const TextStyle(color: textColor, fontSize: 16),
+              tabs: const [
                 Tab(text: 'Work Information'),
                 Tab(text: 'Private Information'),
                 Tab(text: 'Contract'),
               ],
             ),
-            Container(
+            SizedBox(
               height: 200,
               child: TabBarView(
                 controller: tabController,
-                children: [
+                children: const [
                   Center(child: Text('Content for Tab 1')),
                   Center(child: Text('Content for Tab 2')),
                   Center(child: Text('Content for Tab 3')),

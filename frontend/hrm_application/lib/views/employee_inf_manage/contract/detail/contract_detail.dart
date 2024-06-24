@@ -73,14 +73,14 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Incomplete Form'),
-              content: Text('Name field is missing.'),
+              title: const Text('Incomplete Form'),
+              content: const Text('Name field is missing.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -153,15 +153,15 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
           width: 150,
           child: Text(
             label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
           child: TextField(
             controller: controller,
             readOnly: true,
-            style: TextStyle(color: textColor),
-            decoration: InputDecoration(
+            style: const TextStyle(color: textColor),
+            decoration: const InputDecoration(
               filled: true,
               fillColor: snackBarColor,
             ),
@@ -179,8 +179,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
         title: CustomTitleAppbar(
           ctx: context,
           service: pageName,
-          titles: ['Employees', 'Reporting'],
-          options: [
+          titles: const ['Employees', 'Reporting'],
+          options: const [
             ['Employees', 'Department', 'Contracts', 'Org Chart'],
             ['Contracts', 'Skills']
           ],
@@ -189,14 +189,14 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChart())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
           ],
-          activeDropdowns: ['Employees', 'Reporting'],
+          activeDropdowns: const ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {
             setState(() {
               activeDropdown = dropdown;
@@ -206,8 +206,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            titles: ['Setting', 'Employee', 'Recruitment'],
-            options: [
+            titles: const ['Setting', 'Employee', 'Recruitment'],
+            options: const [
               ['Setting', 'Activity Plan'],
               ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
               ['Job Positions', 'Employment Types']
@@ -232,16 +232,15 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
           ),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
                     toggleContractForm();
                   },
-                  child: Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: textColor,
                     backgroundColor: primaryColor,
@@ -249,24 +248,25 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
+                  child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     Text(
                       pageName,
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     IconButton(
-                      icon: Icon(Icons.upload),
+                      icon: const Icon(Icons.upload),
                       color: Colors.white,
                       onPressed: () {},
                       tooltip: "Import records",
                     ),
                     IconButton(
-                      icon: Icon(Icons.clear),
+                      icon: const Icon(Icons.clear),
                       color: Colors.white,
                       iconSize: 24,
                       tooltip: "Delete this contract",
@@ -275,8 +275,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Do you want to delete this contract?'),
-                              content: Text(''),
+                              title: const Text('Do you want to delete this contract?'),
+                              content: const Text(''),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -284,13 +284,13 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                                     Navigator.pop(context); 
                                     Navigator.pop(context); 
                                   },
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Cancel'),
+                                  child: const Text('Cancel'),
                                 ),
                               ],
                             );
@@ -309,7 +309,7 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
       backgroundColor: snackBarColor,
       body:
           SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -322,8 +322,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                           children: [
                             TextField(
                               controller: referenceController,
-                              style: TextStyle(color: textColor, fontSize: 30.0),
-                              decoration: InputDecoration(
+                              style: const TextStyle(color: textColor, fontSize: 30.0),
+                              decoration: const InputDecoration(
                                 hintText: "Contract Reference",
                                 hintStyle: TextStyle(color: termTextColor, fontSize: 30.0),
                               ),
@@ -331,55 +331,55 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                           ],
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(
                         child: Column(
                           children: [
                             buildTextFieldRow('Employee', employeeNameController),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             buildTextFieldRow('Contract Start Date', startDateController),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             buildTextFieldRow('Contract End Date', endDateController),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             buildTextFieldRow('Working Schedule', scheduleController),
                           ],
                         ),
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Expanded(
                         child: Column(
                           children: [
                             buildTextFieldRow('Salary Structure Type', salaryStructureController),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             buildTextFieldRow('Department', departmentController),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             buildTextFieldRow('Job Position', positionController),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             buildTextFieldRow('Contract Type', contractTypeController),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TabBar(
                     controller: tabController,
-                    labelStyle: TextStyle(color: textColor, fontSize: 16),
-                    tabs: [
+                    labelStyle: const TextStyle(color: textColor, fontSize: 16),
+                    tabs: const [
                       Tab(text: 'Salary Information'),
                       Tab(text: 'Contract Details'),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: 200,
                     child: TabBarView(
                       controller: tabController,
-                      children: [
+                      children: const [
                         Center(child: Text('Content for Tab 1')),
                         Center(child: Text('Content for Tab 2')),
                       ],
