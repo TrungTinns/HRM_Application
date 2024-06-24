@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tdtu.employeeservice.command.data.Employee;
-import com.tdtu.employeeservice.command.data.EmployeeRepository;
 import com.tdtu.employeeservice.command.data.EmployeeService;
 import com.tdtu.employeeservice.query.model.EmployeeResponseModel;
 import com.tdtu.employeeservice.query.queries.GetAllEmployeesQuery;

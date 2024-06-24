@@ -15,15 +15,16 @@ import com.google.firebase.FirebaseOptions;
 public class FirebaseInitialization {
 
     @PostConstruct
-    public void initialization() throws IOException {
-        FileInputStream serviceAccount =
-            new FileInputStream("src/main/resources/key.json");
+    public void initialization() {
+        try (FileInputStream serviceAccount = new FileInputStream("src/main/resources/EmployeeServiceAccessKey.json")) {
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .build();
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-            .build();
-
-        FirebaseApp.initializeApp(options);
+            FirebaseApp.initializeApp(options);
+        } catch (IOException e) {
+            System.err.println("Failed to initialize Firebase: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
-

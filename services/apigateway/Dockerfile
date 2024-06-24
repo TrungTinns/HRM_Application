@@ -1,14 +1,10 @@
-# Sử dụng hình ảnh cơ sở Java
-FROM openjdk:17-jdk-slim
+# Dockerfile for apigateway
+FROM openjdk:17-slim
 
-# Đặt biến môi trường
-ENV SPRING_PROFILES_ACTIVE=docker
+WORKDIR /apigateway
 
-# Sao chép file JAR vào container
-COPY target/apigateway-0.0.1-SNAPSHOT.jar app.jar
+# Copy the JAR file into the container
+COPY ./target/apigateway-0.0.1-SNAPSHOT.jar /apigateway/apigateway-0.0.1-SNAPSHOT.jar
 
-# Expose port (chỉnh sửa port theo cấu hình của bạn)
-EXPOSE 9000
-
-# Command để chạy ứng dụng
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Command to run your application
+CMD ["java", "-jar", "apigateway-0.0.1-SNAPSHOT.jar"]

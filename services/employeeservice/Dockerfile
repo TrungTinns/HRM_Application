@@ -1,14 +1,11 @@
-# Sử dụng hình ảnh cơ sở Java
-FROM openjdk:17-jdk-slim
+# Dockerfile for discoveryserver
+FROM openjdk:17-slim
 
-# Đặt biến môi trường
-ENV SPRING_PROFILES_ACTIVE=docker
+WORKDIR /employeeservice
 
-# Sao chép file JAR vào container
-COPY target/employeeservice-0.0.1-SNAPSHOT.jar app.jar
+# Copy the JAR file into the container
+COPY ./target/employeeservice-0.0.1-SNAPSHOT.jar /employeeservice/employeeservice-0.0.1-SNAPSHOT.jar
+COPY src/main/resources/EmployeeServiceAccessKey.json /resources/EmployeeServiceAccessKey.json
 
-# Expose port (chỉnh sửa port theo cấu hình của bạn)
-EXPOSE 9001
-
-# Command để chạy ứng dụng
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Command to run your application
+CMD ["java", "-jar", "employeeservice-0.0.1-SNAPSHOT.jar"]

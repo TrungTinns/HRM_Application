@@ -12,7 +12,7 @@ import org.springframework.beans.BeanUtils;
 import com.tdtu.employeeservice.command.command.CreateEmployeeCommand;
 import com.tdtu.employeeservice.command.command.DeleteEmployeeCommand;
 import com.tdtu.employeeservice.command.command.UpdateEmployeeCommand;
-import com.tdtu.employeeservice.command.data.EmployeeRepository;
+import com.tdtu.employeeservice.command.data.EmployeeService;
 import com.tdtu.employeeservice.command.event.EmployeeCreatedEvent;
 import com.tdtu.employeeservice.command.event.EmployeeDeletedEvent;
 import com.tdtu.employeeservice.command.event.EmployeeUpdatedEvent;
@@ -39,7 +39,7 @@ public class EmployeeAggregate {
 
     // CREATE EVENT
     @CommandHandler
-    public EmployeeAggregate(CreateEmployeeCommand createEmployeeCommand, EmployeeRepository employeeRepository) {
+    public EmployeeAggregate(CreateEmployeeCommand createEmployeeCommand) {
     	EmployeeCreatedEvent employeeCreatedEvent =  new EmployeeCreatedEvent();
     	BeanUtils.copyProperties(createEmployeeCommand, employeeCreatedEvent);
         AggregateLifecycle.apply(employeeCreatedEvent);

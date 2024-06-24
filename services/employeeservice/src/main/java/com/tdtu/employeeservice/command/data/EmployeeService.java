@@ -14,7 +14,7 @@ import com.google.firebase.cloud.FirestoreClient;
 @Service
 public class EmployeeService {
 	
-	private static final String COLLECTION_NAME = "EmployeeServiceDB";
+	private static final String COLLECTION_NAME = "Employee";
 	
 	public String save(Employee e) throws InterruptedException, ExecutionException {
 		Firestore db = FirestoreClient.getFirestore();

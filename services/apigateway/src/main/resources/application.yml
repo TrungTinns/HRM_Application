@@ -1,5 +1,5 @@
 server:
-  port: 9000 
+  port: 9000
 
 spring:
   application:  
@@ -7,7 +7,7 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: employeeservice
+        - id: employee-service
           uri: http://localhost:9001
           predicates:
             - Path=/api/v1/employee/**
@@ -19,3 +19,7 @@ spring:
             allowedOrigins: "*"
             allowedMethods: "*"
             allowedHeaders: "*"
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  discovery-server:
+    build:
+      context: ./services/discoveryserver
+      # dockerfile: ./services/discoveryserver/Dockerfile
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    networks:
+      - microservices-network
+
+  api-gateway:
+    build:
+      context: ./services/apigateway
+    container_name: api-gateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      - discovery-server
+      - employee-service
+    # environment:
+    #   - EUREKA_SERVER=discovery-server:8761/eureka
+    #   - EMPLOYEE_SERVICE_URL=employee-service:9001
+    networks:
+      - microservices-network
+
+  employee-service:
+    build:
+      context: ./services/employeeservice
+      # dockerfile: ./services/employeeservice/Dockerfile
+    container_name: employee-service
+    ports:
+      - "9001:9001"
+    depends_on:
+      - discovery-server
+      - axon-server
+    volumes:
+      -  C:/Users/Admin/Downloads/api-key/EmployeeServiceAccessKey.json:/app/src/main/resources/EmployeeServiceAccessKey.json
+    environment:
+      - EUREKA_SERVER=discovery-server:8761/eureka
+    networks:
+      - microservices-network
+
+  axon-server:
+    image: axoniq/axonserver
+    container_name: axon-server
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+      - "8224:8224"
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
