@@ -38,6 +38,8 @@ dependencies:
   table_calendar: ^3.1.1
   google_fonts: ^6.2.1
   pluto_grid: ^8.0.0
+  org_chart: ^2.2.0
+  flutter_treeview: ^1.0.7+1
 
 
 dev_dependencies:
