@@ -68,34 +68,14 @@ class _OrgChartState extends State<OrgChartManage> {
     });
   }
 
-  void deleteEmployee(String name) {
-    setState(() {
-      employees.removeWhere((employee) => employee.name == name );
-    });
-  }
-
-  final OrgChartController<Map> orgChartController = OrgChartController<Map>(
-    boxSize: const Size(200, 150),
-    items: [
-      {"title": 'CEO', "id": '1', "to": null},
-      {
-        "title": 'HR Manager: John',
-        "id": '2',
-        "to": '1',
-      },
-      {
-        "title": 'HR Officer: Jane',
-        "id": '3',
-        "to": '2',
-      },
-      {
-        "title": 'Project Manager: Zuher',
-        "id": '4',
-        "to": '1',
-      },
-    ],
-    idProvider: (data) => data["id"],
-    toProvider: (data) => data["to"],
+  final OrgChartController<EmployeeInf> orgChartController =
+      OrgChartController<EmployeeInf>(
+    boxSize: const Size(300, 200),
+    items: employees,
+    idProvider: (employee) => employee.name,
+    toProvider: (employee) => employee.manager == employee.name
+        ? null 
+        : employee.manager,
   );
 
   @override
@@ -259,6 +239,7 @@ class _OrgChartState extends State<OrgChartManage> {
                             duration: 500, 
                             isDraggable: true, 
                             builder: (details) {
+                              EmployeeInf employee = details.item;
                                       return Card(
                                         color: details.beingDragged
                                             ? Colors.blue
@@ -276,12 +257,18 @@ class _OrgChartState extends State<OrgChartManage> {
                                                 radius: 20,
                                                 backgroundColor: primaryColor,
                                                 child: Text(
-                                                  details.item["title"].isNotEmpty ? details.item["title"][0].toUpperCase() : '',
-                                                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                                                  employee.name[0].toUpperCase(),
+                                                  style: const TextStyle(color: textColor, fontSize: 20),
                                                 ),
                                               ),
-                                              Text(details.item["title"], style: const TextStyle(color: textColor),),
-                                              const SizedBox(height: 10,),
+                                              Text(
+                                                employee.name,
+                                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
+                                              ),
+                                              Text(
+                                                employee.role,
+                                                style: const TextStyle(fontSize: 18, color: textColor),
+                                              ),
                                               GestureDetector(
                                                 onTap: () {
                                                   details.hideNodes(!details.nodesHidden);
@@ -309,21 +296,6 @@ class _OrgChartState extends State<OrgChartManage> {
                                         ),
                                       );
                                     },
-                                  optionsBuilder: (item) {
-                                      return [
-                                        const PopupMenuItem(value: 'promote', child: Text('Promote')),
-                                        const PopupMenuItem(
-                                            value: 'vacate', child: Text('Vacate Position')),
-                                        const PopupMenuItem(value: 'Remove', child: Text('Remove')),
-                                      ];
-                                    },
-                                    onOptionSelect: (item, value) {
-                                      if (value == 'Remove') {
-                                        orgChartController.removeItem(item["id"]);
-                                        setState(() {});
-                                      }
-                                    },
-                                    
                           ),
                         ),
                       ],
