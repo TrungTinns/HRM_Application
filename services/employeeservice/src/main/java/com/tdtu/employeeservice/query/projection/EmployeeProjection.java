@@ -33,15 +33,15 @@ public class EmployeeProjection {
 		return model;
 	}
 	
-//	@QueryHandler
-//	public List<EmployeeResponseModel> handle(GetAllEmployeesQuery getAllEmployeesQuery) {
-//		List<Employee> lstEntity = empRepository.findAll();
-//		List<EmployeeResponseModel> lstEmp = new ArrayList<>();
-//		lstEntity.forEach(s -> {
-//			EmployeeResponseModel model = new EmployeeResponseModel();
-//			BeanUtils.copyProperties(s, model);
-//			lstEmp.add(model);
-//		});
-//		return lstEmp;
-//	}
+	@QueryHandler
+	public List<EmployeeResponseModel> handle(GetAllEmployeesQuery getAllEmployeesQuery) throws InterruptedException, ExecutionException {
+		List<Employee> lstEntity = empService.findAll();
+		List<EmployeeResponseModel> lstEmp = new ArrayList<>();
+		lstEntity.forEach(s -> {
+			EmployeeResponseModel model = new EmployeeResponseModel();
+			BeanUtils.copyProperties(s, model);
+			lstEmp.add(model);
+		});
+		return lstEmp;
+	}
 }

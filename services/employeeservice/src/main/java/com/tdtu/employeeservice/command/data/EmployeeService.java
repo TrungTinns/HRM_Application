@@ -1,5 +1,7 @@
 package com.tdtu.employeeservice.command.data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 
@@ -49,5 +52,18 @@ public class EmployeeService {
 			return e;
 		}
 		return null;
+	}
+	
+	public List<Employee> findAll() throws InterruptedException, ExecutionException {
+		Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME).get();
+
+        List<Employee> employeeList = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+            Employee employee = document.toObject(Employee.class);
+            employeeList.add(employee);
+        }
+
+        return employeeList;
 	}
 }
