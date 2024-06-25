@@ -25,6 +25,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
   String? activeDropdown;
   final TextEditingController nameController = TextEditingController();
 
+
   void setActiveDropdown(String? dropdown) {
     setState(() {
       activeDropdown = dropdown;
@@ -72,6 +73,15 @@ class _EmployeeManageState extends State<EmployeeManage> {
   void deleteEmployee(String name) {
     setState(() {
       employees.removeWhere((employee) => employee.name == name );
+    });
+  }
+
+  void handleUpdate(EmployeeInf updatedEmployee) {
+    setState(() {
+      final index = employees.indexWhere((emp) => emp.name == updatedEmployee.name);
+      if (index != -1) {
+        employees[index] = updatedEmployee;
+      }
     });
   }
 
@@ -312,6 +322,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                       manager: employee.manager,
                       onDelete: () => deleteEmployee(employee.name),
                       isManager: employee.isManager,
+                      onUpdate: handleUpdate,
                     );
                   },
                 );

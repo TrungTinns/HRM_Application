@@ -19,6 +19,7 @@ class EmployeeDetail extends StatefulWidget {
   final String manager;
   final VoidCallback onDelete;
   final bool isManager;
+  final ValueChanged<EmployeeInf> onUpdate;
 
   EmployeeDetail({
     required this.name,
@@ -29,6 +30,7 @@ class EmployeeDetail extends StatefulWidget {
     required this.manager,
     required this.onDelete,
     required this.isManager,
+    required this.onUpdate,
   });
 
   @override
@@ -51,6 +53,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   String pageName = 'Employees';
   bool showEmployeeForm = false;
   String? activeDropdown;
+  bool isChanged = false;
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -112,6 +115,20 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     super.dispose();
   }
 
+  void saveChanges() {
+    final updatedEmployee = EmployeeInf(
+      name: nameController.text,
+      role: roleController.text,
+      mail: mailController.text,
+      mobile: mobileController.text,
+      department: departmentController.text,
+      manager: managerController.text,
+      isManager: isManager,
+    );
+    widget.onUpdate(updatedEmployee);
+    Navigator.pop(context);
+  }
+
   Widget buildTextFieldRow(String label, TextEditingController controller) {
     return Row(
       children: [
@@ -125,6 +142,11 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
         Expanded(
           child: TextField(
             controller: controller,
+            onChanged: (value) {
+              setState(() {
+                isChanged = true;
+              });
+            },
             style: const TextStyle(color: textColor),
             decoration: const InputDecoration(
               filled: true,
@@ -150,6 +172,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           child: DropdownButtonFormField<String>(
             dropdownColor: dropdownColor,
             value: controller.text,
+            
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -159,6 +182,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
             onChanged: (value) {
               setState(() {
                 controller.text = value!;
+                isChanged = true;
               });
             },
             decoration: const InputDecoration(
@@ -237,25 +261,31 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
             children: [
               Container(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    toggleEmployeeForm();
-
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: textColor,
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (isChanged) {
+                            saveChanges();
+                          } else {
+                            toggleEmployeeForm();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: textColor,
+                          backgroundColor: primaryColor , 
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child: Text(
+                          isChanged ? 'Save' : 'New',
+                          style: const TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
                     Text(
                       pageName,
                       style: const TextStyle(fontSize: 16, color: Colors.white),
@@ -281,17 +311,17 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    widget.onDelete();
-                                    Navigator.pop(context); 
-                                    Navigator.pop(context); 
+                                    Navigator.pop(context);
                                   },
-                                  child: const Text('OK'),
+                                  child: const Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    Navigator.pop(context);
+                                    widget.onDelete();
+                                    Navigator.pop(context);
                                   },
-                                  child: const Text('Cancel'),
+                                  child: const Text('Delete'),
                                 ),
                               ],
                             );
@@ -324,6 +354,11 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                     children: [
                       TextField(
                         controller: nameController,
+                        onChanged: (value) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        },
                         style: const TextStyle(color: textColor, fontSize: 40.0),
                         decoration: const InputDecoration(
                           hintText: "Employee's Name",
@@ -332,6 +367,11 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                       ),
                       TextField(
                         controller: roleController,
+                          onChanged: (value) {
+                            setState(() {
+                              isChanged = true;
+                            });
+                          },
                         style: const TextStyle(color: textColor, fontSize: 20.0),
                         decoration: const InputDecoration(
                           hintText: "Job Position",

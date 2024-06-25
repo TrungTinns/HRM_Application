@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/detail/employee_detail.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 
 class EmployeeCard extends StatelessWidget {
   final String name;
@@ -10,6 +11,7 @@ class EmployeeCard extends StatelessWidget {
   final String manager;
   final VoidCallback onDelete;
   final bool isManager;
+  final ValueChanged<EmployeeInf> onUpdate;
 
   EmployeeCard({
     required this.name,
@@ -20,6 +22,7 @@ class EmployeeCard extends StatelessWidget {
     required this.manager,
     required this.onDelete,
     required this.isManager, 
+    required this.onUpdate,
   });
   
   @override
@@ -38,6 +41,7 @@ class EmployeeCard extends StatelessWidget {
               manager: manager,
               onDelete: onDelete,
               isManager: isManager,
+              onUpdate: onUpdate,
             ),
           ),
         );

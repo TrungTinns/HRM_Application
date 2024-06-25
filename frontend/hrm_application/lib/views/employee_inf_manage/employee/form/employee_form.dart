@@ -34,8 +34,6 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
         isNameFilled = nameController.text.isNotEmpty;
       });
     });
-
-    // Initialize managers list
     managers = getManagers(employees);
   }
 
