@@ -66,11 +66,11 @@ void updateContract(int index, Map<String, dynamic> updatedContract) {
 
 List<ContractData> contracts = [
   ContractData(
-    employeeName: 'John Doe',
+    employeeName: 'Son Tung MTP',
     reference: 'REF123',
     department: 'Administration',
     position: 'Director',
-    startDate: DateTime(2021-06-15),
+    startDate: DateTime(2021-06-15), 
     endDate: DateTime(2021-06-15),
     salaryStructure: 'Employee',
     contractType: 'Permanent',
@@ -78,7 +78,7 @@ List<ContractData> contracts = [
     status: 'Running',
   ),
   ContractData(
-    employeeName: 'Alice Johnson',
+    employeeName: 'Jack J97',
     reference: 'REF124',
     department: 'Research & Development',
     position: 'Project Manager',
@@ -90,10 +90,10 @@ List<ContractData> contracts = [
     status: 'Expired',
   ),
   ContractData(
-    employeeName: 'Trung Tin',
+    employeeName: 'Chi Pu',
     reference: 'REF003',
-    department: 'Research & Development',
-    position: 'Dev',
+    department: 'Sales',
+    position: 'Content Creator',
     startDate: DateTime(2021-06-15),
     endDate: DateTime(2021-06-15),
     salaryStructure: 'Employee',

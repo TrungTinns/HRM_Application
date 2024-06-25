@@ -46,6 +46,22 @@ class _ContractDataTableState extends State<ContractDataTable> {
   });
 }
 
+  void updateContract(int index, Map<String, dynamic> updatedContractMap) {
+    setState(() {
+      rows[index].cells['Employee'] = PlutoCell(value: updatedContractMap['Employee']);
+      rows[index].cells['Reference'] = PlutoCell(value: updatedContractMap['Reference']);
+      rows[index].cells['Department'] = PlutoCell(value: updatedContractMap['Department']);
+      rows[index].cells['Position'] = PlutoCell(value: updatedContractMap['Position']);
+      rows[index].cells['Start Date'] = PlutoCell(value: updatedContractMap['Start Date']);
+      rows[index].cells['End Date'] = PlutoCell(value: updatedContractMap['End Date']);
+      rows[index].cells['Salary Structure'] = PlutoCell(value: updatedContractMap['Salary Structure']);
+      rows[index].cells['Contract Type'] = PlutoCell(value: updatedContractMap['Contract Type']);
+      rows[index].cells['Schedule'] = PlutoCell(value: updatedContractMap['Schedule']);
+      rows[index].cells['Status'] = PlutoCell(value: updatedContractMap['Status']);
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     List<PlutoColumn> columns = [
@@ -126,6 +142,10 @@ class _ContractDataTableState extends State<ContractDataTable> {
               status: row.cells['Status']!.value,
               onDelete: () {
                 deleteRow(index);
+              }, 
+              onUpdate: (updatedContract) {
+                final updatedContractMap = updatedContract.toMap();
+                updateContract(index, updatedContractMap);
               },
             ),
           ),
