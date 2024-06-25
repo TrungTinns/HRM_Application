@@ -6,7 +6,9 @@ import 'package:hrm_application/widgets/colors.dart';
 class DepartmentForm extends StatefulWidget {
   final Function(DepartmentInf) onAddDepartment;
 
-  DepartmentForm({required this.onAddDepartment});
+  DepartmentForm({
+    required this.onAddDepartment
+  });
 
   @override
   _DepartmentFormState createState() => _DepartmentFormState();

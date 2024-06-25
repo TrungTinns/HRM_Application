@@ -81,6 +81,15 @@ class _DepartmentState extends State<Department> {
     });
   }
 
+  void handleUpdate(DepartmentInf updatedDepartment) {
+    setState(() {
+      final index = departments.indexWhere((emp) => emp.department == updatedDepartment.department);
+      if (index != -1) {
+        departments[index] = updatedDepartment;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -249,7 +258,8 @@ class _DepartmentState extends State<Department> {
                       department: department.department,
                       manager: department.manager,
                       superior: department.superior,
-                      onDelete: () => deleteDepartment(department.department)
+                      onDelete: () => deleteDepartment(department.department),
+                      onUpdate: handleUpdate,
                     );
                   },
                 );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/detail/department_detail.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
@@ -8,12 +9,14 @@ class DepartmentCard extends StatelessWidget {
   final String manager;
   final String superior;
   final VoidCallback onDelete;
+  final ValueChanged<DepartmentInf> onUpdate;
 
   DepartmentCard({
     required this.department,
     required this.manager,
     required this.superior,
     required this.onDelete,
+    required this.onUpdate,
   });
 
   @override
@@ -45,6 +48,7 @@ class DepartmentCard extends StatelessWidget {
                         manager: manager, 
                         superior: superior,
                         onDelete: onDelete,
+                        onUpdate: onUpdate,
                       )));
                     }, 
                     icon: const Icon(Icons.more_vert)

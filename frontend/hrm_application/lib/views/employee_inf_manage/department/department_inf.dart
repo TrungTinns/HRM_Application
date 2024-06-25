@@ -13,37 +13,37 @@ class DepartmentInf {
 final List<DepartmentInf> departments = [
   DepartmentInf(
     department: 'Administration',
-    manager: 'John Doe',
+    manager: 'Son Tung MTP',
     superior: '',
   ),
   DepartmentInf(
     department: 'Research & Development',
-    manager: 'Tuan An',
+    manager: 'Jack J97',
     superior: 'Administration',
   ),
   DepartmentInf(
     department: 'Accounting',
-    manager: 'Huynh Hau',
+    manager: 'Chi Long',
     superior: 'Administration',
   ),
   DepartmentInf(
     department: 'Sales',
-    manager: 'Gia Khang',
+    manager: 'Tran Thanh',
     superior: 'Administration',
   ),
   DepartmentInf(
     department: 'Human Resources',
-    manager: 'Fiona Gallagher',
+    manager: 'Chau Bui',
     superior: 'Administration',
   ),
   DepartmentInf(
     department: 'Quality',
-    manager: 'Hannah Montana',
+    manager: 'Thinh Noo',
     superior: 'Research & Development',
   ),
   DepartmentInf(
     department: 'Financial',
-    manager: 'Chanh Tin',
+    manager: 'Obito',
     superior: 'Administration',
   ),
 ];

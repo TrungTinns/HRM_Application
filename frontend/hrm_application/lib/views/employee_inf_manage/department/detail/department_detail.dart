@@ -3,7 +3,9 @@ import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
@@ -12,12 +14,14 @@ class DepartmentDetail extends StatefulWidget {final String department;
   final String manager;
   final String superior;
   final VoidCallback onDelete;
+  final ValueChanged<DepartmentInf> onUpdate;
 
   DepartmentDetail({
     required this.department,
     required this.manager,
     required this.superior,
     required this.onDelete,
+    required this.onUpdate,
   });
 
   @override
@@ -33,6 +37,8 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
   String pageName = 'Department';
   bool showDepartmentForm = false;
   String? activeDropdown;
+  bool isChanged = false;
+
   void setActiveDropdown(String? dropdown) {
     setState(() {
       activeDropdown = dropdown;
@@ -79,6 +85,22 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
     superiorController.text = widget.superior;
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void saveChanges() {
+    final updatedDepartment = DepartmentInf(
+      department: departmentController.text,
+      manager: managerController.text,
+      superior: superiorController.text,
+    );
+
+    widget.onUpdate(updatedDepartment);
+    Navigator.pop(context);
+  }
+
   Widget buildTextFieldRow(String label, TextEditingController controller) {
     return Row(
       children: [
@@ -92,7 +114,11 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
         Expanded(
           child: TextField(
             controller: controller,
-            readOnly: true,
+            onChanged: (value) {
+              setState(() {
+                isChanged = true;
+              });
+            },
             style: const TextStyle(color: textColor),
             decoration: const InputDecoration(
               filled: true,
@@ -117,6 +143,7 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
         Expanded(
           child: DropdownButtonFormField<String>(
             dropdownColor: dropdownColor,
+            value: controller.text,
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -124,7 +151,10 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
               );
             }).toList(),
             onChanged: (value) {
-              controller.text = value!;
+              setState(() {
+                controller.text = value!;
+                isChanged = true;
+              });
             },
             decoration: const InputDecoration(
               filled: true,
@@ -201,22 +231,28 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    toggleDepartmentForm();
-
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: textColor,
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (isChanged) {
+                            saveChanges();
+                          } else {
+                            toggleDepartmentForm();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: textColor,
+                          backgroundColor: primaryColor , 
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child: Text(
+                          isChanged ? 'Save' : 'New',
+                          style: const TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
-                ),
-              ),
               Container(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -280,6 +316,11 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
           children: [
             TextField(
               controller: departmentController,
+              onChanged: (value) {
+                          setState(() {
+                            isChanged = true;
+                          });
+                        },
               style: const TextStyle(color: textColor, fontSize: 30.0),
               decoration: const InputDecoration(
                 hintText: "Name of Department",
@@ -289,9 +330,9 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
             const SizedBox(height: 20),
             Column(
               children: [
-                buildTextFieldRow('Manage', managerController),
+                buildDropdownRow('Manage', managerController, employees.map((employee) => employee.name).toList()),
                 const SizedBox(height: 10),
-                buildTextFieldRow('Superior Department', superiorController),
+                buildDropdownRow('Superior Department', superiorController, superiors),
                 const SizedBox(height: 10),
               ],
             ),
