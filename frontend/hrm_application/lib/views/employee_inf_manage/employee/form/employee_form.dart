@@ -15,23 +15,28 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   TextEditingController mailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
+  bool isManager = false;
 
   final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
   final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
-  final List<String> managers = ['John Doe', 'Gordon Ramsay', 'Manager 3'];
 
   TabController? tabController;
   bool isNameFilled = false;
+  
+  List<String> managers = [];
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     nameController.addListener(() {
       setState(() {
         isNameFilled = nameController.text.isNotEmpty;
       });
     });
+
+    // Initialize managers list
+    managers = getManagers(employees);
   }
 
   @override
@@ -72,6 +77,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   }
 
   Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {
+    
     return Row(
       children: [
         SizedBox(
@@ -164,6 +170,25 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                       buildTextFieldRow('Mobile', mobileController),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Email', mailController),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Management Authority',
+                            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          const SizedBox(width: 20),
+                          Switch(
+                            value: isManager,
+                            onChanged: (value) {
+                              setState(() {
+                                isManager = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -215,6 +240,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                   mobile: mobileController.text,
                   department: departmentController.text,
                   manager: managerController.text,
+                  isManager: isManager,
                 );
                 setState(() {
                   employees.add(newEmployee);

@@ -311,6 +311,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
                       department: employee.department,
                       manager: employee.manager,
                       onDelete: () => deleteEmployee(employee.name),
+                      isManager: employee.isManager,
                     );
                   },
                 );

@@ -5,6 +5,7 @@ import 'package:hrm_application/components/filter_search/filter_search.dart';
 import 'package:hrm_application/components/search/searchBox.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/detail/employee_detail.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
@@ -20,7 +21,6 @@ class OrgChartManage extends StatefulWidget {
 class _OrgChartState extends State<OrgChartManage> {  
   String pageName = 'Org Chart';
   bool showEmployeeForm = false;
-  // bool showEmployeeDetail = false; //Show EmployeeDetail
   String? activeDropdown;
   final TextEditingController nameController = TextEditingController();
 
@@ -65,6 +65,12 @@ class _OrgChartState extends State<OrgChartManage> {
   void clearEmployeeForm() {
     setState(() {
       showEmployeeForm = false;
+    });
+  }
+  
+  void deleteEmployee(String name) {
+    setState(() {
+      employees.removeWhere((employee) => employee.name == name );
     });
   }
 
@@ -219,7 +225,6 @@ class _OrgChartState extends State<OrgChartManage> {
         backgroundColor: snackBarColor,
       ),
       body: showEmployeeForm
-      // &!showEmployeeDetail
           ? EmployeeForm()
           : Stack(
               children: [
@@ -240,62 +245,79 @@ class _OrgChartState extends State<OrgChartManage> {
                             isDraggable: true, 
                             builder: (details) {
                               EmployeeInf employee = details.item;
-                                      return Card(
-                                        color: details.beingDragged
-                                            ? Colors.blue
-                                            : details.isOverlapped
-                                                ? Colors.green
-                                                : snackBarColor,
-                                        elevation: 10,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                                        child: Center(
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children:[
-                                              const SizedBox(height: 5,),
-                                              CircleAvatar(
-                                                radius: 20,
-                                                backgroundColor: primaryColor,
-                                                child: Text(
-                                                  employee.name[0].toUpperCase(),
-                                                  style: const TextStyle(color: textColor, fontSize: 20),
-                                                ),
-                                              ),
-                                              Text(
-                                                employee.name,
-                                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
-                                              ),
-                                              Text(
-                                                employee.role,
-                                                style: const TextStyle(fontSize: 18, color: textColor),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  details.hideNodes(!details.nodesHidden);
-                                                },
-                                                child: Container(  
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  color: authThemeColor,
-                                                  child: const Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.arrow_right_outlined,
-                                                        color: textColor,
-                                                      ),
-                                                      Text(
-                                                        "Show/Hide Nodes",
-                                                        style: TextStyle(color: textColor),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            ],
+                              return GestureDetector(
+                                onTap: () {
+                                  details.hideNodes(!details.nodesHidden);
+                                },
+                                onDoubleTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EmployeeDetail(
+                                        name: employee.name,
+                                        role: employee.role,
+                                        mail: employee.mail,
+                                        mobile: employee.mobile,
+                                        department: employee.department,
+                                        manager: employee.manager,
+                                        onDelete:  () => deleteEmployee(employee.name),
+                                        isManager: employee.isManager,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  color: details.beingDragged
+                                      ? Colors.blue
+                                      : details.isOverlapped
+                                          ? Colors.green
+                                          : snackBarColor,
+                                  elevation: 10,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children:[
+                                        const SizedBox(height: 5,),
+                                        CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: primaryColor,
+                                          child: Text(
+                                            employee.name[0].toUpperCase(),
+                                            style: const TextStyle(color: textColor, fontSize: 20),
                                           ),
                                         ),
-                                      );
-                                    },
+                                        Text(
+                                          employee.name,
+                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
+                                        ),
+                                        Text(
+                                          employee.role,
+                                          style: const TextStyle(fontSize: 18, color: textColor),
+                                        ),
+                                        Container(  
+                                          padding: const EdgeInsets.all(8.0),
+                                          color: authThemeColor,
+                                          child: const Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.arrow_right_outlined,
+                                                color: textColor,
+                                              ),
+                                              Text(
+                                                "Show/Hide Nodes",
+                                                style: TextStyle(color: textColor),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],

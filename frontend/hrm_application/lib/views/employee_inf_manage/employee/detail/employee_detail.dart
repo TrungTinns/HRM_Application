@@ -4,6 +4,7 @@ import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
 import 'package:hrm_application/views/home/home.dart';
@@ -17,6 +18,7 @@ class EmployeeDetail extends StatefulWidget {
   final String department;
   final String manager;
   final VoidCallback onDelete;
+  final bool isManager;
 
   EmployeeDetail({
     required this.name,
@@ -26,6 +28,7 @@ class EmployeeDetail extends StatefulWidget {
     required this.department,
     required this.manager,
     required this.onDelete,
+    required this.isManager,
   });
 
   @override
@@ -39,10 +42,12 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   TextEditingController mailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
+  bool isManager = false;
+
   final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
   final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
-  final List<String> managers = ['John Doe', 'Gordon Ramsay', 'Manager 3'];
-
+  List<String> managers = [];
+  
   String pageName = 'Employees';
   bool showEmployeeForm = false;
   String? activeDropdown;
@@ -86,18 +91,19 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   }
 
   late TabController tabController;
-  String initialDepartment = 'Department 1';
+
   @override
   void initState() {
     super.initState();
     nameController.text = widget.name;
-    roleController.text = widget.role ?? '';
+    roleController.text = widget.role ?? roles.first;
     mobileController.text = widget.mobile;
     mailController.text = widget.mail;
     departmentController.text = widget.department;
     managerController.text = widget.manager;
-
+    managers = getManagers(employees);
     tabController = TabController(length: 4, vsync: this);
+    isManager = widget.isManager; 
   }
 
   @override
@@ -361,6 +367,25 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                       buildTextFieldRow('Mobile', mobileController),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Email', mailController),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Management Authority',
+                            style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          const SizedBox(width: 20),
+                          Switch(
+                            value: isManager,
+                            onChanged: (value) {
+                              setState(() {
+                                isManager = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

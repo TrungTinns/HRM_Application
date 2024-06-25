@@ -9,6 +9,7 @@ class EmployeeCard extends StatelessWidget {
   final String department;
   final String manager;
   final VoidCallback onDelete;
+  final bool isManager;
 
   EmployeeCard({
     required this.name,
@@ -17,7 +18,8 @@ class EmployeeCard extends StatelessWidget {
     required this.mobile,
     required this.department,
     required this.manager,
-    required this.onDelete, 
+    required this.onDelete,
+    required this.isManager, 
   });
   
   @override
@@ -35,6 +37,7 @@ class EmployeeCard extends StatelessWidget {
               department: department,
               manager: manager,
               onDelete: onDelete,
+              isManager: isManager,
             ),
           ),
         );
@@ -69,6 +72,8 @@ class EmployeeCard extends StatelessWidget {
                     if (role != null) Text(role!),
                     Text(mail),
                     Text(mobile),
+                    Text(department),
+                    // Text(isManager.toString()),
                   ],
                 ),
               ),
