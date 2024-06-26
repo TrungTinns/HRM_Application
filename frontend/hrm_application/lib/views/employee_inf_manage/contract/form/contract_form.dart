@@ -5,11 +5,9 @@ import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dar
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class ContractForm extends StatefulWidget {
-  final Function(ContractData) addContract;
-
-  ContractForm({required this.addContract});
   @override
   _ContractFormState createState() => _ContractFormState();
 }
@@ -31,6 +29,8 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
   final List<String> schedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
   final List<String> salaryStructures = ['Employee', 'Worker'];
   final List<String> contractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
+  final List<String> status = ['Running', 'Expired', 'Cancelled'];
+  int toggleIndex = 0;
 
   @override
   void initState() {
@@ -79,28 +79,11 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
     });
   }
 
-  void _addContract() {
-    final newContract = ContractData(
-      employeeName: employeeNameController.text,
-      reference: referenceController.text,
-      department: departmentController.text,
-      position: positionController.text,
-      startDate: DateTime.parse(startDateController.text),
-      endDate: DateTime.parse(endDateController.text),
-      schedule: scheduleController.text,
-      salaryStructure: salaryStructureController.text,
-      contractType: contractTypeController.text,
-      status: statusController.text,                
-    );
-    widget.addContract(newContract);
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts()));
-  }
-
   Widget buildTextFieldRow(String label, TextEditingController controller, {bool isDateField = false}) {
     return Row(
       children: [
         SizedBox(
-          width: 150,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
@@ -133,7 +116,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
     return Row(
       children: [
         SizedBox(
-          width: 150,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
@@ -196,6 +179,24 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                   ),
                 ),
                 const SizedBox(width: 10),
+                ToggleSwitch(
+                  minWidth: 90.0,
+                  initialLabelIndex: toggleIndex,
+                  cornerRadius: 20.0,
+                  activeFgColor: Colors.white,
+                  inactiveBgColor: Colors.grey,
+                  inactiveFgColor: Colors.white,
+                  totalSwitches: 3,
+                  labels: ['Running', 'Expired', 'Cancelled'],
+                  icons: [Icons.play_arrow, Icons.hourglass_empty, Icons.cancel],
+                  activeBgColors: [[Colors.green], [Colors.orange], [Colors.red]],
+                  onToggle: (index) {
+                    setState(() {
+                      toggleIndex = index!;
+                      statusController.text = status[index];
+                    });
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -254,7 +255,24 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
       ),
       floatingActionButton: isRefFilled
           ? FloatingActionButton(
-            onPressed: _addContract,
+            onPressed: () {
+              final newContract = ContractData(
+                employeeName: employeeNameController.text,
+                reference: referenceController.text,
+                department: departmentController.text,
+                position: positionController.text,
+                startDate: DateTime.parse(startDateController.text),
+                endDate: DateTime.parse(endDateController.text),
+                schedule: scheduleController.text,
+                salaryStructure: salaryStructureController.text,
+                contractType: contractTypeController.text,
+                status: statusController.text,                
+              );
+              setState(() {
+                contracts.add(newContract);
+              });
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts()));
+            },
             child: const Icon(Icons.create),
           )
           : null,

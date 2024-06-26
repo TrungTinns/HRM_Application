@@ -74,6 +74,15 @@ class _OrgChartState extends State<OrgChartManage> {
     });
   }
 
+  void handleUpdate(EmployeeInf updatedEmployee) {
+    setState(() {
+      final index = employees.indexWhere((emp) => emp.name == updatedEmployee.name);
+      if (index != -1) {
+        employees[index] = updatedEmployee;
+      }
+    });
+  }
+
   final OrgChartController<EmployeeInf> orgChartController =
       OrgChartController<EmployeeInf>(
     boxSize: const Size(300, 200),
@@ -261,10 +270,18 @@ class _OrgChartState extends State<OrgChartManage> {
                                         department: employee.department,
                                         manager: employee.manager,
                                         onDelete:  () => deleteEmployee(employee.name),
-                                        isManager: employee.isManager,
+                                        isManager: employee.isManager, 
+                                        onUpdate: handleUpdate,
+                                        workLocation: employee.workLocation,
+                                        schedule: employee.schedule,
                                       ),
                                     ),
-                                  );
+                                  ).then((_) {
+                                    setState(() {
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage()));
+                                    });
+                                  });
+                                  
                                 },
                                 child: Card(
                                   color: details.beingDragged

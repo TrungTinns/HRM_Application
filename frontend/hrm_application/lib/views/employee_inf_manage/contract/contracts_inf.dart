@@ -86,7 +86,7 @@ List<ContractData> contracts = [
     endDate: DateTime(2021-06-15),
     salaryStructure: 'Employee',
     contractType: 'Temporary',
-    schedule: 'Part-time 25 hours/week-',
+    schedule: 'Part-time 25 hours/week',
     status: 'Expired',
   ),
   ContractData(

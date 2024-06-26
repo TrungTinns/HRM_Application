@@ -6,6 +6,8 @@ class EmployeeInf {
   final String department;
   final String manager;
   final bool isManager;
+  final String workLocation;
+  final String schedule;
 
   EmployeeInf({
     required this.name,
@@ -15,6 +17,8 @@ class EmployeeInf {
     required this.department,
     required this.manager,
     required this.isManager,
+    required this.workLocation,
+    required this.schedule,
   });
 }
 
@@ -36,6 +40,8 @@ final List<EmployeeInf> employees = [
     department: 'Administration',
     manager: 'Phuong Hang',
     isManager: true,
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',
   ),
   EmployeeInf(
     name: 'Phuong Hang',
@@ -45,6 +51,8 @@ final List<EmployeeInf> employees = [
     department: 'Administration',
     manager: 'Phuong Hang',
     isManager: true,
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Dat G',
@@ -54,6 +62,8 @@ final List<EmployeeInf> employees = [
     department: 'Administration',
     manager: 'Son Tung MTP',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'HieuThuHai',
@@ -63,6 +73,8 @@ final List<EmployeeInf> employees = [
     department: 'Administration',
     manager: 'Son Tung MTP',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   //Research & Development
   EmployeeInf(
@@ -73,6 +85,8 @@ final List<EmployeeInf> employees = [
     department: 'Research & Development',
     manager: 'Son Tung MTP',
     isManager: true,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Huong Tit',
@@ -82,6 +96,8 @@ final List<EmployeeInf> employees = [
     department: 'Research & Development',
     manager: 'Jack J97',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Hieu PC',
@@ -91,6 +107,8 @@ final List<EmployeeInf> employees = [
     department: 'Research & Development',
     manager: 'Jack J97',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Andree RH',
@@ -100,6 +118,8 @@ final List<EmployeeInf> employees = [
     department: 'Research & Development',
     manager: 'Jack J97',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Decao CG',
@@ -109,6 +129,8 @@ final List<EmployeeInf> employees = [
     department: 'Research & Development',
     manager: 'Jack J97',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Minh Tien',
@@ -118,6 +140,8 @@ final List<EmployeeInf> employees = [
     department: 'Research & Development',
     manager: 'Jack J97',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Part-time 25 hours/week',  
   ),
   //HR
   EmployeeInf(
@@ -128,6 +152,8 @@ final List<EmployeeInf> employees = [
     department: 'Human Resources',
     manager: 'Son Tung MTP',
     isManager: true,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Dam Tong',
@@ -137,6 +163,8 @@ final List<EmployeeInf> employees = [
     department: 'Human Resources',
     manager: 'Chau Bui',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   //Sales
   EmployeeInf(
@@ -147,6 +175,8 @@ final List<EmployeeInf> employees = [
     department: 'Sales',
     manager: 'Son Tung MTP',
     isManager: true,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Chi Pu',
@@ -156,6 +186,8 @@ final List<EmployeeInf> employees = [
     department: 'Sales',
     manager: 'Tran Thanh',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Trung Tin',
@@ -165,6 +197,8 @@ final List<EmployeeInf> employees = [
     department: 'Sales',
     manager: 'Tran Thanh',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Part-time 25 hours/week',  
   ),
   EmployeeInf(
     name: 'Thang Ngot',
@@ -174,6 +208,8 @@ final List<EmployeeInf> employees = [
     department: 'Sales',
     manager: 'Tran Thanh',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Truong Giang',
@@ -183,6 +219,8 @@ final List<EmployeeInf> employees = [
     department: 'Sales',
     manager: 'Tran Thanh',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   //Accounting
   EmployeeInf(
@@ -193,6 +231,8 @@ final List<EmployeeInf> employees = [
     department: 'Accounting',
     manager: 'Son Tung MTP',
     isManager: true,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   //Quality
   EmployeeInf(
@@ -203,6 +243,8 @@ final List<EmployeeInf> employees = [
     department: 'Quality',
     manager: 'Son Tung MTP',
     isManager: true,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   EmployeeInf(
     name: 'Ngoc Thy',
@@ -212,6 +254,8 @@ final List<EmployeeInf> employees = [
     department: 'Quality',
     manager: 'Thinh Noo',
     isManager: false,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
   //Financial
   EmployeeInf(
@@ -222,5 +266,7 @@ final List<EmployeeInf> employees = [
     department: 'Financial',
     manager: 'Son Tung MTP',
     isManager: true,  
+    workLocation: 'Office',
+    schedule: 'Standard 40 hours/week',  
   ),
 ];

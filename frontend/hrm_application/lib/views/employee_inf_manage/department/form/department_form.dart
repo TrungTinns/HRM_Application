@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class DepartmentForm extends StatefulWidget {
-  final Function(DepartmentInf) onAddDepartment;
-
-  DepartmentForm({
-    required this.onAddDepartment
-  });
-
   @override
   _DepartmentFormState createState() => _DepartmentFormState();
 }
@@ -107,7 +102,10 @@ class _DepartmentFormState extends State<DepartmentForm> with SingleTickerProvid
                   manager: managerController.text,
                   superior: superiorController.text,
                 );
-                widget.onAddDepartment(newDepartment);
+                setState(() {
+                  departments.add(newDepartment);
+                });
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department()));
               },
               child: const Icon(Icons.create),
             )

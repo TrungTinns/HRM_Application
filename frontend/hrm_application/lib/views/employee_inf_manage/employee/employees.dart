@@ -323,6 +323,8 @@ class _EmployeeManageState extends State<EmployeeManage> {
                       onDelete: () => deleteEmployee(employee.name),
                       isManager: employee.isManager,
                       onUpdate: handleUpdate,
+                      workLocation: employee.workLocation,
+                      schedule: employee.schedule,
                     );
                   },
                 );

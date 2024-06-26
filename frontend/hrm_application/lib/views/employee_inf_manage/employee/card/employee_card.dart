@@ -12,6 +12,8 @@ class EmployeeCard extends StatelessWidget {
   final VoidCallback onDelete;
   final bool isManager;
   final ValueChanged<EmployeeInf> onUpdate;
+  final String workLocation;
+  final String schedule;
 
   EmployeeCard({
     required this.name,
@@ -23,6 +25,8 @@ class EmployeeCard extends StatelessWidget {
     required this.onDelete,
     required this.isManager, 
     required this.onUpdate,
+    required this.workLocation,
+    required this.schedule,
   });
   
   @override
@@ -42,6 +46,8 @@ class EmployeeCard extends StatelessWidget {
               onDelete: onDelete,
               isManager: isManager,
               onUpdate: onUpdate,
+              workLocation: workLocation,
+              schedule: schedule,
             ),
           ),
         );

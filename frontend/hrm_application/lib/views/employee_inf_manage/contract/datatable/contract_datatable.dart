@@ -29,8 +29,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
         'Reference': PlutoCell(value: contract['Reference']),
         'Department': PlutoCell(value: contract['Department']),
         'Position': PlutoCell(value: contract['Position']),
-        'Start Date': PlutoCell(value: contract['Start Date']),
-        'End Date': PlutoCell(value: contract['End Date']),
+        'Start Date': PlutoCell(value: contract['Start Date'].toString()), 
+        'End Date': PlutoCell(value: contract['End Date'].toString()),   
         'Salary Structure': PlutoCell(value: contract['Salary Structure']),
         'Contract Type': PlutoCell(value: contract['Contract Type']),
         'Schedule': PlutoCell(value: contract['Schedule']),
@@ -40,27 +40,28 @@ class _ContractDataTableState extends State<ContractDataTable> {
   }
 
   void deleteRow(int index) {
-  setState(() {
-    rows.removeAt(index);
-    contracts.removeAt(index); 
-  });
-}
-
-  void updateContract(int index, Map<String, dynamic> updatedContractMap) {
     setState(() {
-      rows[index].cells['Employee'] = PlutoCell(value: updatedContractMap['Employee']);
-      rows[index].cells['Reference'] = PlutoCell(value: updatedContractMap['Reference']);
-      rows[index].cells['Department'] = PlutoCell(value: updatedContractMap['Department']);
-      rows[index].cells['Position'] = PlutoCell(value: updatedContractMap['Position']);
-      rows[index].cells['Start Date'] = PlutoCell(value: updatedContractMap['Start Date']);
-      rows[index].cells['End Date'] = PlutoCell(value: updatedContractMap['End Date']);
-      rows[index].cells['Salary Structure'] = PlutoCell(value: updatedContractMap['Salary Structure']);
-      rows[index].cells['Contract Type'] = PlutoCell(value: updatedContractMap['Contract Type']);
-      rows[index].cells['Schedule'] = PlutoCell(value: updatedContractMap['Schedule']);
-      rows[index].cells['Status'] = PlutoCell(value: updatedContractMap['Status']);
+      rows.removeAt(index);
+      contracts.removeAt(index); 
     });
   }
 
+  void updateContract(int index, ContractData updatedContract) {
+    setState(() {
+      rows[index] = PlutoRow(cells: {
+        'Employee': PlutoCell(value: updatedContract.employeeName),
+        'Reference': PlutoCell(value: updatedContract.reference),
+        'Department': PlutoCell(value: updatedContract.department),
+        'Position': PlutoCell(value: updatedContract.position),
+        'Start Date': PlutoCell(value: updatedContract.startDate.toString()), 
+        'End Date': PlutoCell(value: updatedContract.endDate.toString()),    
+        'Salary Structure': PlutoCell(value: updatedContract.salaryStructure),
+        'Contract Type': PlutoCell(value: updatedContract.contractType),
+        'Schedule': PlutoCell(value: updatedContract.schedule),
+        'Status': PlutoCell(value: updatedContract.status),
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +146,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
               }, 
               onUpdate: (updatedContract) {
                 final updatedContractMap = updatedContract.toMap();
-                updateContract(index, updatedContractMap);
+                final updatedContractData = ContractData.fromMap(updatedContractMap);
+                updateContract(index, updatedContractData);
               },
             ),
           ),

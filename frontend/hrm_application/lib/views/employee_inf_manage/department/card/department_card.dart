@@ -49,7 +49,8 @@ class DepartmentCard extends StatelessWidget {
                         superior: superior,
                         onDelete: onDelete,
                         onUpdate: onUpdate,
-                      )));
+                      )
+                      ));
                     }, 
                     icon: const Icon(Icons.more_vert)
                   )

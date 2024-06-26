@@ -3,12 +3,14 @@ import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/form/contract_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class ContractDetail extends StatefulWidget {
   final String employeeName;
@@ -58,10 +60,12 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
   bool showContractForm = false;
   String? activeDropdown;
   bool isChanged = false;
+  late int toggleIndex;
 
   final List<String> schedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
   final List<String> salaryStructures = ['Employee', 'Worker'];
   final List<String> contractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
+  final List<String> status = ['Running', 'Expired', 'Cancelled'];
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -71,7 +75,7 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
 
   void toggleContractForm() {
     if (showContractForm) {
-      if (employeeNameController.text.isEmpty) {
+      if (referenceController.text.isEmpty) {
         showDialog(
           context: context,
           builder: (context) {
@@ -91,7 +95,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
         );
       } else {
         setState(() {
-          employeeNameController.clear();
+          referenceController.clear();
+          
         });
       }
     } else {
@@ -108,15 +113,20 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     super.initState();
     employeeNameController = TextEditingController(text: widget.employeeName);
     referenceController = TextEditingController(text: widget.reference);
-    startDateController = TextEditingController(text: widget.startDate);
-    endDateController = TextEditingController(text: widget.endDate);
+    startDateController = TextEditingController(text: formatDate(DateTime.parse(widget.startDate)));
+    endDateController = TextEditingController(text: formatDate(DateTime.parse(widget.endDate)));
     departmentController = TextEditingController(text: widget.department);
     positionController = TextEditingController(text: widget.position);
     scheduleController = TextEditingController(text: widget.schedule);
     salaryStructureController = TextEditingController(text: widget.salaryStructure);
     contractTypeController = TextEditingController(text: widget.contractType);
     statusController = TextEditingController(text: widget.status);
+    toggleIndex = status.indexOf(widget.status);
     tabController = TabController(length: 2, vsync: this);
+  }
+
+  String formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -133,6 +143,19 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     contractTypeController.dispose();
     statusController.dispose();
     super.dispose();
+  }
+
+  void clearDepartmentForm() {
+    setState(() {
+      showContractForm = false;
+      departmentController.clear();
+      positionController.clear();
+      scheduleController.clear();
+      salaryStructureController.clear();
+      contractTypeController.clear();
+      statusController.clear();
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts()));
+    });
   }
 
   void _updateEmployeeInfo(EmployeeInf employee) {
@@ -154,8 +177,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
       reference: referenceController.text,
       department: departmentController.text,
       position: positionController.text,
-      startDate: DateTime.parse(startDateController.text),
-      endDate: DateTime.parse(endDateController.text),
+      startDate: DateTime.parse("${startDateController.text} 00:00:00"),
+      endDate: DateTime.parse("${endDateController.text} 00:00:00"),
       schedule: scheduleController.text,
       salaryStructure: salaryStructureController.text,
       contractType: contractTypeController.text,
@@ -169,7 +192,7 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     return Row(
       children: [
         SizedBox(
-          width: 150,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -194,11 +217,11 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     );
   }
 
-    Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController controller) {
+  Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController controller) {
     return Row(
       children: [
         SizedBox(
-          width: 150,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
@@ -299,6 +322,10 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
           child: Row(
             children: [
               Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Container(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
@@ -320,11 +347,7 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                           style: const TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
+                    ),
                     Text(
                       pageName,
                       style: const TextStyle(fontSize: 16, color: Colors.white),
@@ -339,34 +362,34 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                       icon: const Icon(Icons.clear),
                       color: Colors.white,
                       iconSize: 24,
-                      tooltip: "Delete this contract",
-                      onPressed: () {
+                      tooltip: showContractForm ? "Discard all changes" : "Delete this department",
+                      onPressed: showContractForm ? clearDepartmentForm : () {
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Do you want to delete this contract?'),
+                              title: const Text('Do you want to delete this department?'),
                               content: const Text(''),
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    widget.onDelete();
-                                    Navigator.pop(context); 
-                                    Navigator.pop(context); 
+                                    Navigator.pop(context);
                                   },
-                                  child: const Text('OK'),
+                                  child: const Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    Navigator.pop(context);
+                                    widget.onDelete();
+                                    Navigator.pop(context);
                                   },
-                                  child: const Text('Cancel'),
+                                  child: const Text('Delete'),
                                 ),
                               ],
                             );
                           },
                         );
-                      },
+                      }
                     ),
                   ],
                 ),
@@ -377,8 +400,9 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
         backgroundColor: snackBarColor,
       ),
       backgroundColor: snackBarColor,
-      body:
-          SingleChildScrollView(
+      body: showContractForm
+      ? ContractForm()
+        : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,6 +431,25 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                         ),
                       ),
                       const SizedBox(width: 10),
+                      ToggleSwitch(
+                        minWidth: 90.0,
+                        initialLabelIndex: toggleIndex,
+                        cornerRadius: 20.0,
+                        activeFgColor: Colors.white,
+                        inactiveBgColor: Colors.grey,
+                        inactiveFgColor: Colors.white,
+                        totalSwitches: 3,
+                        labels: ['Running', 'Expired', 'Cancelled'],
+                        icons: [Icons.play_arrow, Icons.hourglass_empty, Icons.cancel],
+                        activeBgColors: [[Colors.green], [Colors.orange], [Colors.red]],
+                        onToggle: (index) {
+                          setState(() {
+                            toggleIndex = index!;
+                            statusController.text = ['Running', 'Expired', 'Cancelled'][index];
+                            isChanged = true;
+                          });
+                        },
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),

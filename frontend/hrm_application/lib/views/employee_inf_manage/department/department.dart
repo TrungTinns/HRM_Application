@@ -61,29 +61,21 @@ class _DepartmentState extends State<Department> {
     }
   }
 
-  void addDepartment(DepartmentInf newDepartment) {
-    setState(() {
-      departments.add(newDepartment);
-      showDepartmentForm = false;
-    });
-  }
-
   void clearDepartmentForm() {
     setState(() {
-      departmentController.clear();
       showDepartmentForm = false;
     });
   }
 
   void deleteDepartment(String department) {
     setState(() {
-      departments.removeWhere((deparment) => deparment.department == department);
+      departments.removeWhere((department) => department.department == department);
     });
   }
 
   void handleUpdate(DepartmentInf updatedDepartment) {
     setState(() {
-      final index = departments.indexWhere((emp) => emp.department == updatedDepartment.department);
+      final index = departments.indexWhere((dpm) => dpm.department == updatedDepartment.department);
       if (index != -1) {
         departments[index] = updatedDepartment;
       }
@@ -228,7 +220,7 @@ class _DepartmentState extends State<Department> {
         backgroundColor: snackBarColor,
       ),
       body: showDepartmentForm
-          ? DepartmentForm(onAddDepartment: addDepartment) 
+          ? DepartmentForm() 
           : Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {

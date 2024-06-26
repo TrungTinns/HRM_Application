@@ -20,6 +20,8 @@ class EmployeeDetail extends StatefulWidget {
   final VoidCallback onDelete;
   final bool isManager;
   final ValueChanged<EmployeeInf> onUpdate;
+  final String workLocation;
+  final String schedule;
 
   EmployeeDetail({
     required this.name,
@@ -31,6 +33,8 @@ class EmployeeDetail extends StatefulWidget {
     required this.onDelete,
     required this.isManager,
     required this.onUpdate,
+    required this.workLocation,
+    required this.schedule
   });
 
   @override
@@ -44,6 +48,8 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   TextEditingController mailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
+  TextEditingController workLocationController = TextEditingController();
+  TextEditingController scheduleController = TextEditingController();
   bool isManager = false;
 
   final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
@@ -93,6 +99,13 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     }
   }
 
+  void clearEmployeeForm() {
+    setState(() {
+      showEmployeeForm = false;
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage()));
+    });
+  }
+
   late TabController tabController;
 
   @override
@@ -107,6 +120,8 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     managers = getManagers(employees);
     tabController = TabController(length: 4, vsync: this);
     isManager = widget.isManager; 
+    workLocationController.text = widget.workLocation;
+    scheduleController.text = widget.schedule;
   }
 
   @override
@@ -124,6 +139,8 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
       department: departmentController.text,
       manager: managerController.text,
       isManager: isManager,
+      workLocation: workLocationController.text,
+      schedule: scheduleController.text
     );
     widget.onUpdate(updatedEmployee);
     Navigator.pop(context);
@@ -133,7 +150,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     return Row(
       children: [
         SizedBox(
-          width: 150,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -162,7 +179,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     return Row(
       children: [
         SizedBox(
-          width: 150,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -172,7 +189,6 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
           child: DropdownButtonFormField<String>(
             dropdownColor: dropdownColor,
             value: controller.text,
-            
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -300,8 +316,8 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                       icon: const Icon(Icons.clear),
                       color: Colors.white,
                       iconSize: 24,
-                      tooltip: "Delete this employee",
-                      onPressed: () {
+                      tooltip: showEmployeeForm ? "Discard all changes" : "Delete this employee",
+                      onPressed: showEmployeeForm ? clearEmployeeForm : () {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -327,7 +343,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                             );
                           },
                         );
-                      },
+                      }
                     ),
                   ],
                 ),
@@ -453,14 +469,23 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                 Tab(text: 'Contract'),
               ],
             ),
+            const SizedBox(height: 10),
             SizedBox(
               height: 200,
               child: TabBarView(
                 controller: tabController,
-                children: const [
-                  Center(child: Text('Content for Tab 1')),
-                  Center(child: Text('Content for Tab 2')),
-                  Center(child: Text('Content for Tab 3')),
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        buildTextFieldRow('Work Location', workLocationController),
+                        const SizedBox(height: 10),
+                        buildTextFieldRow('Schedule', scheduleController),
+                      ],
+                    ),
+                  ),
+                  const Center(child: Text('Content for Tab 2')),
+                  const Center(child: Text('Content for Tab 3')),
                 ],
               ),
             ),

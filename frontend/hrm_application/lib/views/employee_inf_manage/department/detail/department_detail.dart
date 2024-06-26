@@ -4,6 +4,7 @@ import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/form/department_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
@@ -75,6 +76,16 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
         showDepartmentForm = true;
       });
     }
+  }
+
+  void clearDepartmentForm() {
+    setState(() {
+      showDepartmentForm = false;
+      departmentController.clear();
+      managerController.clear();
+      superiorController.clear();
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department()));
+    });
   }
   
     @override
@@ -228,9 +239,13 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
-          child: Row(
+          child:  Row(
             children: [
               Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Container(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
@@ -253,10 +268,6 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
                         ),
                       ),
                     ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
                     Text(
                       pageName,
                       style: const TextStyle(fontSize: 16, color: Colors.white),
@@ -271,34 +282,34 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
                       icon: const Icon(Icons.clear),
                       color: Colors.white,
                       iconSize: 24,
-                      tooltip: "Delete this Department",
-                      onPressed: () {
+                      tooltip: showDepartmentForm ? "Discard all changes" : "Delete this department",
+                      onPressed: showDepartmentForm ? clearDepartmentForm : () {
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Do you want to delete this Department?'),
+                              title: const Text('Do you want to delete this department?'),
                               content: const Text(''),
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    widget.onDelete();
-                                    Navigator.pop(context); 
-                                    Navigator.pop(context); 
+                                    Navigator.pop(context);
                                   },
-                                  child: const Text('OK'),
+                                  child: const Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    Navigator.pop(context);
+                                    widget.onDelete();
+                                    Navigator.pop(context);
                                   },
-                                  child: const Text('Cancel'),
+                                  child: const Text('Delete'),
                                 ),
                               ],
                             );
                           },
                         );
-                      },
+                      }
                     ),
                   ],
                 ),
@@ -309,7 +320,9 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
         backgroundColor: snackBarColor,
       ),
       backgroundColor: snackBarColor,
-      body:  SingleChildScrollView(
+      body: showDepartmentForm
+      ? DepartmentForm()
+      : SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

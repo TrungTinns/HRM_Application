@@ -69,26 +69,6 @@ class _ContractsState extends State<Contracts> {
     });
   }
 
-    void addContract(ContractData newContract) {
-    setState(() {
-      contracts.add(newContract);
-      rows.add(PlutoRow(
-        cells: {
-          'Employee': PlutoCell(value: newContract.employeeName),
-          'Reference': PlutoCell(value: newContract.reference),
-          'Department': PlutoCell(value: newContract.department),
-          'Position': PlutoCell(value: newContract.position),
-          'Start Date': PlutoCell(value: newContract.startDate.toString()),
-          'End Date': PlutoCell(value: newContract.endDate.toString()),
-          'Salary Structure': PlutoCell(value: newContract.salaryStructure),
-          'Contract Type': PlutoCell(value: newContract.contractType),
-          'Schedule': PlutoCell(value: newContract.schedule),
-          'Status': PlutoCell(value: newContract.status),
-        },
-      ));
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,9 +207,7 @@ class _ContractsState extends State<Contracts> {
         backgroundColor: snackBarColor,
       ),
       body:showContractForm
-          ? ContractForm(
-            addContract: addContract,
-          )
+          ? ContractForm()
           : ContractDataTable(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
@@ -15,6 +16,8 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   TextEditingController mailController = TextEditingController();
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
+  TextEditingController workLocationController = TextEditingController();
+  TextEditingController scheduleController = TextEditingController();
   bool isManager = false;
 
   final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
@@ -54,7 +57,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
     return Row(
       children: [
         SizedBox(
-          width: 100,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -79,7 +82,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
     return Row(
       children: [
         SizedBox(
-          width: 150,
+          width: 200,
           child: Text(
             label,
             style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
@@ -214,14 +217,23 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 Tab(text: 'Contract'),
               ],
             ),
+            const SizedBox(height: 10),
             SizedBox(
               height: 200,
               child: TabBarView(
                 controller: tabController,
-                children: const [
-                  Center(child: Text('Content for Tab 1')),
-                  Center(child: Text('Content for Tab 2')),
-                  Center(child: Text('Content for Tab 3')),
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        buildTextFieldRow('Work Location', workLocationController),
+                        const SizedBox(height: 10),
+                        buildTextFieldRow('Schedule', scheduleController),
+                      ],
+                    ),
+                  ),
+                  const Center(child: Text('Content for Tab 2')),
+                  const Center(child: Text('Content for Tab 3')),
                 ],
               ),
             ),
@@ -239,6 +251,8 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                   department: departmentController.text,
                   manager: managerController.text,
                   isManager: isManager,
+                  workLocation: workLocationController.text,
+                  schedule : scheduleController.text
                 );
                 setState(() {
                   employees.add(newEmployee);
