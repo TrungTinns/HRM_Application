@@ -30,6 +30,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
         'Contract Type': PlutoCell(value: contract['Contract Type']),
         'Schedule': PlutoCell(value: contract['Schedule']),
         'Status': PlutoCell(value: contract['Status']),
+        'Salary': PlutoCell(value: contract['Salary']),
+        'Note': PlutoCell(value: contract['Note']),
       });
     }).toList();
   }
@@ -54,6 +56,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
         'Contract Type': PlutoCell(value: updatedContract.contractType),
         'Schedule': PlutoCell(value: updatedContract.schedule),
         'Status': PlutoCell(value: updatedContract.status),
+        'Salary': PlutoCell(value: updatedContract.salary),
+        'Note': PlutoCell(value: updatedContract.note),
       });
     });
   }
@@ -144,6 +148,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
                 final updatedContractData = ContractData.fromMap(updatedContractMap);
                 updateContract(index, updatedContractData);
               },
+              salary: row.cells['Salary']!.value,
+              note: row.cells['Note']!.value,
             ),
           ),
         );

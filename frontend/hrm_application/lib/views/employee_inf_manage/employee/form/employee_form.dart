@@ -154,21 +154,30 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
         ),
         Expanded(
           child: GestureDetector(
-            // onTap: () {
-            //   if (isDateField) {
-            //     _selectDate(controller);
-            //   }
-            // },
-            // child: AbsorbPointer(
-              child: TextField(
-                controller: controller,
-                style: const TextStyle(color: textColor),
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: snackBarColor,
-                ),
-              ),
-            // ),
+            onTap: () {
+              if (isDateField) {
+                _selectDate(controller);
+              }
+            },
+            child: isDateField
+                ? AbsorbPointer(
+                    child: TextField(
+                      controller: controller,
+                      style: const TextStyle(color: textColor),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: snackBarColor,
+                      ),
+                    ),
+                  )
+                : TextField(
+                    controller: controller,
+                    style: const TextStyle(color: textColor),
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: snackBarColor,
+                    ),
+                  ),
           ),
         ),
       ],
@@ -176,7 +185,6 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   }
 
   Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {  
-    
     return Row(
       children: [
         SizedBox(
@@ -366,37 +374,37 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                               buildTextFieldRow('School', schoolController),
                               const SizedBox(height: 20),
                               const Text('CITIZEN', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
-                        const Divider(
-                          thickness: 0.5,
-                          color: textColor, 
-                        ),
-                        buildDropdownCountry('Nationality', nationalityController),
-                        const SizedBox(height: 10),
-                        buildTextFieldRow('ID Number', idNumController),
-                        const SizedBox(height: 10),
-                        buildTextFieldRow('Social Security Number', ssNumController),
-                        const SizedBox(height: 10),
-                        buildTextFieldRow('Passport', passportController),
-                        const SizedBox(height: 10),
-                        buildDropdownRow('Sex', sexController, EmployeeInf.defaultSex),
-                        const SizedBox(height: 10),
-                        // buildTextFieldRow('Date of Birth', birthDateController, isDateField: true),
-                        buildTextFieldRow('Date of Birth', birthDateController),
-                        const SizedBox(height: 10),
-                        buildTextFieldRow('Place of Birth', birthPlaceController),
-                            ]
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Column( 
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('EMERGENCY CONTACT ', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                               const Divider(
                                 thickness: 0.5,
                                 color: textColor, 
                               ),
+                              buildDropdownCountry('Nationality', nationalityController),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('ID Number', idNumController),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Social Security Number', ssNumController),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Passport', passportController),
+                              const SizedBox(height: 10),
+                              buildDropdownRow('Sex', sexController, EmployeeInf.defaultSex),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Date of Birth', birthDateController, isDateField: true),
+                              // buildTextFieldRow('Date of Birth', birthDateController),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Place of Birth', birthPlaceController),
+                                  ]
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: Column( 
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('EMERGENCY CONTACT ', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                                    const Divider(
+                                      thickness: 0.5,
+                                      color: textColor, 
+                                    ),
                               buildTextFieldRow('Relative Contact Name', relativeNameController),
                               const SizedBox(height: 10),
                               buildTextFieldRow('Relative Phone', relativeMobileController),

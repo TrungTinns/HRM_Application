@@ -25,6 +25,8 @@ class ContractDetail extends StatefulWidget {
   final String status;
   final VoidCallback onDelete;
   final ValueChanged<ContractData> onUpdate;
+  final double? salary;
+  final String? note;
 
   ContractDetail({
     required this.name,
@@ -39,6 +41,8 @@ class ContractDetail extends StatefulWidget {
     required this.status,
     required this.onDelete,
     required this.onUpdate,
+    this.salary,
+    this.note,
   });
 
   @override
@@ -56,6 +60,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
   late TextEditingController salaryStructureController;
   late TextEditingController contractTypeController;
   late TextEditingController statusController;
+  late TextEditingController salaryController;
+  late TextEditingController noteController;
   String pageName = 'Contracts';
   bool showContractForm = false;
   String? activeDropdown;
@@ -117,6 +123,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     contractTypeController = TextEditingController(text: widget.contractType); 
     statusController = TextEditingController(text: widget.status);
     toggleIndex = ContractData.defaultStatus.indexOf(widget.status);
+    salaryController = TextEditingController(text: widget.salary.toString());
+    noteController = TextEditingController(text: widget.note);
     tabController = TabController(length: 2, vsync: this);
   }
 
@@ -149,6 +157,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
       salaryStructureController.clear();
       contractTypeController.clear();
       statusController.clear();
+      salaryController.clear();
+      noteController.clear();
       Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts()));
     });
   }
@@ -178,6 +188,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
       salaryStructure: salaryStructureController.text,
       contractType: contractTypeController.text,
       status: statusController.text,
+      salary: double.parse(salaryController.text),
+      note: noteController.text
     );
     widget.onUpdate(updatedContract);
     Navigator.pop(context);
@@ -212,45 +224,50 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     );
   }
 
-  Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController controller) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 200,
-          child: Text(
-            label,
-            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-        ),
-        Expanded(
-          child: DropdownButtonFormField<dynamic>(
-            dropdownColor: dropdownColor,
-            value: controller.text,
-            items: items.map((item) {
-              return DropdownMenuItem<dynamic>(
-                value: item,
-                child: Text(item is EmployeeInf ? item.name : item.toString(), style: const TextStyle(color: textColor),),
-              );
-            }).toList(),
-            onChanged: (selectedItem) {
-              setState(() {
-                if (selectedItem is EmployeeInf) {
-                  _updateEmployeeInfo(selectedItem);
-                } else {
-                  controller.text = selectedItem.toString();
-                }
-                isChanged = true;
-              });
-            },
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: snackBarColor,
-            ),
-          ),
-        ),
-      ],
-    );
+Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController controller) {
+  dynamic currentValue = controller.text;
+  if (!items.any((item) => item.toString() == currentValue)) {
+    currentValue = items.first.toString();
   }
+  return Row(
+    children: [
+      SizedBox(
+        width: 200,
+        child: Text(
+          label,
+          style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+      ),
+      Expanded(
+        child: DropdownButtonFormField<dynamic>(
+          dropdownColor: dropdownColor,
+          value: currentValue,
+          items: items.map((item) {
+            return DropdownMenuItem<dynamic>(
+              value: item,
+              child: Text(item is EmployeeInf ? item.name : item.toString(), style: const TextStyle(color: textColor)),
+            );
+          }).toList(),
+          onChanged: (selectedItem) {
+            setState(() {
+              if (selectedItem is EmployeeInf) {
+                _updateEmployeeInfo(selectedItem);
+              } else {
+                controller.text = selectedItem.toString();
+              }
+              isChanged = true;
+            });
+          },
+          decoration: const InputDecoration(
+            filled: true,
+            fillColor: snackBarColor,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -490,19 +507,37 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                       Tab(text: 'Contract Details'),
                     ],
                   ),
+                  const SizedBox(height: 10),
                   SizedBox(
                     height: 200,
                     child: TabBarView(
                       controller: tabController,
-                      children: const [
-                        Center(child: Text('Content for Tab 1')),
-                        Center(child: Text('Content for Tab 2')),
+                      children: [
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              buildTextFieldRow('Wages/salaries', salaryController),
+                            ],
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const Text('NOTE', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                              const Divider(
+                                thickness: 0.5,
+                                color: textColor, 
+                              ),
+                              buildTextFieldRow('Note', noteController),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

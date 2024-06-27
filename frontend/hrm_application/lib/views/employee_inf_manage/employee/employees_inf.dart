@@ -65,17 +65,17 @@ class EmployeeInf {
   });
 }
 
-int countEmployeesInDepartment(List<EmployeeInf> employees, String department) {
-  return employees.where((employee) => employee.department == department).length;
-}
+  int countEmployeesInDepartment(List<EmployeeInf> employees, String department) {
+    return employees.where((employee) => employee.department == department).length;
+  }
 
-List<String> getManagers(List<EmployeeInf> employees) {
-  return employees.where((employee) => employee.isManager).map((e) => e.name).toList();
-}
+  List<String> getManagers(List<EmployeeInf> employees) {
+    return employees.where((employee) => employee.isManager).map((e) => e.name).toList();
+  }
 
-List<String> getRoles(List<EmployeeInf> employees) {
-  return employees.map((employee) => employee.role).toSet().toList();
-}
+  List<String> getRoles(List<EmployeeInf> employees) {
+    return employees.map((employee) => employee.role).toSet().toList();
+  }
 
 final List<EmployeeInf> employees = [
   //Administration

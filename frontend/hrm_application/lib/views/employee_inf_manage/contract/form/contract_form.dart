@@ -23,7 +23,9 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
   TextEditingController salaryStructureController = TextEditingController();
   TextEditingController contractTypeController = TextEditingController();
   TextEditingController statusController = TextEditingController();
-
+  TextEditingController salaryController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+  
   TabController? tabController;
   bool isRefFilled = false;
   int toggleIndex = 0;
@@ -92,16 +94,25 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 _selectDate(controller);
               }
             },
-            child: AbsorbPointer(
-              child: TextField(
-                controller: controller,
-                style: const TextStyle(color: textColor),
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: snackBarColor,
-                ),
-              ),
-            ),
+            child: isDateField
+                ? AbsorbPointer(
+                    child: TextField(
+                      controller: controller,
+                      style: const TextStyle(color: textColor),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: snackBarColor,
+                      ),
+                    ),
+                  )
+                : TextField(
+                    controller: controller,
+                    style: const TextStyle(color: textColor),
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: snackBarColor,
+                    ),
+                  ),
           ),
         ),
       ],
@@ -229,22 +240,40 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
             ),
             const SizedBox(height: 20),
             TabBar(
-              controller: tabController,
               labelColor: textColor,
               unselectedLabelColor: termTextColor,
+              controller: tabController,
               labelStyle: const TextStyle(color: textColor, fontSize: 16),
               tabs: const [
                 Tab(text: 'Salary Information'),
                 Tab(text: 'Contract Details'),
               ],
             ),
+            const SizedBox(height: 10),
             SizedBox(
               height: 200,
               child: TabBarView(
                 controller: tabController,
-                children: const [
-                  Center(child: Text('Content for Tab 1')),
-                  Center(child: Text('Content for Tab 2')),
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        buildTextFieldRow('Wages/salaries', salaryController),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const Text('NOTE', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                        const Divider(
+                          thickness: 0.5,
+                          color: textColor, 
+                        ),
+                        buildTextFieldRow('Note', noteController),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -264,7 +293,9 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 schedule: scheduleController.text,
                 salaryStructure: salaryStructureController.text,
                 contractType: contractTypeController.text,
-                status: statusController.text,                
+                status: statusController.text,    
+                salary: double.parse(salaryController.text),
+                note: noteController.text,            
               );
               setState(() {
                 contracts.add(newContract);

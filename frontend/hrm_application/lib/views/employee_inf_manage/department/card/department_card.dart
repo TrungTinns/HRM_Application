@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/manage/department_manage.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/detail/department_detail.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
@@ -27,7 +28,7 @@ class DepartmentCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,          
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Row(
@@ -42,23 +43,32 @@ class DepartmentCard extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => 
-                      DepartmentDetail(
-                        department: department,
-                        manager: manager, 
-                        superior: superior,
-                        onDelete: onDelete,
-                        onUpdate: onUpdate,
-                      )
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx) =>
+                        DepartmentDetail(
+                          department: department,
+                          manager: manager,
+                          superior: superior,
+                          onDelete: onDelete,
+                          onUpdate: onUpdate,
+                        )
                       ));
-                    }, 
+                    },
                     icon: const Icon(Icons.more_vert)
                   )
                 ],
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => EmployeeofDepartment(
+                      initialDepartment: department,
+                    ),
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 foregroundColor: textColor,
                 backgroundColor: primaryColor,

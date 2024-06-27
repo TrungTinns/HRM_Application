@@ -9,6 +9,8 @@ class ContractData {
   final String salaryStructure;
   final String contractType;
   final String status;
+  final double? salary;
+  final String? note;
   static final List<String> defaultSalaryStructures = ['Employee', 'Worker'];
   static final List<String> defaultContractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
   static final List<String> defaultSchedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
@@ -25,7 +27,8 @@ class ContractData {
     required this.salaryStructure,
     required this.contractType,
     required this.status,
-    
+    this.salary,
+    this.note,
   });
 
   factory ContractData.fromMap(Map<String, dynamic> data) {
@@ -40,6 +43,8 @@ class ContractData {
       contractType: data['Contract Type'],
       schedule: data['Schedule'],
       status: data['Status'],
+      salary: data['Salary'],
+      note: data['Note'],
     );
   }
 
@@ -55,6 +60,8 @@ class ContractData {
       'Contract Type': contractType,
       'Schedule': schedule,
       'Status': status,
+      'Salary': salary,
+      'Note': note,
     };
   }
 }
@@ -81,6 +88,8 @@ List<ContractData> contracts = [
     contractType: 'Permanent',
     schedule: 'Standard 40 hours/week',
     status: 'Running',
+    salary: 10000000,
+    note: 'This is a note',
   ),
   ContractData(
     name: 'Jack J97',
@@ -93,6 +102,7 @@ List<ContractData> contracts = [
     contractType: 'Temporary',
     schedule: 'Part-time 25 hours/week',
     status: 'Expired',
+    note: 'This is another note',
   ),
   ContractData(
     name: 'Chi Pu',
@@ -105,6 +115,7 @@ List<ContractData> contracts = [
     contractType: 'Full-time',
     schedule: 'Standard 40 hours/week',
     status: 'Running',
+    salary: 20000000,
   ),
 ];
 

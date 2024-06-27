@@ -327,32 +327,28 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
     );
   }
 
-  Widget buildTextFieldRow(String label, TextEditingController controller, {bool isDateField = false}) {
+  Widget buildTextFieldRow(String label, TextEditingController controller) {
     return Row(
       children: [
         SizedBox(
           width: 200,
           child: Text(
             label,
-            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Expanded(
-          child: GestureDetector(
-            onTap: () {
-              if (isDateField) {
-                _selectDate(controller);
-              }
+          child: TextField(
+            controller: controller,
+            onChanged: (value) {
+              setState(() {
+                isChanged = true;
+              });
             },
-            child: AbsorbPointer(
-              child: TextField(
-                controller: controller,
-                style: const TextStyle(color: textColor),
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: snackBarColor,
-                ),
-              ),
+            style: const TextStyle(color: textColor),
+            decoration: const InputDecoration(
+              filled: true,
+              fillColor: snackBarColor,
             ),
           ),
         ),

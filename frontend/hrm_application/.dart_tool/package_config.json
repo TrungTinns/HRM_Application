@@ -272,6 +272,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "toggle_switch",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/toggle_switch-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.3.2",
       "packageUri": "lib/",
@@ -314,7 +320,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-23T20:34:59.304010Z",
+  "generated": "2024-06-26T09:48:25.183683Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }
