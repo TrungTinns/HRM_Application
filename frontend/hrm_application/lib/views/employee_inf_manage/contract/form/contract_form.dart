@@ -13,7 +13,7 @@ class ContractForm extends StatefulWidget {
 }
 
 class _ContractFormState extends State<ContractForm> with SingleTickerProviderStateMixin {
-  TextEditingController employeeNameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController referenceController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
@@ -26,10 +26,6 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
 
   TabController? tabController;
   bool isRefFilled = false;
-  final List<String> schedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
-  final List<String> salaryStructures = ['Employee', 'Worker'];
-  final List<String> contractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
-  final List<String> status = ['Running', 'Expired', 'Cancelled'];
   int toggleIndex = 0;
 
   @override
@@ -193,7 +189,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                   onToggle: (index) {
                     setState(() {
                       toggleIndex = index!;
-                      statusController.text = status[index];
+                      statusController.text = ContractData.defaultStatus[index];
                     });
                   },
                 ),
@@ -205,13 +201,13 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Employee', employees, employeeNameController),
+                      buildDropdownRow('Employee', employees, nameController),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Contract Start Date', startDateController, isDateField: true),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Contract End Date', endDateController, isDateField: true),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Working Schedule', schedules, scheduleController),
+                      buildDropdownRow('Working Schedule', ContractData.defaultSchedules, scheduleController),
                     ],
                   ),
                 ),
@@ -219,13 +215,13 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Salary Structure Type', salaryStructures, salaryStructureController),
+                      buildDropdownRow('Salary Structure Type', ContractData.defaultSalaryStructures, salaryStructureController),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Department', departmentController),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Job Position', positionController),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Contract Type', contractTypes, contractTypeController),
+                      buildDropdownRow('Contract Type', ContractData.defaultContractTypes, contractTypeController),
                     ],
                   ),
                 ),
@@ -234,6 +230,8 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
             const SizedBox(height: 20),
             TabBar(
               controller: tabController,
+              labelColor: textColor,
+              unselectedLabelColor: termTextColor,
               labelStyle: const TextStyle(color: textColor, fontSize: 16),
               tabs: const [
                 Tab(text: 'Salary Information'),
@@ -257,7 +255,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
           ? FloatingActionButton(
             onPressed: () {
               final newContract = ContractData(
-                employeeName: employeeNameController.text,
+                name: nameController.text,
                 reference: referenceController.text,
                 department: departmentController.text,
                 position: positionController.text,

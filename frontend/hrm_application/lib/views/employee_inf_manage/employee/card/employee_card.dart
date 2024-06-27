@@ -12,8 +12,28 @@ class EmployeeCard extends StatelessWidget {
   final VoidCallback onDelete;
   final bool isManager;
   final ValueChanged<EmployeeInf> onUpdate;
-  final String workLocation;
-  final String schedule;
+  final String? workLocation;
+  final String? schedule;
+  final String? salaryStructure;
+  final String? contractType;
+  final double? cost;
+  final String? personalAddress;
+  final String? personalMail;
+  final String? personalMobile;
+  final String? relativeName;
+  final String? relativeMobile;
+  final String? certification;
+  final String? school;
+  final String? maritalStatus;
+  final int? child;
+  final String? nationality;
+  final String? idNum;
+  final String? ssNum;
+  final String? passport;
+  final String? sex;
+  // final DateTime? birthDate;
+  final String? birthDate;
+  final String? birthPlace;
 
   EmployeeCard({
     required this.name,
@@ -23,10 +43,29 @@ class EmployeeCard extends StatelessWidget {
     required this.department,
     required this.manager,
     required this.onDelete,
-    required this.isManager, 
+    required this.isManager,
     required this.onUpdate,
-    required this.workLocation,
-    required this.schedule,
+    this.workLocation,
+    this.schedule,
+    this.salaryStructure,
+    this.contractType,
+    this.cost,
+    this.personalAddress,
+    this.personalMail,
+    this.personalMobile,
+    this.relativeName,
+    this.relativeMobile,
+    this.certification,
+    this.school,
+    this.maritalStatus,
+    this.child,
+    this.nationality,
+    this.idNum,
+    this.ssNum,
+    this.passport,
+    this.sex,
+    this.birthDate,
+    this.birthPlace,
   });
   
   @override
@@ -46,8 +85,27 @@ class EmployeeCard extends StatelessWidget {
               onDelete: onDelete,
               isManager: isManager,
               onUpdate: onUpdate,
-              workLocation: workLocation,
-              schedule: schedule,
+              workLocation: workLocation ?? '',
+              schedule: schedule ?? '',
+              salaryStructure: salaryStructure ?? '',
+              contractType: contractType ?? '',
+              cost: double.tryParse(cost.toString()) ?? 0.0,  
+              personalAddress: personalAddress ?? '',
+              personalMail: personalMail ?? '',
+              personalMobile: personalMobile ?? '',
+              relativeName: relativeName ?? '',
+              relativeMobile: relativeMobile ?? '',  
+              certification: certification ?? '', 
+              school: school ?? '', 
+              maritalStatus: maritalStatus ?? '', 
+              child: int.tryParse(child.toString()) ?? 0,
+              nationality: nationality ?? '', 
+              idNum: idNum ?? '', 
+              ssNum: ssNum ?? '', 
+              passport: passport ?? '', 
+              sex: sex ?? '', 
+              birthDate: birthDate ?? '', 
+              birthPlace: birthPlace ?? '',
             ),
           ),
         );

@@ -33,7 +33,6 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
   TextEditingController superiorController = TextEditingController();
-  final List<String> superiors = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
 
   String pageName = 'Department';
   bool showDepartmentForm = false;
@@ -345,7 +344,7 @@ class _DepartmentDetailState extends State<DepartmentDetail> with SingleTickerPr
               children: [
                 buildDropdownRow('Manage', managerController, employees.map((employee) => employee.name).toList()),
                 const SizedBox(height: 10),
-                buildDropdownRow('Superior Department', superiorController, superiors),
+                buildDropdownRow('Superior Department', superiorController, getDepartments()),
                 const SizedBox(height: 10),
               ],
             ),

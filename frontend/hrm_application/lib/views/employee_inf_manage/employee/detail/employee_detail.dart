@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
@@ -20,8 +25,28 @@ class EmployeeDetail extends StatefulWidget {
   final VoidCallback onDelete;
   final bool isManager;
   final ValueChanged<EmployeeInf> onUpdate;
-  final String workLocation;
-  final String schedule;
+  final String? workLocation;
+  final String? schedule;
+  final String? salaryStructure;
+  final String? contractType;
+  final double? cost;
+  final String? personalAddress;
+  final String? personalMail;
+  final String? personalMobile;
+  final String? relativeName;
+  final String? relativeMobile;
+  final String? certification;
+  final String? school;
+  final String? maritalStatus;
+  final int? child;
+  final String? nationality;
+  final String? idNum;
+  final String? ssNum;
+  final String? passport;
+  final String? sex;
+  // final DateTime? birthDate;
+  final String? birthDate;
+  final String? birthPlace;
 
   EmployeeDetail({
     required this.name,
@@ -33,8 +58,27 @@ class EmployeeDetail extends StatefulWidget {
     required this.onDelete,
     required this.isManager,
     required this.onUpdate,
-    required this.workLocation,
-    required this.schedule
+    this.workLocation,
+    this.schedule,
+    this.salaryStructure,
+    this.contractType,
+    this.cost,
+    this.personalAddress,
+    this.personalMail,
+    this.personalMobile,
+    this.relativeName,
+    this.relativeMobile,
+    this.certification,
+    this.school,
+    this.maritalStatus,
+    this.child,
+    this.nationality,
+    this.idNum,
+    this.ssNum,
+    this.passport,
+    this.sex,
+    this.birthDate,
+    this.birthPlace,
   });
 
   @override
@@ -50,11 +94,26 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   TextEditingController managerController = TextEditingController();
   TextEditingController workLocationController = TextEditingController();
   TextEditingController scheduleController = TextEditingController();
+  TextEditingController salaryStructureController = TextEditingController();
+  TextEditingController contractTypeController = TextEditingController();
+  TextEditingController costController = TextEditingController();
+  TextEditingController personalAddressController = TextEditingController();
+  TextEditingController personalMailController = TextEditingController();
+  TextEditingController personalMobileController = TextEditingController();
+  TextEditingController relativeNameController = TextEditingController();
+  TextEditingController relativeMobileController = TextEditingController();
+  TextEditingController certificationController = TextEditingController();
+  TextEditingController schoolController = TextEditingController();
+  TextEditingController maritalStatusController = TextEditingController();
+  TextEditingController childController = TextEditingController();
+  TextEditingController nationalityController = TextEditingController();
+  TextEditingController idNumController = TextEditingController();
+  TextEditingController ssNumController = TextEditingController();
+  TextEditingController passportController = TextEditingController();
+  TextEditingController sexController = TextEditingController();
+  TextEditingController birthDateController = TextEditingController();
+  TextEditingController birthPlaceController = TextEditingController();
   bool isManager = false;
-
-  final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
-  final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
-  List<String> managers = [];
   
   String pageName = 'Employees';
   bool showEmployeeForm = false;
@@ -112,16 +171,35 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   void initState() {
     super.initState();
     nameController.text = widget.name;
-    roleController.text = widget.role ?? roles.first;
+    roleController.text = widget.role ?? '';
     mobileController.text = widget.mobile;
     mailController.text = widget.mail;
     departmentController.text = widget.department;
     managerController.text = widget.manager;
-    managers = getManagers(employees);
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     isManager = widget.isManager; 
-    workLocationController.text = widget.workLocation;
-    scheduleController.text = widget.schedule;
+    workLocationController.text = widget.workLocation ?? '';
+    scheduleController.text = widget.schedule ?? '';
+    salaryStructureController.text = widget.salaryStructure ?? '';
+    contractTypeController.text = widget.contractType ?? '';
+    costController.text = widget.cost.toString();
+    personalAddressController.text = widget.personalAddress ?? '';
+    personalMailController.text = widget.personalMail ?? '';
+    personalMobileController.text = widget.personalMobile ?? '';
+    relativeNameController.text = widget.relativeName ?? '';
+    relativeMobileController.text = widget.relativeMobile ?? '';
+    certificationController.text = widget.certification ?? '';
+    schoolController.text = widget.school ?? '';
+    maritalStatusController.text = widget.maritalStatus ?? '';
+    childController.text = widget.child.toString();
+    nationalityController.text = widget.nationality ?? '';
+    idNumController.text = widget.idNum ?? '';
+    ssNumController.text = widget.ssNum ?? '';
+    passportController.text = widget.passport ?? '';
+    sexController.text = widget.sex ?? '';
+    // birthDateController.text = formatDate(DateTime.parse((widget.birthDate as String?) ?? ''));
+    birthDateController.text = widget.birthDate?? '';
+    birthPlaceController.text = widget.birthPlace ?? '';
   }
 
   @override
@@ -140,34 +218,141 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
       manager: managerController.text,
       isManager: isManager,
       workLocation: workLocationController.text,
-      schedule: scheduleController.text
+      schedule: scheduleController.text,
+      salaryStructure: salaryStructureController.text,
+      contractType: contractTypeController.text,
+      cost: double.parse(costController.text),
+      personalAddress: personalAddressController.text,
+      personalMail: personalMailController.text,
+      personalMobile: personalMobileController.text,
+      relativeName: relativeNameController.text,
+      relativeMobile: relativeMobileController.text,
+      certification: certificationController.text,
+      school: schoolController.text,
+      maritalStatus: maritalStatusController.text,
+      child: int.parse(childController.text),
+      nationality: nationalityController.text,
+      idNum: idNumController.text,
+      ssNum: ssNumController.text,
+      passport: passportController.text,
+      sex: sexController.text,
+      // birthDate: DateTime.parse("${birthDateController.text} 00:00:00"),
+      birthDate: birthDateController.text,
+      birthPlace: birthPlaceController.text,
     );
     widget.onUpdate(updatedEmployee);
     Navigator.pop(context);
   }
 
-  Widget buildTextFieldRow(String label, TextEditingController controller) {
+  String formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+
+
+  Future<void> _selectDate(TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        controller.text = picked.toString().substring(0, 10);
+      });
+    }
+  }
+
+  Future<List<String>> fetchCountries() async {
+    final response = await http.get(Uri.parse('https://restcountries.com/v3/all'));
+    if (response.statusCode == 200) {
+      final List<dynamic> countries = jsonDecode(response.body);
+      return countries.map((country) => country['name']['common'] as String).toList();
+    } else {
+      throw Exception('Failed to load countries');
+    }
+  }
+
+  Widget buildDropdownCountry(String label, TextEditingController controller) {
+    return FutureBuilder<List<String>>(
+      future: fetchCountries(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          final countries = snapshot.data!;
+          if (!countries.contains(controller.text)) {
+            controller.text = countries.first;
+          }
+          return Row(
+            children: [
+              SizedBox(
+                width: 200,
+                child: Text(
+                  label,
+                  style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+            Expanded(
+              child: DropdownButtonFormField<String>(
+                dropdownColor: dropdownColor,
+                value: countries.contains(controller.text) ? controller.text : null,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    controller.text = newValue!;
+                    isChanged = true;
+                  });
+                },
+                items: countries.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value, style: const TextStyle(color: textColor)),
+                  );
+                }).toList(),
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: snackBarColor,
+                ),
+              ),
+            )
+            ],
+          );
+        } else {
+          return Text('No data available');
+        }
+      },
+    );
+  }
+
+  Widget buildTextFieldRow(String label, TextEditingController controller, {bool isDateField = false}) {
     return Row(
       children: [
         SizedBox(
           width: 200,
           child: Text(
             label,
-            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         Expanded(
-          child: TextField(
-            controller: controller,
-            onChanged: (value) {
-              setState(() {
-                isChanged = true;
-              });
+          child: GestureDetector(
+            onTap: () {
+              if (isDateField) {
+                _selectDate(controller);
+              }
             },
-            style: const TextStyle(color: textColor),
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: snackBarColor,
+            child: AbsorbPointer(
+              child: TextField(
+                controller: controller,
+                style: const TextStyle(color: textColor),
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: snackBarColor,
+                ),
+              ),
             ),
           ),
         ),
@@ -176,13 +361,16 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
   }
 
   Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {
+    if (!items.contains(controller.text)) {
+      controller.text = items.isNotEmpty ? items.first : '';
+    }
     return Row(
       children: [
         SizedBox(
           width: 200,
           child: Text(
             label,
-            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         Expanded(
@@ -417,8 +605,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Column(
-                    
+                  child: Column( 
                     children: [
                       buildTextFieldRow('Mobile', mobileController),
                       const SizedBox(height: 10),
@@ -437,6 +624,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                             onChanged: (value) {
                               setState(() {
                                 isManager = value;
+                                isChanged = true;
                               });
                             },
                           ),
@@ -449,11 +637,11 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Department', departmentController, departments),
+                      buildDropdownRow('Department', departmentController, getDepartments()),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, roles),
+                      buildDropdownRow('Position', roleController, getRoles(employees)),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Manager', managerController, managers),
+                      buildDropdownRow('Manager', managerController, getManagers(employees)),
                     ],
                   ),
                 ),
@@ -461,12 +649,13 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
             ),
             const SizedBox(height: 20),
             TabBar(
+              labelColor: textColor,
+              unselectedLabelColor: termTextColor,
               controller: tabController,
               labelStyle: const TextStyle(color: textColor, fontSize: 16),
               tabs: const [
                 Tab(text: 'Work Information'),
                 Tab(text: 'Private Information'),
-                Tab(text: 'Contract'),
               ],
             ),
             const SizedBox(height: 10),
@@ -478,14 +667,96 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        buildTextFieldRow('Work Location', workLocationController),
+                        buildDropdownRow('Work Location', workLocationController, EmployeeInf.defaultWorkLocations),
                         const SizedBox(height: 10),
-                        buildTextFieldRow('Schedule', scheduleController),
+                        buildDropdownRow('Working Schedule', scheduleController, ContractData.defaultSchedules),
+                        const SizedBox(height: 10),
+                        buildDropdownRow('Salary Structure Type', salaryStructureController, ContractData.defaultSalaryStructures),
+                        const SizedBox(height: 10),
+                        buildDropdownRow('Contract Type', contractTypeController, ContractData.defaultContractTypes),
+                        const SizedBox(height: 10),
+                        buildTextFieldRow('Cost per Hour', costController),
                       ],
                     ),
                   ),
-                  const Center(child: Text('Content for Tab 2')),
-                  const Center(child: Text('Content for Tab 3')),
+                  SingleChildScrollView(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column( 
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('PERSONAL CONTACT', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                              const Divider(
+                                thickness: 0.5,
+                                color: textColor, 
+                              ),
+                              buildTextFieldRow('Personal Address', personalAddressController),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Email', personalMailController),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Phone', personalMobileController),
+                              const SizedBox(height: 20),
+                              const Text('EDUCATION', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                              const Divider(
+                                thickness: 0.5,
+                                color: textColor, 
+                              ),
+                              buildDropdownRow('Certification', certificationController, EmployeeInf.defaultCertifications),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('School', schoolController),
+                              const SizedBox(height: 20),
+                              const Text('CITIZEN', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                        const Divider(
+                          thickness: 0.5,
+                          color: textColor, 
+                        ),
+                        buildDropdownCountry('Nationality', nationalityController),
+                        const SizedBox(height: 10),
+                        buildTextFieldRow('ID Number', idNumController),
+                        const SizedBox(height: 10),
+                        buildTextFieldRow('Social Security Number', ssNumController),
+                        const SizedBox(height: 10),
+                        buildTextFieldRow('Passport', passportController),
+                        const SizedBox(height: 10),
+                        buildDropdownRow('Sex', sexController, EmployeeInf.defaultSex),
+                        const SizedBox(height: 10),
+                        // buildTextFieldRow('Date of Birth', birthDateController, isDateField: true),
+                        buildTextFieldRow('Date of Birth', birthDateController),
+                        const SizedBox(height: 10),
+                        buildTextFieldRow('Place of Birth', birthPlaceController),
+                            ]
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column( 
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('EMERGENCY CONTACT ', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                              const Divider(
+                                thickness: 0.5,
+                                color: textColor, 
+                              ),
+                              buildTextFieldRow('Relative Contact Name', relativeNameController),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Relative Phone', relativeMobileController),
+                              const SizedBox(height: 78),
+                              const Text('FAMILY STATUS', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                              const Divider(
+                                thickness: 0.5,
+                                color: textColor, 
+                              ),
+                              buildDropdownRow('Marital Status', maritalStatusController, EmployeeInf.defaultMaritalStatus),
+                              const SizedBox(height: 10),
+                              buildTextFieldRow('Number of children', childController),
+                            ]
+                          ),
+                        ),  
+                      ],
+                    ),                   
+                  ),
                 ],
               ),
             ),

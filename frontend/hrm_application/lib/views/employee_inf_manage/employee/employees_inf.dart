@@ -6,8 +6,32 @@ class EmployeeInf {
   final String department;
   final String manager;
   final bool isManager;
-  final String workLocation;
-  final String schedule;
+  final String? workLocation;
+  final String? schedule;
+  final String? salaryStructure;
+  final String? contractType;
+  final double? cost;
+  final String? personalAddress;
+  final String? personalMail;
+  final String? personalMobile;
+  final String? relativeName;
+  final String? relativeMobile;
+  final String? certification;
+  final String? school;
+  final String? maritalStatus;
+  final int? child;
+  final String? nationality;
+  final String? idNum;
+  final String? ssNum;
+  final String? passport;
+  final String? sex;
+  // final DateTime? birthDate;
+  final String? birthDate;
+  final String? birthPlace;
+  static final List<String> defaultWorkLocations = ['Office', 'Home'];
+  static final List<String> defaultCertifications = ['Graduated', 'Bachelor', 'Master', 'Doctor'];
+  static final List<String> defaultMaritalStatus = ['Single', 'Married', 'Legal Cohabitant','Divorced', 'Widower'];
+  static final List<String> defaultSex = ['Male', 'Female'];
 
   EmployeeInf({
     required this.name,
@@ -17,8 +41,27 @@ class EmployeeInf {
     required this.department,
     required this.manager,
     required this.isManager,
-    required this.workLocation,
-    required this.schedule,
+    this.workLocation,
+    this.schedule,
+    this.salaryStructure,
+    this.contractType,
+    this.cost,
+    this.personalAddress,
+    this.personalMail,
+    this.personalMobile,
+    this.relativeName,
+    this.relativeMobile,
+    this.certification,
+    this.school,
+    this.maritalStatus,
+    this.child,
+    this.nationality,
+    this.idNum,
+    this.ssNum,
+    this.passport,
+    this.sex,
+    this.birthDate,
+    this.birthPlace,
   });
 }
 
@@ -28,6 +71,10 @@ int countEmployeesInDepartment(List<EmployeeInf> employees, String department) {
 
 List<String> getManagers(List<EmployeeInf> employees) {
   return employees.where((employee) => employee.isManager).map((e) => e.name).toList();
+}
+
+List<String> getRoles(List<EmployeeInf> employees) {
+  return employees.map((employee) => employee.role).toSet().toList();
 }
 
 final List<EmployeeInf> employees = [
@@ -42,6 +89,26 @@ final List<EmployeeInf> employees = [
     isManager: true,
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
+    certification: 'Flutter', 
+    school: 'University of California', 
+    maritalStatus: 'Married', 
+    child: 2, 
+    nationality: 'USA', 
+    idNum: '123456789', 
+    ssNum: '987654321', 
+    passport: 'password', 
+    sex: 'Male', 
+    // birthDate: DateTime(2000, 08, 11), 
+    birthDate: '2000-08-11',
+    birthPlace: 'California',
   ),
   EmployeeInf(
     name: 'Phuong Hang',
@@ -53,6 +120,14 @@ final List<EmployeeInf> employees = [
     isManager: true,
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Dat G',
@@ -64,6 +139,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'HieuThuHai',
@@ -75,6 +158,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   //Research & Development
   EmployeeInf(
@@ -87,6 +178,14 @@ final List<EmployeeInf> employees = [
     isManager: true,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Huong Tit',
@@ -98,6 +197,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Hieu PC',
@@ -109,6 +216,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Andree RH',
@@ -120,6 +235,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Decao CG',
@@ -131,6 +254,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Minh Tien',
@@ -142,6 +273,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Part-time 25 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   //HR
   EmployeeInf(
@@ -154,6 +293,14 @@ final List<EmployeeInf> employees = [
     isManager: true,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Dam Tong',
@@ -165,6 +312,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   //Sales
   EmployeeInf(
@@ -177,6 +332,14 @@ final List<EmployeeInf> employees = [
     isManager: true,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Chi Pu',
@@ -188,6 +351,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Trung Tin',
@@ -199,6 +370,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Part-time 25 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Thang Ngot',
@@ -210,6 +389,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Truong Giang',
@@ -221,6 +408,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   //Accounting
   EmployeeInf(
@@ -233,6 +428,14 @@ final List<EmployeeInf> employees = [
     isManager: true,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   //Quality
   EmployeeInf(
@@ -245,6 +448,14 @@ final List<EmployeeInf> employees = [
     isManager: true,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   EmployeeInf(
     name: 'Ngoc Thy',
@@ -256,6 +467,14 @@ final List<EmployeeInf> employees = [
     isManager: false,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
   //Financial
   EmployeeInf(
@@ -268,5 +487,13 @@ final List<EmployeeInf> employees = [
     isManager: true,  
     workLocation: 'Office',
     schedule: 'Standard 40 hours/week',  
+    salaryStructure: 'Employee',
+    contractType: 'Permanent',  
+    cost: 25.0000,  
+    personalAddress: 'HCM',
+    personalMail: 'sontung@gmail.com',
+    personalMobile: '123-456-7890',
+    relativeName: 'Dat G',
+    relativeMobile: '987-654-3210',  
   ),
 ];

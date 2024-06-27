@@ -1,5 +1,5 @@
 class ContractData {
-  final String employeeName;
+  final String name;
   final String reference;
   final String department;
   final String position;
@@ -9,9 +9,13 @@ class ContractData {
   final String salaryStructure;
   final String contractType;
   final String status;
+  static final List<String> defaultSalaryStructures = ['Employee', 'Worker'];
+  static final List<String> defaultContractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
+  static final List<String> defaultSchedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
+ static final List<String> defaultStatus = ['Running', 'Expired', 'Cancelled'];
 
   ContractData({
-    required this.employeeName,
+    required this.name,
     required this.reference,
     required this.department,
     required this.position,
@@ -21,11 +25,12 @@ class ContractData {
     required this.salaryStructure,
     required this.contractType,
     required this.status,
+    
   });
 
   factory ContractData.fromMap(Map<String, dynamic> data) {
     return ContractData(
-      employeeName: data['Employee'],
+      name: data['Employee'],
       reference: data['Reference'],
       department: data['Department'],
       position: data['Position'],
@@ -40,7 +45,7 @@ class ContractData {
 
   Map<String, dynamic> toMap() {
     return {
-      'Employee': employeeName,
+      'Employee': name,
       'Reference': reference,
       'Department': department,
       'Position': position,
@@ -66,7 +71,7 @@ void updateContract(int index, Map<String, dynamic> updatedContract) {
 
 List<ContractData> contracts = [
   ContractData(
-    employeeName: 'Son Tung MTP',
+    name: 'Son Tung MTP',
     reference: 'REF123',
     department: 'Administration',
     position: 'Director',
@@ -78,7 +83,7 @@ List<ContractData> contracts = [
     status: 'Running',
   ),
   ContractData(
-    employeeName: 'Jack J97',
+    name: 'Jack J97',
     reference: 'REF124',
     department: 'Research & Development',
     position: 'Project Manager',
@@ -90,7 +95,7 @@ List<ContractData> contracts = [
     status: 'Expired',
   ),
   ContractData(
-    employeeName: 'Chi Pu',
+    name: 'Chi Pu',
     reference: 'REF003',
     department: 'Sales',
     position: 'Content Creator',

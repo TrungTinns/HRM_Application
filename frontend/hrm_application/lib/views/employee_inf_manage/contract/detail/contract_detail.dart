@@ -13,7 +13,7 @@ import 'package:hrm_application/widgets/colors.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class ContractDetail extends StatefulWidget {
-  final String employeeName;
+  final String name;
   final String reference;
   final String department;
   final String position;
@@ -27,7 +27,7 @@ class ContractDetail extends StatefulWidget {
   final ValueChanged<ContractData> onUpdate;
 
   ContractDetail({
-    required this.employeeName,
+    required this.name,
     required this.reference,
     required this.department,
     required this.position,
@@ -46,7 +46,7 @@ class ContractDetail extends StatefulWidget {
 }
 
 class _ContractDetailState extends State<ContractDetail> with SingleTickerProviderStateMixin {
-  late TextEditingController employeeNameController;
+  late TextEditingController nameController;
   late TextEditingController referenceController;
   late TextEditingController startDateController;
   late TextEditingController endDateController;
@@ -61,11 +61,6 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
   String? activeDropdown;
   bool isChanged = false;
   late int toggleIndex;
-
-  final List<String> schedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
-  final List<String> salaryStructures = ['Employee', 'Worker'];
-  final List<String> contractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
-  final List<String> status = ['Running', 'Expired', 'Cancelled'];
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -111,7 +106,7 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    employeeNameController = TextEditingController(text: widget.employeeName);
+    nameController = TextEditingController(text: widget.name);
     referenceController = TextEditingController(text: widget.reference);
     startDateController = TextEditingController(text: formatDate(DateTime.parse(widget.startDate)));
     endDateController = TextEditingController(text: formatDate(DateTime.parse(widget.endDate)));
@@ -119,9 +114,9 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     positionController = TextEditingController(text: widget.position);
     scheduleController = TextEditingController(text: widget.schedule);
     salaryStructureController = TextEditingController(text: widget.salaryStructure);
-    contractTypeController = TextEditingController(text: widget.contractType);
+    contractTypeController = TextEditingController(text: widget.contractType); 
     statusController = TextEditingController(text: widget.status);
-    toggleIndex = status.indexOf(widget.status);
+    toggleIndex = ContractData.defaultStatus.indexOf(widget.status);
     tabController = TabController(length: 2, vsync: this);
   }
 
@@ -132,7 +127,7 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
   @override
   void dispose() {
     tabController.dispose();
-    employeeNameController.dispose();
+    nameController.dispose();
     referenceController.dispose();
     startDateController.dispose();
     endDateController.dispose();
@@ -173,7 +168,7 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
 
   void saveChanges() {
     final updatedContract= ContractData(
-      employeeName: employeeNameController.text,
+      name: nameController.text,
       reference: referenceController.text,
       department: departmentController.text,
       position: positionController.text,
@@ -439,9 +434,9 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                         inactiveBgColor: Colors.grey,
                         inactiveFgColor: Colors.white,
                         totalSwitches: 3,
-                        labels: ['Running', 'Expired', 'Cancelled'],
-                        icons: [Icons.play_arrow, Icons.hourglass_empty, Icons.cancel],
-                        activeBgColors: [[Colors.green], [Colors.orange], [Colors.red]],
+                        labels: const ['Running', 'Expired', 'Cancelled'],
+                        icons: const [Icons.play_arrow, Icons.hourglass_empty, Icons.cancel],
+                        activeBgColors: const [[Colors.green], [Colors.orange], [Colors.red]],
                         onToggle: (index) {
                           setState(() {
                             toggleIndex = index!;
@@ -458,13 +453,13 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                       Expanded(
                         child: Column(
                           children: [
-                            buildDropdownRow('Employee',  employees.map((employee) => employee.name).toList(), employeeNameController),
+                            buildDropdownRow('Employee',  employees.map((employee) => employee.name).toList(), nameController),
                             const SizedBox(height: 10),
                             buildTextFieldRow('Contract Start Date', startDateController),
                             const SizedBox(height: 10),
                             buildTextFieldRow('Contract End Date', endDateController),
                             const SizedBox(height: 10),
-                            buildDropdownRow('Working Schedule', schedules, scheduleController),
+                            buildDropdownRow('Working Schedule', ContractData.defaultSchedules, scheduleController),
                           ],
                         ),
                       ),
@@ -472,13 +467,13 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                       Expanded(
                         child: Column(
                           children: [
-                            buildDropdownRow('Salary Structure Type', salaryStructures, salaryStructureController),
+                            buildDropdownRow('Salary Structure Type', ContractData.defaultSalaryStructures, salaryStructureController),
                             const SizedBox(height: 10),
                             buildTextFieldRow('Department', departmentController),
                             const SizedBox(height: 10),
                             buildTextFieldRow('Job Position', positionController),
                             const SizedBox(height: 10),
-                            buildDropdownRow('Contract Type', contractTypes, contractTypeController),
+                            buildDropdownRow('Contract Type', ContractData.defaultContractTypes, contractTypeController),
                           ],
                         ),
                       ),
@@ -486,6 +481,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
                   ),
                   const SizedBox(height: 20),
                   TabBar(
+                    labelColor: textColor,
+                    unselectedLabelColor: termTextColor,
                     controller: tabController,
                     labelStyle: const TextStyle(color: textColor, fontSize: 16),
                     tabs: const [

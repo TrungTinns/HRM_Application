@@ -10,6 +10,10 @@ class DepartmentInf {
   });
 }
 
+List<String> getDepartments() {
+  return departments.map((department) => department.department).toSet().toList();
+}
+
 final List<DepartmentInf> departments = [
   DepartmentInf(
     department: 'Administration',

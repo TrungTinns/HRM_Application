@@ -10,7 +10,6 @@ class DepartmentForm extends StatefulWidget {
 }
 
 class _DepartmentFormState extends State<DepartmentForm> with SingleTickerProviderStateMixin {
-  final List<String> superiors = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
   TextEditingController departmentController = TextEditingController();
   TextEditingController managerController = TextEditingController();
   TextEditingController superiorController = TextEditingController();
@@ -87,7 +86,7 @@ class _DepartmentFormState extends State<DepartmentForm> with SingleTickerProvid
               children: [
                 buildDropdownRow('Manage', managerController, employees.map((employee) => employee.name).toList()),
                 const SizedBox(height: 10),
-                buildDropdownRow('Superior Department', superiorController, superiors),
+                buildDropdownRow('Superior Department', superiorController, getDepartments()),
                 const SizedBox(height: 10),
               ],
             ),

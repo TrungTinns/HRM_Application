@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/detail/contract_detail.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -11,12 +12,6 @@ class ContractDataTable extends StatefulWidget {
 }
 
 class _ContractDataTableState extends State<ContractDataTable> {
-  final List<String> departments = ['Administration', 'Research & Development', 'Quality', 'Human Resources', 'Sales', 'Accounting', 'Financial'];
-  final List<String> roles = ['Director', 'CEO', 'Project Manager', 'Dev', 'Tester', 'Quality Assurance', 'HR', 'Content Creator', 'Accountant', 'Business Analysis', 'Designer', 'Actuary', 'Secretary', 'Sales', 'Database Administrator', 'Collaborator'];
-  final List<String> schedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
-  final List<String> salaryStructures = ['Employee', 'Worker'];
-  final List<String> contractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
-  final List<String> status = ['Running', 'Expired', 'Cancelled'];
 
   List<PlutoRow> rows = [];
 
@@ -49,7 +44,7 @@ class _ContractDataTableState extends State<ContractDataTable> {
   void updateContract(int index, ContractData updatedContract) {
     setState(() {
       rows[index] = PlutoRow(cells: {
-        'Employee': PlutoCell(value: updatedContract.employeeName),
+        'Employee': PlutoCell(value: updatedContract.name),
         'Reference': PlutoCell(value: updatedContract.reference),
         'Department': PlutoCell(value: updatedContract.department),
         'Position': PlutoCell(value: updatedContract.position),
@@ -79,12 +74,12 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Department',
         field: 'Department',
-        type: PlutoColumnType.select(departments),
+        type: PlutoColumnType.select(getDepartments()),
       ),
       PlutoColumn(
         title: 'Position',
         field: 'Position',
-        type: PlutoColumnType.select(roles),
+        type: PlutoColumnType.select(getRoles(employees)),
       ),
       PlutoColumn(
         title: 'Start Date',
@@ -99,22 +94,22 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Salary Structure',
         field: 'Salary Structure',
-        type: PlutoColumnType.select(salaryStructures),
+        type: PlutoColumnType.select(ContractData.defaultSalaryStructures),
       ),
       PlutoColumn(
         title: 'Contract Type',
         field: 'Contract Type',
-        type: PlutoColumnType.select(contractTypes),
+        type: PlutoColumnType.select(ContractData.defaultContractTypes),
       ),
       PlutoColumn(
         title: 'Schedule',
         field: 'Schedule',
-        type: PlutoColumnType.select(schedules),
+        type: PlutoColumnType.select(ContractData.defaultSchedules),
       ),
       PlutoColumn(
         title: 'Status',
         field: 'Status',
-        type: PlutoColumnType.select(status),
+        type: PlutoColumnType.select(ContractData.defaultStatus),
       ),
     ];
 
@@ -131,7 +126,7 @@ class _ContractDataTableState extends State<ContractDataTable> {
           context,
           MaterialPageRoute(
             builder: (ctx) => ContractDetail(
-              employeeName: row.cells['Employee']!.value,
+              name: row.cells['Employee']!.value,
               reference: row.cells['Reference']!.value,
               department: row.cells['Department']!.value,
               position: row.cells['Position']!.value,
