@@ -36,7 +36,7 @@ final List<DepartmentInf> departments = [
     superior: 'Administration',
   ),
   DepartmentInf(
-    department: 'Human Resources',
+    department: 'Human Resource',
     manager: 'Chau Bui',
     superior: 'Administration',
   ),

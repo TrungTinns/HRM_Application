@@ -41,6 +41,7 @@ dependencies:
   org_chart: ^2.2.0
   flutter_treeview: ^1.0.7+1
   toggle_switch: ^2.3.0
+  syncfusion_flutter_gauges: ^26.1.39
 
 
 dev_dependencies:

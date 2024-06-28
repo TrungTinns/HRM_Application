@@ -140,7 +140,7 @@ class _EmployeeManageState extends State<EmployeeManage> {
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
-            [
+            [ 
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
             ],

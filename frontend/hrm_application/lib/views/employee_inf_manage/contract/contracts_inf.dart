@@ -14,7 +14,7 @@ class ContractData {
   static final List<String> defaultSalaryStructures = ['Employee', 'Worker'];
   static final List<String> defaultContractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
   static final List<String> defaultSchedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
- static final List<String> defaultStatus = ['Running', 'Expired', 'Cancelled'];
+  static final List<String> defaultStatus = ['Running', 'Expired', 'Cancelled'];
 
   ContractData({
     required this.name,
