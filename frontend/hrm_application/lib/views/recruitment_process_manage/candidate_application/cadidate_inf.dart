@@ -9,11 +9,13 @@ class CandidateInf {
   final String? degree;
   final String? interviewer;
   final String? recruiter;
-  final double? elevation;
+  double? elevation;
   final String? availability;
   final double? expectedSalary;
   final double? proposedSalary;
   final String? summary;
+  final int stage;
+  static final List<String> defaultStages = ['New', 'Initial Qualification', 'First Interview', 'Second Interview', 'Contract Proposal', 'Contract Signed'];
 
   CandidateInf({
     required this.introRole,
@@ -31,6 +33,7 @@ class CandidateInf {
     this.expectedSalary,
     this.proposedSalary,
     this.summary,
+    required this.stage,
   });
 }
 
@@ -42,6 +45,14 @@ int countCandidatesByRole(String role) {
     }
   }
   return count;
+}
+
+List<CandidateInf> getCandidatesByStage(int stage) {
+  return candidates.where((candidate) => candidate.stage == stage).toList();
+}
+
+List<CandidateInf> getCandidatesByRole(String role) {
+  return candidates.where((candidate) => candidate.role == role).toList();
 }
 
 final List<CandidateInf> candidates = [
@@ -61,6 +72,7 @@ final List<CandidateInf> candidates = [
     expectedSalary: 60000,
     proposedSalary: 55000,
     summary: 'Promising candidate with solid skills in mobile development.',
+    stage: 1,
   ),
   CandidateInf(
     introRole: 'QC 1 years experience',
@@ -77,6 +89,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 5000.0,
     proposedSalary: 4000.0,
+    stage: 5,
   ),
   CandidateInf(
     introRole: 'HR without experience',
@@ -93,6 +106,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 5000.0,
     proposedSalary: 4000.0,
+    stage: 1,
   ),
   CandidateInf(
     introRole: 'HR 1 years experience',
@@ -109,6 +123,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 5000.0,
     proposedSalary: 4000.0,
+    stage: 6,
   ),
   CandidateInf(
     introRole: 'BA 2 years experience ',
@@ -125,6 +140,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 5000.0,
     proposedSalary: 4000.0,
+    stage: 4,
   ),
   CandidateInf(
     introRole: 'QC 3 years experience',
@@ -141,6 +157,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 6000.0,
     proposedSalary: 5000.0,
+    stage: 5,
   ),
   CandidateInf(
     introRole: 'HR 2 years experience',
@@ -157,6 +174,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 5500.0,
     proposedSalary: 5000.0,
+    stage: 3,
   ),
   CandidateInf(
     introRole: 'CC 2 years experience',
@@ -173,6 +191,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 6000.0,
     proposedSalary: 5500.0,
+    stage: 2,
   ),
   CandidateInf(
     introRole: 'DM 1.5 years experience',
@@ -189,6 +208,7 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 6500.0,
     proposedSalary: 6000.0,
+    stage: 3,
   ),
   CandidateInf(
     introRole: 'Tester 3 years experience',
@@ -205,5 +225,6 @@ final List<CandidateInf> candidates = [
     availability: '02-10-2022',
     expectedSalary: 7000.0,
     proposedSalary: 6500.0,
+    stage: 1,
   ),
 ];

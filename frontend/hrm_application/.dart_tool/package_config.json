@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "appflowy_board",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/appflowy_board-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "async",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.11.0",
       "packageUri": "lib/",
@@ -44,6 +50,18 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "custom_rating_bar",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/custom_rating_bar-2.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "equatable",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.1",
       "packageUri": "lib/",
@@ -62,22 +80,28 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "flutter_expandable_table",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_expandable_table-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
     {
+      "name": "flutter_scroll_shadow",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_scroll_shadow-1.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///C:/Flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
-    },
-    {
-      "name": "flutter_treeview",
-      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_treeview-1.0.7+1",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
     },
     {
       "name": "google_fonts",
@@ -122,6 +146,12 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "linked_scroll_controller",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/linked_scroll_controller-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "lints",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/lints-3.0.0",
       "packageUri": "lib/",
@@ -142,6 +172,12 @@
     {
       "name": "meta",
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.11.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "nested",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -210,6 +246,18 @@
       "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/pluto_grid-8.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "progress_stepper",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/progress_stepper-3.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///C:/Users/User/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "rxdart",
@@ -320,7 +368,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-26T09:48:25.183683Z",
+  "generated": "2024-07-02T05:58:45.210492Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }

@@ -5,11 +5,11 @@ import 'package:hrm_application/components/filter_search/filter_search.dart';
 import 'package:hrm_application/components/search/searchBox.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
-import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/home/home.dart';
-import 'package:hrm_application/views/recruitment_process_manage/card/jobposition_recruit_card.dart';
-import 'package:hrm_application/views/recruitment_process_manage/jobposition_inf.dart';
-import 'package:hrm_application/views/recruitment_process_manage/role_form/jobposition_form.dart';
+import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application_manage.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/card/jobposition_recruit_card.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/form/jobposition_form.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class RecruitmentManage extends StatefulWidget {
@@ -131,7 +131,7 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => RecruitmentManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),

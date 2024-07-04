@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hrm_application/views/recruitment_process_manage/jobposition_inf.dart';
-import 'package:hrm_application/views/recruitment_process_manage/recruitment.dart';
-import 'package:hrm_application/views/recruitment_process_manage/role_form/jobposition_form.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application_manage.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/form/jobposition_form.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/recruitment.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/components/configuration/configurtion.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
@@ -230,7 +232,7 @@ class _JobPositionDetailState extends State<JobPositionDetail> with SingleTicker
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => RecruitmentManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
@@ -249,7 +251,7 @@ class _JobPositionDetailState extends State<JobPositionDetail> with SingleTicker
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            titles: const ['', 'Job Positions', 'Applications', 'Employees', 'Activities'],
+            titles: const ['', 'Job Positons', 'Applications', 'Employees', 'Activities'],
             options: const [
               ['Setting'],
               ['Employment Types'],
@@ -424,7 +426,7 @@ class _JobPositionDetailState extends State<JobPositionDetail> with SingleTicker
                               const SizedBox(height: 10),
                               buildTextFieldRow('Email Alias', mailController),
                               const SizedBox(height: 10),
-                              buildDropdownRow('Employment Type', typeController, JobPositionInf.defaultTypes),                          
+                              buildDropdownRow('Employment Type', typeController, ContractData.defaultContractTypes),                          
                             ]
                           ),
                         ),

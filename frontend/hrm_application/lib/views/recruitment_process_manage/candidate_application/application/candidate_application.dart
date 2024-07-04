@@ -7,6 +7,7 @@ import 'package:hrm_application/views/recruitment_process_manage/candidate_appli
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/cadidate_inf.dart';
 import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:progress_stepper/progress_stepper.dart';
 
 class CandidateApplication extends StatefulWidget {
   @override
@@ -29,6 +30,8 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
   TextEditingController expectedSalaryController = TextEditingController();
   TextEditingController proposedSalaryController = TextEditingController();
   TextEditingController summaryController = TextEditingController();
+  TextEditingController stageController = TextEditingController();
+  int currentStep = 1;
   bool isNameFilled = false;
 
   void initState() {
@@ -42,6 +45,21 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
 
   @override
   void dispose() {
+    introRoleController.dispose();
+    roleController.dispose();
+    nameController.dispose();
+    mailController.dispose();
+    mobileController.dispose();
+    departmentController.dispose();
+    profileController.dispose();
+    degreeController.dispose();
+    interviewerController.dispose();
+    recruiterController.dispose();
+    elevationController.dispose();
+    availabilityController.dispose();
+    expectedSalaryController.dispose();
+    proposedSalaryController.dispose();
+    summaryController.dispose();
     super.dispose();
   }
 
@@ -143,6 +161,40 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ProgressStepper(
+              width: 1000,
+              height: 50,
+              padding: 1,
+              currentStep: currentStep,
+              onClick: (index) {
+                setState(() {
+                  currentStep = index;
+                });
+              },
+              bluntHead: true,
+              bluntTail: true,
+              color: Colors.transparent,
+              progressColor: Colors.green,
+              stepCount: 6, 
+              labels: const <String>[
+                'New', 
+                'Initial Qualification', 
+                'First Interview', 
+                'Second Interview', 
+                'Contract Proposal', 
+                'Contract Signed'
+              ],
+              defaultTextStyle: const TextStyle(
+                fontSize: 16,
+                color: textColor,
+                fontWeight: FontWeight.w500,
+              ),
+              selectedTextStyle: const TextStyle(
+                fontSize: 16,
+                color: textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -216,12 +268,12 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
                           ),
                           const SizedBox(width: 120),
                           RatingBar(
-                            filledIcon: Icons.star, 
+                            filledIcon: Icons.star,
                             emptyIcon: Icons.star_border,
                             initialRating: double.tryParse(elevationController.text) ?? 0.0,
                             onRatingChanged: (initialRating) {
                               setState(() {
-                                double.tryParse(elevationController.text);            
+                                elevationController.text = initialRating.toString();
                               });
                             },
                             maxRating: 3,
@@ -229,7 +281,7 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
                         ],
                       ),
                       const SizedBox(height: 16),
-                      buildTextFieldRow('Availability', availabilityController),
+                      buildTextFieldRow('Availability', availabilityController, isDateField: true),
                       const SizedBox(height: 40),
                       const Text('CONTRACT', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                       const Divider(
@@ -280,6 +332,7 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
                   summary: summaryController.text,
                   expectedSalary: double.tryParse(expectedSalaryController.text),
                   proposedSalary: double.tryParse(proposedSalaryController.text),
+                  stage: currentStep,
                 );
                 setState(() {
                   candidates.add(newApplication);

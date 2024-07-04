@@ -15,7 +15,7 @@ import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class EmployeeofDepartment extends StatefulWidget {
-  final String? initialDepartment; // Nhận giá trị department
+  final String? initialDepartment;
 
   EmployeeofDepartment({this.initialDepartment});
 

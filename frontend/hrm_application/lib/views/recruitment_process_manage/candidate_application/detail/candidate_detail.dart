@@ -5,6 +5,7 @@ import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application/candidate_application.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application_manage.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/cadidate_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/candidate_application/progress/application_progress.dart';
 import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/views/recruitment_process_manage/jobPosition/recruitment.dart';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
@@ -14,7 +15,7 @@ import 'package:hrm_application/views/employee_inf_manage/department/department_
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
-
+import 'package:progress_stepper/progress_stepper.dart';
 class CandidateDetail extends StatefulWidget {
   final String introRole;
   final String role;
@@ -32,7 +33,8 @@ class CandidateDetail extends StatefulWidget {
   final double? proposedSalary;
   final String? summary;
   final VoidCallback onDelete;
-  final ValueChanged<CandidateInf> onUpdate;
+  // final ValueChanged<CandidateInf> onUpdate;
+  final int stage;
 
   CandidateDetail({
     required this.introRole,
@@ -51,7 +53,8 @@ class CandidateDetail extends StatefulWidget {
     this.proposedSalary,
     this.summary,
     required this.onDelete,
-    required this.onUpdate,
+    // required this.onUpdate,
+    required this.stage,
   });
 
   @override
@@ -80,6 +83,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
   bool showCandidateApplication = false;
   String? activeDropdown;
   bool isChanged = false;
+  int currentStep = 0;
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -126,6 +130,16 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
     });
   }
 
+  void deleteCandidate() {
+  int index = candidates.indexWhere((candidate) => candidate.name == widget.name);
+  if (index != -1) {
+    setState(() {
+      candidates.removeAt(index);
+    });
+    Navigator.pop(context);
+  }
+}
+
   @override
   void initState() {
     super.initState();
@@ -144,33 +158,12 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
     expectedSalaryController.text = widget.expectedSalary?.toString() ?? '';
     proposedSalaryController.text = widget.proposedSalary?.toString() ?? '';
     summaryController.text = widget.summary ?? '';
+    currentStep = widget.stage;
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void saveChanges() {
-    final updatedApplication= CandidateInf(
-      introRole: introRoleController.text,
-      role: roleController.text,
-      name: nameController.text,
-      mail: mailController.text,
-      mobile: mobileController.text,
-      department: departmentController.text,
-      profile: profileController.text,
-      degree: degreeController.text,
-      interviewer: interviewerController.text,
-      recruiter: recruiterController.text,
-      elevation: double.parse(elevationController.text),
-      availability: availabilityController.text,
-      expectedSalary: double.parse(expectedSalaryController.text),
-      proposedSalary: double.parse(proposedSalaryController.text),
-      summary: summaryController.text,
-    );
-    widget.onUpdate(updatedApplication);
-    Navigator.pop(context);
   }
 
   Widget buildTextFieldRow(String label, TextEditingController controller) {
@@ -274,7 +267,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
             isActive: activeDropdown == 'Configuration',
             onOpen: () => setActiveDropdown('Configuration'),
             onClose: () => setActiveDropdown(null),
-            titles: const ['', 'Job Positions', 'Applications', 'Employees', 'Activities'],
+            titles: const ['', 'Job Positons', 'Applications', 'Employees', 'Activities'],
             options: const [
               ['Setting'],
               ['Employment Types'],
@@ -316,7 +309,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                       child: ElevatedButton(
                         onPressed: () {
                           if (isChanged) {
-                            saveChanges();
+                            
                           } else {
                             toggleCandidateApplication();
                           }
@@ -366,7 +359,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    widget.onDelete();
+                                    deleteCandidate();
                                     Navigator.pop(context);
                                   },
                                   child: const Text('Delete'),
@@ -393,6 +386,41 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ProgressStepper(
+              width: 1000,
+              height: 50,
+              padding: 1,
+              currentStep: currentStep,
+              onClick: (index) {
+                setState(() {
+                  currentStep = index;
+                  isChanged = true;
+                });
+              },
+              bluntHead: true,
+              bluntTail: true,
+              color: Colors.transparent,
+              progressColor: Colors.green,
+              stepCount: 6, 
+              labels: const <String>[
+                'New', 
+                'Initial Qualification', 
+                'First Interview', 
+                'Second Interview', 
+                'Contract Proposal', 
+                'Contract Signed'
+              ],
+              defaultTextStyle: const TextStyle(
+                fontSize: 16,
+                color: textColor,
+                fontWeight: FontWeight.w500,
+              ),
+              selectedTextStyle: const TextStyle(
+                fontSize: 16,
+                color: textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -529,4 +557,4 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
       ),
     );
   }
-}
+} 

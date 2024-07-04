@@ -10,7 +10,6 @@ class JobPositionInf {
   final String interviewer;
   final String? details;
   static final List<String> defaultJobLocations = ['HRMapp', 'Abroad', 'Remote'];
-  static final List<String> defaultTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
 
   JobPositionInf({
     required this.department,
@@ -28,6 +27,10 @@ class JobPositionInf {
 
 int countJobPositionsInDepartment(List<JobPositionInf> jobPositions, String department) {
   return jobPositions.where((jobPosition) => jobPosition.department == department).length;
+}
+
+List<String> getJobPositions(List<JobPositionInf> jobPositions) {
+  return jobPositions.map((jobPosition) => jobPosition.role).toSet().toList();
 }
 
 final List<JobPositionInf> jobPositions = [

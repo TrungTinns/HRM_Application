@@ -444,7 +444,7 @@ Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController
                       ),
                       const SizedBox(width: 10),
                       ToggleSwitch(
-                        minWidth: 90.0,
+                        minWidth: 120.0,
                         initialLabelIndex: toggleIndex,
                         cornerRadius: 20.0,
                         activeFgColor: Colors.white,

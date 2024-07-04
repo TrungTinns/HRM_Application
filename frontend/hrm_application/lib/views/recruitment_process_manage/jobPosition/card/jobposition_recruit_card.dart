@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/recruitment_process_manage/candidate/cadidate_inf.dart';
-import 'package:hrm_application/views/recruitment_process_manage/detail/jobposition_detail.dart';
-import 'package:hrm_application/views/recruitment_process_manage/jobposition_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application_manage.dart';
+import 'package:hrm_application/views/recruitment_process_manage/candidate_application/cadidate_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/detail/jobposition_detail.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class JobPositionCard extends StatelessWidget {
@@ -83,7 +84,14 @@ class JobPositionCard extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-              
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => ApplicationManage(
+                          initialRole: role,
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: textColor,
@@ -102,8 +110,7 @@ class JobPositionCard extends StatelessWidget {
             Row(
             mainAxisAlignment: MainAxisAlignment.start,
               children: [                          
-                Switch(
-                  
+                Switch(               
                   activeTrackColor: Colors.green,
                   value: isPublished,
                   onChanged: (value) {

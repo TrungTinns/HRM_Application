@@ -39,9 +39,11 @@ dependencies:
   google_fonts: ^6.2.1
   pluto_grid: ^8.0.0
   org_chart: ^2.2.0
-  flutter_treeview: ^1.0.7+1
   toggle_switch: ^2.3.0
-  syncfusion_flutter_gauges: ^26.1.39
+  progress_stepper: ^3.1.0
+  custom_rating_bar: ^2.0.5
+  flutter_expandable_table: ^2.0.1
+  appflowy_board: ^0.1.2
 
 
 dev_dependencies:

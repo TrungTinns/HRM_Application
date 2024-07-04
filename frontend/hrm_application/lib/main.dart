@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/recruitment_process_manage/recruitment.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/recruitment.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

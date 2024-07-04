@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
-import 'package:hrm_application/views/recruitment_process_manage/jobposition_inf.dart';
-import 'package:hrm_application/views/recruitment_process_manage/recruitment.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class JobPositionForm extends StatefulWidget {
@@ -156,7 +157,7 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
                               const SizedBox(height: 10),
                               buildTextFieldRow('Email Alias', mailController),
                               const SizedBox(height: 10),
-                              buildDropdownRow('Employment Type', typeController, JobPositionInf.defaultTypes),                          
+                              buildDropdownRow('Employment Type', typeController, ContractData.defaultContractTypes),                          
                             ]
                           ),
                         ),
@@ -171,10 +172,10 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Management Authority',
+                                    'Is Published',
                                     style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
                                   ),
-                                  const SizedBox(width: 20),
+                                  const SizedBox(width: 100),
                                   Checkbox(
                                     value: isPublished,
                                     onChanged: (value) {

@@ -6,13 +6,15 @@ import 'package:hrm_application/components/search/searchBox.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application/candidate_application.dart';
-import 'package:hrm_application/views/recruitment_process_manage/candidate_application/card/candidate_card.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/cadidate_inf.dart';
-import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/candidate_application/progress/application_progress.dart';
 import 'package:hrm_application/views/recruitment_process_manage/jobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class ApplicationManage extends StatefulWidget {
+  final String? initialRole;
+
+  ApplicationManage({this.initialRole});
   @override
   _ApplicationManageState createState() => _ApplicationManageState();
 }
@@ -22,6 +24,15 @@ class _ApplicationManageState extends State<ApplicationManage> {
   String pageName = 'Applications';
   bool showCandidateApplication = false;
   String? activeDropdown;
+  bool showAllApplication = true; 
+  String? selectedRole; 
+
+  @override
+  void initState() {
+    super.initState();
+    selectedRole = widget.initialRole;
+    showAllApplication = selectedRole == null;
+  }
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -66,21 +77,15 @@ class _ApplicationManageState extends State<ApplicationManage> {
       showCandidateApplication = false;
     });
   }
-
-  void deleteApplication(String role) {
-    setState(() {
-      candidates.removeWhere((jobPosition) => jobPosition.role == role);
-    });
-  }
-
-  void handleUpdate(CandidateInf updatedApplication) {
-    setState(() {
-      final index =
-          candidates.indexWhere((app) => app.role == updatedApplication.role);
-      if (index != -1) {
-        candidates[index] = updatedApplication;
-      }
-    });
+  
+  List<CandidateInf> get roleApplications {
+    if (showAllApplication) {
+      return candidates;
+    } else if (selectedRole != null) {
+      return candidates.where((app) => app.role == selectedRole).toList();
+    } else {
+      return [];
+    }
   }
 
   @override
@@ -95,12 +100,12 @@ class _ApplicationManageState extends State<ApplicationManage> {
           titles: const ['Applications', 'Reporting'],
           options: const [
             ['By Job Positions', 'All Applications'],
-            ['Recruitment Analysis', 'Source Analysis', 'Time In Stage  Analysis', 'Team Performance']
+            ['Recruitment Analysis', 'Source Analysis', 'Time In Stage Analysis', 'Team Performance']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => RecruitmentManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage())),
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
@@ -231,56 +236,8 @@ class _ApplicationManageState extends State<ApplicationManage> {
       ),
       body: showCandidateApplication
           ? CandidateApplication()
-          : Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                int crossAxisCount;
-                if (constraints.maxWidth >= 1200) {
-                  // Desktop
-                  crossAxisCount = 4;
-                } else if (constraints.maxWidth >= 800) {
-                  // Tablet
-                  crossAxisCount = 3;
-                } else {
-                  // Mobile
-                  crossAxisCount = 2;
-                }
-                return GridView.builder(
-                  padding: const EdgeInsets.all(10),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 2.5,
-                  ),
-                  itemCount: candidates.length,
-                  itemBuilder: (context, index) {
-                    final application = candidates[index];
-                    return ApplicationCard(
-                          introRole: application.introRole,
-                          role: application.role,
-                          department: application.department,
-                          name: application.name,
-                          mail: application.mail,
-                          mobile: application.mobile,
-                          profile: application.profile,
-                          degree: application.degree,
-                          interviewer: application.interviewer,
-                          recruiter: application.recruiter,
-                          elevation: application.elevation,
-                          availability: application.availability,
-                          expectedSalary: application.expectedSalary,
-                          proposedSalary: application.proposedSalary,
-                          summary: application.summary,
-                          onDelete: () => deleteApplication(application.role),
-                      onUpdate: handleUpdate, 
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+          : ProgressBoard(initialRole: selectedRole),
+          backgroundColor: snackBarColor,
         );
   }
 }
-

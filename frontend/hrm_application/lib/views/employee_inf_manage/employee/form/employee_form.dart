@@ -81,10 +81,12 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   }
 
   Future<List<String>> fetchCountries() async {
-    final response = await http.get(Uri.parse('https://restcountries.com/v3/all'));
+    final response = await http.get(Uri.parse('https://restcountries.com/v3.1/all?fields=name,capital,currencies'));
     if (response.statusCode == 200) {
       final List<dynamic> countries = jsonDecode(response.body);
-      return countries.map((country) => country['name']['common'] as String).toList();
+      List<String> countryNames = countries.map<String>((country) => country['name']['common'] as String).toList();
+      countryNames.sort(); // Sort country names alphabetically
+      return countryNames;
     } else {
       throw Exception('Failed to load countries');
     }
@@ -95,9 +97,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
       future: fetchCountries(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
           final countries = snapshot.data!;
           if (!countries.contains(controller.text)) {
@@ -109,34 +111,34 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 width: 200,
                 child: Text(
                   label,
-                  style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
-            Expanded(
-              child: DropdownButtonFormField<String>(
-                dropdownColor: dropdownColor,
-                value: countries.contains(controller.text) ? controller.text : null,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    controller.text = newValue!;
-                  });
-                },
-                items: countries.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: const TextStyle(color: textColor)),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: snackBarColor,
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  dropdownColor: snackBarColor,
+                  value: controller.text.isEmpty || !countries.contains(controller.text) ? null : controller.text,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      controller.text = newValue!;
+                    });
+                  },
+                  items: countries.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value, style: TextStyle(color: textColor)),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: snackBarColor,
+                  ),
                 ),
               ),
-            )
             ],
           );
         } else {
-          return Text('No data available');
+          return Center(child: Text('No data available'));
         }
       },
     );
