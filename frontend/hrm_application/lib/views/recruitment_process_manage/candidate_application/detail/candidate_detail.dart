@@ -16,7 +16,9 @@ import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:progress_stepper/progress_stepper.dart';
+
 class CandidateDetail extends StatefulWidget {
+  final String? initialRole;
   final String introRole;
   final String role;
   final String name;
@@ -33,10 +35,11 @@ class CandidateDetail extends StatefulWidget {
   final double? proposedSalary;
   final String? summary;
   final VoidCallback onDelete;
-  // final ValueChanged<CandidateInf> onUpdate;
   final int stage;
+  final bool isRefused;
 
   CandidateDetail({
+    this.initialRole,
     required this.introRole,
     required this.role,
     required this.name,
@@ -53,8 +56,8 @@ class CandidateDetail extends StatefulWidget {
     this.proposedSalary,
     this.summary,
     required this.onDelete,
-    // required this.onUpdate,
     required this.stage,
+    required this.isRefused,
   });
 
   @override
@@ -84,6 +87,8 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
   String? activeDropdown;
   bool isChanged = false;
   int currentStep = 0;
+  String? selectedRole; 
+  bool isRefused = false; 
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -143,6 +148,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
   @override
   void initState() {
     super.initState();
+    selectedRole = widget.role;
     introRoleController.text = widget.introRole;
     roleController.text = widget.role;
     nameController.text = widget.name;
@@ -159,11 +165,128 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
     proposedSalaryController.text = widget.proposedSalary?.toString() ?? '';
     summaryController.text = widget.summary ?? '';
     currentStep = widget.stage;
+    isRefused = widget.isRefused; 
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void saveCandidateChanges() {
+    int index = candidates.indexWhere((candidate) => candidate.name == widget.name);
+    if (index != -1) {
+      setState(() {
+        candidates[index] = CandidateInf(
+          introRole: introRoleController.text,
+          role: roleController.text,
+          name: nameController.text,
+          mail: mailController.text,
+          mobile: mobileController.text,
+          department: departmentController.text,
+          profile: profileController.text,
+          degree: degreeController.text,
+          interviewer: interviewerController.text,
+          recruiter: recruiterController.text,
+          elevation: double.tryParse(elevationController.text),
+          availability: availabilityController.text,
+          expectedSalary: double.tryParse(expectedSalaryController.text),
+          proposedSalary: double.tryParse(proposedSalaryController.text),
+          summary: summaryController.text,
+          stage: currentStep,
+          isRefused: isRefused, 
+        );
+        isChanged = false; 
+      });
+      Navigator.pop(context); 
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage(initialRole: selectedRole,)));
+    }
+  }
+
+  void showRefuseDialog() {
+    List<String> refuseReasons = [
+      "Doesn't fit the job requirement",
+      'Duplicate',
+      'Language issues',
+      'Refused by Applicant: better offer',
+      "Refused by Applicant: don't like job",
+      'Refused by Applicant: salary',
+      'Role already fulfilled',
+      'Spam'
+    ];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String? selectedReason;
+        return AlertDialog(
+          title: Text('Refuse Reason',style: const TextStyle(color: textColor)),
+          backgroundColor: snackBarColor,
+          content: SingleChildScrollView(
+            child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Divider(color: Colors.grey, thickness: 0.2,),
+              Row(
+                children: [
+                  Text('Reason', style: const TextStyle(color: textColor, fontSize: 16.0)),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      dropdownColor: snackBarColor,
+                      value: selectedReason,
+                      items: refuseReasons.map((String reason) {
+                        return DropdownMenuItem<String>(
+                          value: reason,
+                          child: Text(reason, style: const TextStyle(color: textColor)),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedReason = value!;
+                          isChanged = true;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+                ],
+              ),
+            ],
+          )
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isRefused = true;
+                  Navigator.of(context).pop();
+                  saveCandidateChanges();
+                });
+              },
+              child: Text('Refuse',style: const TextStyle(color: textColor)),
+              style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel', style: const TextStyle(color: textColor)),
+              style: TextButton.styleFrom(backgroundColor: dropdownColor),
+            ),
+          ],  
+        );
+      },
+    );
+  }
+
+  void restoreCandidate() {
+    setState(() {
+      isRefused = false;
+      saveCandidateChanges();
+    });
   }
 
   Widget buildTextFieldRow(String label, TextEditingController controller) {
@@ -309,7 +432,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                       child: ElevatedButton(
                         onPressed: () {
                           if (isChanged) {
-                            
+                            saveCandidateChanges();
                           } else {
                             toggleCandidateApplication();
                           }
@@ -360,7 +483,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                                   onPressed: () {
                                     Navigator.pop(context);
                                     deleteCandidate();
-                                    Navigator.pop(context);
+                                    Navigator.push(context, MaterialPageRoute(builder: (ctx) => RecruitmentManage()));
                                   },
                                   child: const Text('Delete'),
                                 ),
@@ -386,40 +509,95 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ProgressStepper(
-              width: 1000,
-              height: 50,
-              padding: 1,
-              currentStep: currentStep,
-              onClick: (index) {
-                setState(() {
-                  currentStep = index;
-                  isChanged = true;
-                });
-              },
-              bluntHead: true,
-              bluntTail: true,
-              color: Colors.transparent,
-              progressColor: Colors.green,
-              stepCount: 6, 
-              labels: const <String>[
-                'New', 
-                'Initial Qualification', 
-                'First Interview', 
-                'Second Interview', 
-                'Contract Proposal', 
-                'Contract Signed'
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Visibility(
+                  visible: isRefused,
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        restoreCandidate();
+                      },
+                      style: ElevatedButton.styleFrom(  
+                        side: BorderSide(color: Colors.red),
+                        backgroundColor: snackBarColor,
+                        foregroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        'Restore',
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: !isRefused,
+                  child: ProgressStepper(
+                    width: 1000,
+                    height: 50,
+                    padding: 1,
+                    currentStep: currentStep,
+                    onClick: (index) {
+                      setState(() {
+                        currentStep = index;
+                        isChanged = true;
+                      });
+                    },
+                    bluntHead: true,
+                    bluntTail: true,
+                    color: Colors.transparent,
+                    progressColor: Colors.green,
+                    stepCount: 6, 
+                    labels: const <String>[
+                      'New', 
+                      'Initial Qualification', 
+                      'First Interview', 
+                      'Second Interview', 
+                      'Contract Proposal', 
+                      'Contract Signed'
+                    ],
+                    defaultTextStyle: const TextStyle(
+                      fontSize: 16,
+                      color: textColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    selectedTextStyle: const TextStyle(
+                      fontSize: 16,
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Visibility(
+                  visible: !isRefused,
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showRefuseDialog();
+                      },
+                      style: ElevatedButton.styleFrom(  
+                        side: BorderSide(color: Colors.red),
+                        backgroundColor: snackBarColor,
+                        foregroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        'Refuse',
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-              defaultTextStyle: const TextStyle(
-                fontSize: 16,
-                color: textColor,
-                fontWeight: FontWeight.w500,
-              ),
-              selectedTextStyle: const TextStyle(
-                fontSize: 16,
-                color: textColor,
-                fontWeight: FontWeight.bold,
-              ),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,

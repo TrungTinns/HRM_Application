@@ -235,7 +235,7 @@ class _ApplicationManageState extends State<ApplicationManage> {
         backgroundColor: snackBarColor,
       ),
       body: showCandidateApplication
-          ? CandidateApplication()
+          ? showAllApplication ? CandidateApplication() : CandidateApplication(initialRole: selectedRole,)
           : ProgressBoard(initialRole: selectedRole),
           backgroundColor: snackBarColor,
         );

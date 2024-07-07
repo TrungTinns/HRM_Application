@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/cadidate_inf.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/detail/candidate_detail.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 class ProgressBoard extends StatefulWidget {
   final String? initialRole; 
@@ -25,6 +26,13 @@ class _ProgressBoardState extends State<ProgressBoard> {
     super.initState();
     boardController = AppFlowyBoardScrollController();
     initializeGroups();
+  }
+
+  void refreshBoard() {
+    setState(() {
+      controller.clear();
+      initializeGroups();
+    });
   }
 
   void initializeGroups() {
@@ -91,76 +99,103 @@ class _ProgressBoardState extends State<ProgressBoard> {
       return Align(
         alignment: Alignment.centerLeft,
         child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      item.candidate.name,
-                      style: const TextStyle(
-                        fontSize: 18,
+          padding: const EdgeInsets.all(0),
+          child: Container(
+            foregroundDecoration: item.candidate.isRefused
+                ? const RotatedCornerDecoration.withColor(
+                    color: Colors.red,
+                    spanBaselineShift: 4,
+                    badgeSize: Size(64, 64),
+                    badgeCornerRadius: Radius.circular(0),
+                    badgePosition: BadgePosition.topStart,
+                    textSpan: TextSpan(
+                      text: 'Refused',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        letterSpacing: 1,
                         fontWeight: FontWeight.bold,
+                        shadows: [
+                          BoxShadow(color: Colors.yellowAccent, blurRadius: 8),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => CandidateDetail(
-                              introRole: item.candidate.introRole,
-                              role: item.candidate.role,
-                              name: item.candidate.name,
-                              mail: item.candidate.mail,
-                              mobile: item.candidate.mobile,
-                              department: item.candidate.department,
-                              profile: item.candidate.profile,
-                              degree: item.candidate.degree,
-                              interviewer: item.candidate.interviewer,
-                              recruiter: item.candidate.recruiter,
-                              availability: item.candidate.availability,
-                              expectedSalary: item.candidate.expectedSalary,
-                              proposedSalary: item.candidate.proposedSalary,
-                              summary: item.candidate.summary,
-                              elevation: item.candidate.elevation,
-                              stage: item.candidate.stage,
-                              onDelete: item.deleteCandidate,
-                            ),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.more_vert),
-                    )
-                  ],
-                ),
-              ),
-              Text(item.candidate.role),
-              const SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  )
+                : null,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RatingBar(
-                    filledIcon: Icons.star,
-                    emptyIcon: Icons.star_border,
-                    initialRating: item.candidate.elevation!,
-                    onRatingChanged: (value) {
-                      setState(() {
-                        item.candidate.elevation = value;
-                      });
-                    },
-                    maxRating: 3,
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item.candidate.name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => CandidateDetail(
+                                  introRole: item.candidate.introRole,
+                                  role: item.candidate.role,
+                                  name: item.candidate.name,
+                                  mail: item.candidate.mail,
+                                  mobile: item.candidate.mobile,
+                                  department: item.candidate.department,
+                                  profile: item.candidate.profile,
+                                  degree: item.candidate.degree,
+                                  interviewer: item.candidate.interviewer,
+                                  recruiter: item.candidate.recruiter,
+                                  availability: item.candidate.availability,
+                                  expectedSalary: item.candidate.expectedSalary,
+                                  proposedSalary: item.candidate.proposedSalary,
+                                  summary: item.candidate.summary,
+                                  elevation: item.candidate.elevation,
+                                  stage: item.candidate.stage,
+                                  onDelete: item.deleteCandidate,
+                                  isRefused: item.candidate.isRefused,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.more_vert),
+                        )
+                      ],
+                    ),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.attachment),
-                  ),
+                  Text(item.candidate.role),
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RatingBar(
+                        filledIcon: Icons.star,
+                        emptyIcon: Icons.star_border,
+                        initialRating: item.candidate.elevation!,
+                        onRatingChanged: (value) {
+                          setState(() {
+                            item.candidate.elevation = value;
+                          });
+                        },
+                        maxRating: 3,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.attachment),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
       );

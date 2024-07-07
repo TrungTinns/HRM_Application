@@ -15,6 +15,7 @@ class CandidateInf {
   final double? proposedSalary;
   final String? summary;
   final int stage;
+  final bool isRefused;
   static final List<String> defaultStages = ['New', 'Initial Qualification', 'First Interview', 'Second Interview', 'Contract Proposal', 'Contract Signed'];
 
   CandidateInf({
@@ -34,6 +35,7 @@ class CandidateInf {
     this.proposedSalary,
     this.summary,
     required this.stage,
+    this.isRefused = false,
   });
 }
 
