@@ -96,30 +96,46 @@ class _ProgressBoardState extends State<ProgressBoard> {
 
   Widget _buildCard(AppFlowyGroupItem item) {
     if (item is CandidateItem) {
+      Color? badgeColor;
+      TextSpan? textSpan;
+
+      if (item.candidate.stage == 6) {
+        badgeColor = Colors.green;
+        textSpan = const TextSpan(
+          text: 'Hired',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 12,
+            letterSpacing: 1,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      } else if (item.candidate.isRefused) {
+        badgeColor = Colors.red;
+        textSpan = const TextSpan(
+          text: 'Refused',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 12,
+            letterSpacing: 1,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      }
+
       return Align(
         alignment: Alignment.centerLeft,
         child: Padding(
           padding: const EdgeInsets.all(0),
           child: Container(
-            foregroundDecoration: item.candidate.isRefused
-                ? const RotatedCornerDecoration.withColor(
-                    color: Colors.red,
+            foregroundDecoration: badgeColor != null
+                ? RotatedCornerDecoration.withColor(
+                    color: badgeColor,
                     spanBaselineShift: 4,
                     badgeSize: Size(64, 64),
                     badgeCornerRadius: Radius.circular(0),
                     badgePosition: BadgePosition.topStart,
-                    textSpan: TextSpan(
-                      text: 'Refused',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          BoxShadow(color: Colors.yellowAccent, blurRadius: 8),
-                        ],
-                      ),
-                    ),
+                    textSpan: textSpan!,
                   )
                 : null,
             child: Padding(
@@ -202,6 +218,7 @@ class _ProgressBoardState extends State<ProgressBoard> {
     }
     throw UnimplementedError();
   }
+
 }
 
 List<CandidateInf> getCandidatesByStageAndRole(int stage, String? role) {

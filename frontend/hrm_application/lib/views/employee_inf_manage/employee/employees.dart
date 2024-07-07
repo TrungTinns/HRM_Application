@@ -14,6 +14,22 @@ import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class EmployeeManage extends StatefulWidget {
+  final String? name;
+  final String? role;
+  final String? department;
+  final String? mobile;
+  final String? mail;
+  final String? certification;
+
+  const EmployeeManage({
+    Key? key,
+  this.name,
+  this.role,
+  this.department,
+  this.mobile,
+  this.mail,
+  this.certification,
+  }) : super(key: key);
   @override
   _EmployeeManageState createState() => _EmployeeManageState();
 }
@@ -260,7 +276,21 @@ class _EmployeeManageState extends State<EmployeeManage> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: showEmployeeForm
+      body: widget.name != null && 
+            widget.role != null && 
+            widget.department != null && 
+            widget.mobile != null && 
+            widget.mail != null && 
+            widget.certification != null
+      ? EmployeeForm(
+          name: widget.name,
+          role: widget.role,
+          department: widget.department,
+          mobile: widget.mobile,
+          mail: widget.mail,
+          certification: widget.certification,
+        )
+      : showEmployeeForm
           ? EmployeeForm()
           : Row(
               children: [

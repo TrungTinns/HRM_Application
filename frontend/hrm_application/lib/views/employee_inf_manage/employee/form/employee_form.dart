@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
@@ -9,6 +10,22 @@ import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf
 import 'package:hrm_application/widgets/colors.dart';
 
 class EmployeeForm extends StatefulWidget {
+  final String? name;
+  final String? role;
+  final String? department;
+  final String? mobile;
+  final String? mail;
+  final String? certification;
+
+  const EmployeeForm({
+    Key? key,
+  this.name,
+  this.role,
+  this.department,
+  this.mobile,
+  this.mail,
+  this.certification,
+  }) : super(key: key);
   @override
   _EmployeeFormState createState() => _EmployeeFormState();
 }
@@ -49,6 +66,12 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    nameController.text = widget.name ?? '';
+    roleController.text = widget.role ?? '';
+    mobileController.text = widget.mobile ?? '';
+    mailController.text = widget.mail ?? '';
+    departmentController.text = widget.department ?? '';
+    certificationController.text = widget.certification ?? '';
     tabController = TabController(length: 2, vsync: this);
     nameController.addListener(() {
       setState(() {
@@ -307,7 +330,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                     children: [
                       buildDropdownRow('Department', departmentController, getDepartments()),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, getRoles(employees)),
+                      buildDropdownRow('Position', roleController, getJobPositions(jobPositions)),
                       const SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, getManagers(employees)),
                     ],

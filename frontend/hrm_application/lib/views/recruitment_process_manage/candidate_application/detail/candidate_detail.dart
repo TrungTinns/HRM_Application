@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/detail/employee_detail.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
+import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application/candidate_application.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/application_manage.dart';
 import 'package:hrm_application/views/recruitment_process_manage/candidate_application/cadidate_inf.dart';
@@ -574,6 +577,46 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                   ),
                 ),
                 const Spacer(),
+                Visibility(
+                      visible: !isRefused && widget.stage == 6, 
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EmployeeManage(                  
+                                      name: widget.name,
+                                      role: widget.role,
+                                      department: widget.department,
+                                      mobile: widget.mobile,
+                                      mail: widget.mail,
+                                      certification: widget.degree, 
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                side: BorderSide(color: Colors.green),
+                                backgroundColor: snackBarColor,
+                                foregroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                              child: Text(
+                                'Create Employee',
+                                style: const TextStyle(color: Colors.white, fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
+                      ),
+                    ),
                 Visibility(
                   visible: !isRefused,
                   child: SizedBox(
