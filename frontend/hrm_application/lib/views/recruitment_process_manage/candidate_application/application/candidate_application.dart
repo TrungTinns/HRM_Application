@@ -10,6 +10,10 @@ import 'package:hrm_application/widgets/colors.dart';
 import 'package:progress_stepper/progress_stepper.dart';
 
 class CandidateApplication extends StatefulWidget {
+  final String? initialRole;
+  final bool? showAllApplication;
+
+  CandidateApplication({this.initialRole, this.showAllApplication});
   @override
   _CandidateApplicationState createState() => _CandidateApplicationState();
 }
@@ -33,9 +37,11 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
   TextEditingController stageController = TextEditingController();
   int currentStep = 1;
   bool isNameFilled = false;
+  String? selectedRole; 
 
   void initState() {
     super.initState();
+    selectedRole = widget.initialRole;
     roleController.addListener(() {
       setState(() {
         isNameFilled = roleController.text.isNotEmpty;
@@ -337,7 +343,7 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
                 setState(() {
                   candidates.add(newApplication);
                 });
-                Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage()));
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage(initialRole: selectedRole,)));
               },
               child: const Icon(Icons.create),
             )

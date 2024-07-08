@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:hrm_application/components/appbar/custom_title_appbar.dart';
@@ -635,7 +636,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
                     children: [
                       buildDropdownRow('Department', departmentController, getDepartments()),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, getRoles(employees)),
+                      buildDropdownRow('Position', roleController, getJobPositions(jobPositions)),
                       const SizedBox(height: 10),
                       buildDropdownRow('Manager', managerController, getManagers(employees)),
                     ],

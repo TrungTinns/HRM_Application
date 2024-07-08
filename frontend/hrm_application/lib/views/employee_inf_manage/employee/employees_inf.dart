@@ -70,11 +70,7 @@ class EmployeeInf {
   }
 
   List<String> getManagers(List<EmployeeInf> employees) {
-    return employees.where((employee) => employee.isManager).map((e) => e.name).toList();
-  }
-
-  List<String> getRoles(List<EmployeeInf> employees) {
-    return employees.map((employee) => employee.role).toSet().toList();
+    return employees.where((employee) => employee.isManager).map((e) => e.name).toList()..sort((a, b) => a.compareTo(b));
   }
 
 final List<EmployeeInf> employees = [

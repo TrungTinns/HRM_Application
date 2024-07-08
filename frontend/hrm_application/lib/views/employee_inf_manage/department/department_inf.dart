@@ -11,7 +11,7 @@ class DepartmentInf {
 }
 
 List<String> getDepartments() {
-  return departments.map((department) => department.department).toSet().toList();
+  return departments.map((department) => department.department).toSet().toList()..sort((a, b) => a.compareTo(b));
 }
 
 final List<DepartmentInf> departments = [

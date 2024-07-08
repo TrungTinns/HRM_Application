@@ -3,6 +3,7 @@ import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf
 import 'package:hrm_application/views/employee_inf_manage/contract/detail/contract_detail.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -83,7 +84,7 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Position',
         field: 'Position',
-        type: PlutoColumnType.select(getRoles(employees)),
+        type: PlutoColumnType.select(getJobPositions(jobPositions)),
       ),
       PlutoColumn(
         title: 'Start Date',
