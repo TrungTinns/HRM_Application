@@ -33,6 +33,15 @@ List<String> getJobPositions(List<JobPositionInf> jobPositions) {
   return jobPositions.map((jobPosition) => jobPosition.role).toSet().toList()..sort((a, b) => a.compareTo(b));
 }
 
+List<String> getRolesInDepartment(List<JobPositionInf> jobPositions, String department) {
+  return jobPositions
+    .where((jobPosition) => jobPosition.department == department)
+    .map((jobPosition) => jobPosition.role)
+    .toSet()
+    .toList()
+    ..sort((a, b) => a.compareTo(b));
+}
+
 final List<JobPositionInf> jobPositions = [
   JobPositionInf(
     department: 'Financial',
