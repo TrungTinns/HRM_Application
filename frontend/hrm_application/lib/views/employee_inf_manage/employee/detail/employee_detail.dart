@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hrm_application/views/employee_inf_manage/position/position.dart';
 import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -404,21 +405,25 @@ class _EmployeeDetailState extends State<EmployeeDetail> with SingleTickerProvid
         title: CustomTitleAppbar(
           ctx: context,
           service: pageName,
-          titles: const ['Employees', 'Reporting'],
+          titles: const ['Employees', 'Department'],
           options: const [
-            ['Employees', 'Department', 'Contracts', 'Org Chart'],
-            ['Contracts', 'Skills']
+            ['Employees', 'Contracts', 'Org Chart'],
+            ['Department', 'Position']
           ],
           optionNavigations: [
             [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
-            [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+            [ 
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => Department())),              
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => PositionManage())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],

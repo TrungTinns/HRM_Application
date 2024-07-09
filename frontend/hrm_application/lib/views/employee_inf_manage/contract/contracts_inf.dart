@@ -11,10 +11,14 @@ class ContractData {
   final String status;
   final double? salary;
   final String? note;
+  final String? wageType;
+  final String? schedulePay;
   static final List<String> defaultSalaryStructures = ['Employee', 'Worker'];
   static final List<String> defaultContractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
   static final List<String> defaultSchedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
   static final List<String> defaultStatus = ['Running', 'Expired', 'Cancelled'];
+  static final List<String> defaultWageTypes = ['Fixed Wage', 'Hourly Wage'];
+  static final List<String> defaultSchedulePays = ['Annually', 'Semi-Annually', 'Quarterly', 'Bi-monthly', 'Monthly', 'Semi-Monthly', 'Bi-weekly', 'Weekly', 'Daily'];
 
   ContractData({
     required this.name,
@@ -29,6 +33,8 @@ class ContractData {
     required this.status,
     this.salary,
     this.note,
+    this.wageType,
+    this.schedulePay,
   });
 
   factory ContractData.fromMap(Map<String, dynamic> data) {
@@ -45,6 +51,8 @@ class ContractData {
       status: data['Status'],
       salary: data['Salary'],
       note: data['Note'],
+      wageType: data['Wage Type'],
+      schedulePay: data['Schedule Pay'],
     );
   }
 
@@ -62,6 +70,8 @@ class ContractData {
       'Status': status,
       'Salary': salary,
       'Note': note,
+      'Wage Type': wageType,
+      'Schedule Pay': schedulePay,
     };
   }
 }
@@ -90,6 +100,8 @@ List<ContractData> contracts = [
     status: 'Running',
     salary: 10000000,
     note: 'This is a note',
+    wageType: 'Hourly Wage',
+    schedulePay: 'Monthly',
   ),
   ContractData(
     name: 'Jack J97',
@@ -103,6 +115,8 @@ List<ContractData> contracts = [
     schedule: 'Part-time 25 hours/week',
     status: 'Expired',
     note: 'This is another note',
+    wageType: 'Fixed Wage',
+    schedulePay: 'Weekly',
   ),
   ContractData(
     name: 'Chi Pu',
@@ -116,6 +130,9 @@ List<ContractData> contracts = [
     schedule: 'Standard 40 hours/week',
     status: 'Running',
     salary: 20000000,
+    note: 'This is a note',
+    wageType: 'Hourly Wage',
+    schedulePay: 'Monthly',
   ),
 ];
 

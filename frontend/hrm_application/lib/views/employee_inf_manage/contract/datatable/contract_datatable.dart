@@ -32,6 +32,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
         'Schedule': PlutoCell(value: contract['Schedule']),
         'Status': PlutoCell(value: contract['Status']),
         'Salary': PlutoCell(value: contract['Salary']),
+        'Wage Type': PlutoCell(value: contract['Wage Type']),
+        'Schedule Pay': PlutoCell(value: contract['Schedule Pay']),
         'Note': PlutoCell(value: contract['Note']),
       });
     }).toList();
@@ -58,6 +60,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
         'Schedule': PlutoCell(value: updatedContract.schedule),
         'Status': PlutoCell(value: updatedContract.status),
         'Salary': PlutoCell(value: updatedContract.salary),
+        'Wage Type': PlutoCell(value: updatedContract.wageType),
+        'Schedule Pay': PlutoCell(value: updatedContract.schedulePay),
         'Note': PlutoCell(value: updatedContract.note),
       });
     });
@@ -69,7 +73,7 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Employee',
         field: 'Employee',
-        type: PlutoColumnType.select(employees),
+        type: PlutoColumnType.select(getNameEmp(employees)),
       ),
       PlutoColumn(
         title: 'Reference',
@@ -141,6 +145,8 @@ class _ContractDataTableState extends State<ContractDataTable> {
               contractType: row.cells['Contract Type']!.value,
               schedule: row.cells['Schedule']!.value,
               status: row.cells['Status']!.value,
+              wageType: row.cells['Wage Type']!.value,
+              schedulePay: row.cells['Schedule Pay']!.value,
               onDelete: () {
                 deleteRow(index);
               }, 

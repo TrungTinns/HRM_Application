@@ -5,10 +5,13 @@ import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dar
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/form/contract_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
+import 'package:hrm_application/views/employee_inf_manage/position/position.dart';
 import 'package:hrm_application/views/home/home.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -27,6 +30,8 @@ class ContractDetail extends StatefulWidget {
   final ValueChanged<ContractData> onUpdate;
   final double? salary;
   final String? note;
+  final String? wageType;
+  final String? schedulePay;
 
   ContractDetail({
     required this.name,
@@ -43,6 +48,8 @@ class ContractDetail extends StatefulWidget {
     required this.onUpdate,
     this.salary,
     this.note,
+    this.schedulePay,
+    this.wageType,
   });
 
   @override
@@ -62,6 +69,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
   late TextEditingController statusController;
   late TextEditingController salaryController;
   late TextEditingController noteController;
+  late TextEditingController schedulePayController;
+  late TextEditingController wageTypeController;
   String pageName = 'Contracts';
   bool showContractForm = false;
   String? activeDropdown;
@@ -125,6 +134,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     toggleIndex = ContractData.defaultStatus.indexOf(widget.status);
     salaryController = TextEditingController(text: widget.salary.toString());
     noteController = TextEditingController(text: widget.note);
+    schedulePayController = TextEditingController(text: widget.schedulePay);
+    wageTypeController = TextEditingController(text: widget.wageType);
     tabController = TabController(length: 2, vsync: this);
   }
 
@@ -145,6 +156,10 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
     salaryStructureController.dispose();
     contractTypeController.dispose();
     statusController.dispose();
+    salaryController.dispose();
+    noteController.dispose();
+    schedulePayController.dispose();
+    wageTypeController.dispose();
     super.dispose();
   }
 
@@ -159,6 +174,8 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
       statusController.clear();
       salaryController.clear();
       noteController.clear();
+      schedulePayController.clear();
+      wageTypeController.clear();
       Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts()));
     });
   }
@@ -189,7 +206,9 @@ class _ContractDetailState extends State<ContractDetail> with SingleTickerProvid
       contractType: contractTypeController.text,
       status: statusController.text,
       salary: double.parse(salaryController.text),
-      note: noteController.text
+      note: noteController.text,
+      wageType: wageTypeController.text,
+      schedulePay: schedulePayController.text,
     );
     widget.onUpdate(updatedContract);
     Navigator.pop(context);
@@ -277,21 +296,20 @@ Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController
         title: CustomTitleAppbar(
           ctx: context,
           service: pageName,
-          titles: const ['Employees', 'Reporting'],
+          titles: const ['Employees', 'Department'],
           options: const [
-            ['Employees', 'Department', 'Contracts', 'Org Chart'],
-            ['Contracts', 'Skills']
+            ['Employees', 'Contracts', 'Org Chart'],
+            ['Department', 'Position']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
-            [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+            [ 
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),              
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],
@@ -470,7 +488,7 @@ Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController
                       Expanded(
                         child: Column(
                           children: [
-                            buildDropdownRow('Employee',  employees.map((employee) => employee.name).toList(), nameController),
+                            buildDropdownRow('Employee',  getNameEmp(employees), nameController),
                             const SizedBox(height: 10),
                             buildTextFieldRow('Contract Start Date', startDateController),
                             const SizedBox(height: 10),
@@ -486,9 +504,9 @@ Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController
                           children: [
                             buildDropdownRow('Salary Structure Type', ContractData.defaultSalaryStructures, salaryStructureController),
                             const SizedBox(height: 10),
-                            buildTextFieldRow('Department', departmentController),
+                            buildDropdownRow('Department', getDepartments(),departmentController),
                             const SizedBox(height: 10),
-                            buildTextFieldRow('Job Position', positionController),
+                            buildDropdownRow('Job Position', getJobPositions(jobPositions), positionController),
                             const SizedBox(height: 10),
                             buildDropdownRow('Contract Type', ContractData.defaultContractTypes, contractTypeController),
                           ],
@@ -516,6 +534,10 @@ Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController
                         SingleChildScrollView(
                           child: Column(
                             children: [
+                              buildDropdownRow('Wage Type', ContractData.defaultWageTypes, wageTypeController),
+                              const SizedBox(height: 10),
+                              buildDropdownRow('Schedule Pay', ContractData.defaultSchedulePays, schedulePayController),
+                              const SizedBox(height: 10),
                               buildTextFieldRow('Wages/salaries', salaryController),
                             ],
                           ),
@@ -523,11 +545,6 @@ Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController
                         SingleChildScrollView(
                           child: Column(
                             children: [
-                              const Text('NOTE', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
-                              const Divider(
-                                thickness: 0.5,
-                                color: textColor, 
-                              ),
                               buildTextFieldRow('Note', noteController),
                       ],
                     ),

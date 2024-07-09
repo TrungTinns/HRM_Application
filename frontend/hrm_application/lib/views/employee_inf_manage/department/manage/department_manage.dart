@@ -11,6 +11,7 @@ import 'package:hrm_application/views/employee_inf_manage/employee/employees.dar
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/form/employee_form.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
+import 'package:hrm_application/views/employee_inf_manage/position/position.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
@@ -122,21 +123,25 @@ class _EmployeeofDepartmentState extends State<EmployeeofDepartment> {
         title: CustomTitleAppbar(
           ctx: context,
           service: 'Employees',
-          titles: const ['Employees', 'Reporting'],
+          titles: const ['Employees', 'Department'],
           options: const [
-            ['Employees', 'Department', 'Contracts', 'Org Chart'],
-            ['Contracts', 'Skills']
+            ['Employees', 'Contracts', 'Org Chart'],
+            ['Department', 'Position']
           ],
           optionNavigations: [
             [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
-            [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+            [ 
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => Department())),              
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => PositionManage())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],

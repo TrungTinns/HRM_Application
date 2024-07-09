@@ -69,8 +69,16 @@ class EmployeeInf {
     return employees.where((employee) => employee.department == department).length;
   }
 
+  int countEmployeesInPosition(List<EmployeeInf> employees, String role) {
+    return employees.where((employee) => employee.role == role).length;
+  }
+
   List<String> getManagers(List<EmployeeInf> employees) {
     return employees.where((employee) => employee.isManager).map((e) => e.name).toList()..sort((a, b) => a.compareTo(b));
+  }
+
+  List<String> getNameEmp(List<EmployeeInf> employees) {
+    return employees.map((employee) => employee.name).toSet().toList()..sort((a, b) => a.compareTo(b));
   }
 
 final List<EmployeeInf> employees = [
@@ -278,13 +286,13 @@ final List<EmployeeInf> employees = [
     relativeName: 'Dat G',
     relativeMobile: '987-654-3210',  
   ),
-  //HR
+  //Human Resource
   EmployeeInf(
     name: 'Chau Bui',
-    role: 'HR',
+    role: 'Human Resource',
     mail: 'chaubui@gmail.com',
     mobile: '678-901-2345',
-    department: 'Human Resources',
+    department: 'Human Resource',
     manager: 'Son Tung MTP',
     isManager: true,  
     workLocation: 'Office',
@@ -300,10 +308,10 @@ final List<EmployeeInf> employees = [
   ),
   EmployeeInf(
     name: 'Dam Tong',
-    role: 'HR',
+    role: 'Human Resource',
     mail: 'ngoclinh@gmail.com',
     mobile: '789-012-3456',
-    department: 'Human Resources',
+    department: 'Human Resource',
     manager: 'Chau Bui',
     isManager: false,  
     workLocation: 'Office',

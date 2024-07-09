@@ -8,6 +8,7 @@ import 'package:hrm_application/views/employee_inf_manage/contract/form/contract
 import 'package:hrm_application/views/employee_inf_manage/department/department.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
 import 'package:hrm_application/views/employee_inf_manage/org%20chart/orgchart.dart';
+import 'package:hrm_application/views/employee_inf_manage/position/position.dart';
 import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -76,21 +77,20 @@ class _ContractsState extends State<Contracts> {
         title: CustomTitleAppbar(
           ctx: context,
           service: 'Employees',
-          titles: const ['Employees', 'Reporting'],
+          titles: const ['Employees', 'Department'],
           options: const [
-            ['Employees', 'Department', 'Contracts', 'Org Chart'],
-            ['Contracts', 'Skills']
+            ['Employees', 'Contracts', 'Org Chart'],
+            ['Department', 'Position']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
-            [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+            [ 
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),              
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],

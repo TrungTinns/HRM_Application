@@ -23,7 +23,6 @@ class DepartmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int employeeCount = countEmployeesInDepartment(employees, department);
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20.0),

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts.dart';
 import 'package:hrm_application/views/employee_inf_manage/contract/contracts_inf.dart';
+import 'package:hrm_application/views/employee_inf_manage/department/department_inf.dart';
 import 'package:hrm_application/views/employee_inf_manage/employee/employees_inf.dart';
+import 'package:hrm_application/views/recruitment_process_manage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -25,7 +27,8 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
   TextEditingController statusController = TextEditingController();
   TextEditingController salaryController = TextEditingController();
   TextEditingController noteController = TextEditingController();
-  
+  TextEditingController schedulePayController = TextEditingController();
+  TextEditingController wageTypeController = TextEditingController();
   TabController? tabController;
   bool isRefFilled = false;
   int toggleIndex = 0;
@@ -212,7 +215,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Employee', employees, nameController),
+                      buildDropdownRow('Employee', getNameEmp(employees), nameController),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Contract Start Date', startDateController, isDateField: true),
                       const SizedBox(height: 10),
@@ -228,9 +231,9 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                     children: [
                       buildDropdownRow('Salary Structure Type', ContractData.defaultSalaryStructures, salaryStructureController),
                       const SizedBox(height: 10),
-                      buildTextFieldRow('Department', departmentController),
+                      buildDropdownRow('Department', getDepartments(),departmentController),
                       const SizedBox(height: 10),
-                      buildTextFieldRow('Job Position', positionController),
+                      buildDropdownRow('Job Position', getJobPositions(jobPositions), positionController),
                       const SizedBox(height: 10),
                       buildDropdownRow('Contract Type', ContractData.defaultContractTypes, contractTypeController),
                     ],
@@ -258,6 +261,10 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                   SingleChildScrollView(
                     child: Column(
                       children: [
+                        buildDropdownRow('Wage Type', ContractData.defaultWageTypes, wageTypeController),
+                        const SizedBox(height: 10),
+                        buildDropdownRow('Schedule Pay', ContractData.defaultSchedulePays, schedulePayController),
+                        const SizedBox(height: 10),
                         buildTextFieldRow('Wages/salaries', salaryController),
                       ],
                     ),
@@ -265,11 +272,6 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        const Text('NOTE', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
-                        const Divider(
-                          thickness: 0.5,
-                          color: textColor, 
-                        ),
                         buildTextFieldRow('Note', noteController),
                       ],
                     ),
