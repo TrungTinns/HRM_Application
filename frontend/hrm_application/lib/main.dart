@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/recruitment_process_manage/jobPosition/recruitment.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Dashboard/payroll_manage.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: SignIn(),
-      home: RecruitmentManage(),
+      home: PayrollManage(),
     );
   }
 }

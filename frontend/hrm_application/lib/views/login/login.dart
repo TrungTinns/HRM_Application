@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/components/iconic/icon.dart';
-import 'package:hrm_application/views/home/home.dart';
-import 'package:hrm_application/widgets/colors.dart';
+import 'package:hrm_application/Component/Iconic/icon.dart';
+import 'package:hrm_application/Views/Home/home.dart';
+import 'package:hrm_application/Widgets/colors.dart';
 
 class AuthScreen extends StatefulWidget {
   @override

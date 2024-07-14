@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/components/button/button.dart';
-import 'package:hrm_application/components/iconic/icon.dart';
-import 'package:hrm_application/views/employee_inf_manage/employee/employees.dart';
-import 'package:hrm_application/views/recruitment_process_manage/jobPosition/recruitment.dart';
+import 'package:hrm_application/Component/Iconic/icon.dart';
+import 'package:hrm_application/Component/button/button.dart';
+import 'package:hrm_application/views/services/EmployeeManage/employee/employees.dart';
+import 'package:hrm_application/views/services/PayrollManage/Dashboard/payroll_manage.dart';
+import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class Home extends StatefulWidget {
@@ -22,14 +23,14 @@ class _HomeState extends State<Home> {
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: [
-                authThemeColor, 
-              Colors.black, 
+                authThemeColor,
+              Colors.black,
               ],
             ),
           ),
           child: AppBar(
             title: appIcon(context),
-            backgroundColor: Colors.transparent, 
+            backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             centerTitle: true,
             actions: [
@@ -38,7 +39,6 @@ class _HomeState extends State<Home> {
                 color: textColor,
                 iconSize: 30,
                 onPressed: () {
-                
                 },
               ),
               IconButton(
@@ -46,7 +46,6 @@ class _HomeState extends State<Home> {
                 color: textColor,
                 iconSize: 30,
                 onPressed: () {
-                
                 },
               ),
               const SizedBox(width: 8),
@@ -60,8 +59,8 @@ class _HomeState extends State<Home> {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
             colors: [
-              authThemeColor, 
-              Colors.black, 
+              authThemeColor,
+              Colors.black,
             ],
           ),
         ),
@@ -111,7 +110,7 @@ class _HomeState extends State<Home> {
                     final pages = [
                       EmployeeManage(),
                       RecruitmentManage(),
-                      EmployeeManage(),
+                      PayrollManage(),
                       EmployeeManage(),
                       EmployeeManage(),
                       EmployeeManage(),
