@@ -11,12 +11,22 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
+#axoniq:
+#  console:
+#    application-name: Employee_Service
+#    credentials: fc950d54-0:c30062b0dc7e43d2829d5221cb16be17
+#    dlq-mode: FULL
+
 #axon:
-#  axonserver:
-#    servers:
-#      - name: local
-#        hostname: localhost
-#        port: 8024
+#  serializer:
+#    general: jackson
+#    events: jackson
+#    messages: jackson
+
+axon:
+  axonserver:
+    servers: localhost:8124
+    context: default
 
 
 #debug: true

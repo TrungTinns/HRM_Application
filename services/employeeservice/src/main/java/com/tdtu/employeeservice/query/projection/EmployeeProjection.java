@@ -10,38 +10,51 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tdtu.employeeservice.command.data.Employee;
-import com.tdtu.employeeservice.command.data.EmployeeService;
+import com.tdtu.employeeservice.command.data.employee.Employee;
+import com.tdtu.employeeservice.command.data.employee.EmployeeService;
 import com.tdtu.employeeservice.query.model.EmployeeResponseModel;
-import com.tdtu.employeeservice.query.queries.GetAllEmployeesQuery;
-import com.tdtu.employeeservice.query.queries.GetEmployeeQuery;
+import com.tdtu.employeeservice.query.model.ResumeResponseModel;
+import com.tdtu.employeeservice.query.queries.employee.GetAllEmployeesQuery;
+import com.tdtu.employeeservice.query.queries.employee.GetEmployeeQuery;
 
 @Component
 public class EmployeeProjection {
 
 	@Autowired
 	private EmployeeService empService;
-	
-	
+
 	@QueryHandler
-	public EmployeeResponseModel handle(GetEmployeeQuery getEmployeeQuery) throws InterruptedException, ExecutionException {
+	public EmployeeResponseModel handle(GetEmployeeQuery getEmployeeQuery)
+			throws InterruptedException, ExecutionException {
 		EmployeeResponseModel model = new EmployeeResponseModel();
 		Optional<Employee> empOptional = Optional.ofNullable(empService.findById(getEmployeeQuery.getId()));
 		if (empOptional.isPresent()) {
-			BeanUtils.copyProperties(empOptional.get(), model);
+			Employee employee = empOptional.get();
+			BeanUtils.copyProperties(employee, model);
+			ResumeResponseModel resume = new ResumeResponseModel();
+			resume.setId(employee.getResumeRef().getId());
+			resume.setExperience(employee.getResume().getExperience());
+			resume.setSkillTypes(employee.getResume().getSkillTypes());
+			model.setResume(resume);
 		}
 		return model;
 	}
-	
+
 	@QueryHandler
-	public List<EmployeeResponseModel> handle(GetAllEmployeesQuery getAllEmployeesQuery) throws InterruptedException, ExecutionException {
+	public List<EmployeeResponseModel> handle(GetAllEmployeesQuery getAllEmployeesQuery)
+			throws InterruptedException, ExecutionException {
 		List<Employee> lstEntity = empService.findAll();
 		List<EmployeeResponseModel> lstEmp = new ArrayList<>();
-		lstEntity.forEach(s -> {
+		for (Employee employee : lstEntity) {
 			EmployeeResponseModel model = new EmployeeResponseModel();
-			BeanUtils.copyProperties(s, model);
-			lstEmp.add(model);
-		});
+			BeanUtils.copyProperties(employee, model);
+			ResumeResponseModel resume = new ResumeResponseModel();
+			resume.setId(employee.getResumeRef().getId());
+			resume.setExperience(employee.getResume().getExperience());
+			resume.setSkillTypes(employee.getResume().getSkillTypes());
+			model.setResume(resume);
+	        lstEmp.add(model);
+		}
 		return lstEmp;
 	}
 }

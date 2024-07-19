@@ -15,13 +15,14 @@ import lombok.ToString;
 @ToString
 public class EmployeeResponseModel {
 	private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private Date dateOfBirth;
-    private String position;
-    private Double salary;
-    private String department;
-    private String phone;
-    private String img;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private Date dateOfBirth;
+	private String position;
+	private Double salary;
+	private String department;
+	private String phone;
+	private String img;
+	private ResumeResponseModel resume;
 }

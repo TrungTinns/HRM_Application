@@ -1,6 +1,7 @@
 package com.tdtu.employeeservice.command.model;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class EmployeeRequestModel {
-	private String id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,4 +25,8 @@ public class EmployeeRequestModel {
     private String department;
     private String phone;
     private String img;
+    private List<String> tags;
+    private String managerId;
+    private String coachId;
+    private ResumeRequestModel resume;
 }
