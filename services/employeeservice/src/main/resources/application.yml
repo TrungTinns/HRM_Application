@@ -9,7 +9,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_SERVER}
 
 #axoniq:
 #  console:
@@ -25,7 +25,7 @@ eureka:
 
 axon:
   axonserver:
-    servers: localhost:8124
+    servers: ${AXON_SERVER_HOST}:${AXON_SERVER_PORT}
     context: default
 
 

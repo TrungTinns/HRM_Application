@@ -16,14 +16,20 @@ public class FirebaseInitialization {
 
 	@PostConstruct
 	public void initialization() {
-		try (FileInputStream serviceAccount = new FileInputStream("src/main/resources/EmployeeServiceAccessKey.json")) {
-			FirebaseOptions options = new FirebaseOptions.Builder()
-					.setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+		String firebaseConfigPath = System.getenv("FIREBASE_CONFIG_PATH");
+        if (firebaseConfigPath == null) {
+            throw new IllegalArgumentException("FIREBASE_CONFIG_PATH environment variable not set" + firebaseConfigPath);
+        }
 
-			FirebaseApp.initializeApp(options);
-		} catch (IOException e) {
-			System.err.println("Failed to initialize Firebase: " + e.getMessage());
-			e.printStackTrace();
-		}
+        try (FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath)) {
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build();
+
+            FirebaseApp.initializeApp(options);
+        } catch (IOException e) {
+            System.err.println("Failed to initialize Firebase: " + e.getMessage());
+            e.printStackTrace();
+        }
 	}
 }
