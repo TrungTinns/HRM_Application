@@ -3,22 +3,26 @@ import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
 import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Component/FilterSearch/filter_search.dart';
 import 'package:hrm_application/Component/Search/searchBox.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Batch/batch.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Payslip/DataTable/payslip_datatable.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Payslip/Form/payslip_form.dart';
 import 'package:hrm_application/views/home/home.dart';
-import 'package:hrm_application/views/services/PayrollManage/Payslip/DataTable/payslip_datatable.dart';
-import 'package:hrm_application/views/services/PayrollManage/Payslip/Form/payslip_form.dart';
 import 'package:hrm_application/views/services/PayrollManage/Dashboard/payroll_manage.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PayslipsManage extends StatefulWidget {
+class PayslipManage extends StatefulWidget {
   @override
-  _PayslipsManageState createState() => _PayslipsManageState();
+  _PayslipManageState createState() => _PayslipManageState();
 }
 
-class _PayslipsManageState extends State<PayslipsManage> {
-  TextEditingController nameController = TextEditingController();
-  String pageName = '';
+class _PayslipManageState extends State<PayslipManage> {
+  TextEditingController nameController= TextEditingController();
+  String pageName = 'Employee Payslips';
   bool showPayslipForm = false;
   String? activeDropdown;
+  List<PlutoRow> rows = [];
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -58,7 +62,7 @@ class _PayslipsManageState extends State<PayslipsManage> {
     }
   }
 
-  void clearContractForm() {
+  void clearPayslipForm() {
     setState(() {
       showPayslipForm = false;
     });
@@ -87,25 +91,25 @@ class _PayslipsManageState extends State<PayslipsManage> {
             ],
             [
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayrollManage())),
+                  context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
             [
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayrollManage())),
+                  context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
             [
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayslipsManage())),
+                  context, MaterialPageRoute(builder: (ctx) => PayslipManage())),
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => Home())),
+                  context, MaterialPageRoute(builder: (ctx) => BatchManage())),
             ],
             [
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayrollManage())),
+                  context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
@@ -200,7 +204,7 @@ class _PayslipsManageState extends State<PayslipsManage> {
                         iconSize: 24,
                         tooltip: "Discard all changes",
                         onPressed: () {
-                          clearContractForm();
+                          clearPayslipForm();
                         },
                     ),
                   ],

@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hrm_application/views/services/EmployeeManage/contract/contracts.dart';
-import 'package:hrm_application/views/services/EmployeeManage/contract/contracts_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/employee/employees_inf.dart';
-import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/Views/Home/home.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Batch/batch.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Batch/batches_inf.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Payslip/payslips_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:progress_stepper/progress_stepper.dart';
 
 class PayslipForm extends StatefulWidget {
   @override
@@ -17,44 +20,73 @@ class PayslipForm extends StatefulWidget {
 class _PayslipFormState extends State<PayslipForm> with SingleTickerProviderStateMixin {
   TextEditingController nameController = TextEditingController();
   TextEditingController referenceController = TextEditingController();
+  TextEditingController contractRefController = TextEditingController();
+  TextEditingController structureController = TextEditingController();
+  TextEditingController othersController = TextEditingController();
+  TextEditingController batchController = TextEditingController();
+  TextEditingController statusController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
-  TextEditingController departmentController = TextEditingController();
-  TextEditingController positionController = TextEditingController();
-  TextEditingController scheduleController = TextEditingController();
-  TextEditingController salaryStructureController = TextEditingController();
-  TextEditingController contractTypeController = TextEditingController();
-  TextEditingController statusController = TextEditingController();
-  TextEditingController salaryController = TextEditingController();
-  TextEditingController noteController = TextEditingController();
-  TextEditingController schedulePayController = TextEditingController();
-  TextEditingController wageTypeController = TextEditingController();
-  TabController? tabController;
+  int currentStep = 1;
   bool isRefFilled = false;
-  int toggleIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
-    referenceController.addListener(() {
+    nameController.addListener(() {
       setState(() {
-        isRefFilled = referenceController.text.isNotEmpty;
+        isRefFilled = nameController.text.isNotEmpty;
       });
     });
   }
 
+  String? findContractReference(String employeeName) {
+    for (var contract in contracts) {
+      if (contract.name == employeeName) {
+        return contract.reference;
+      }
+    }
+    return null;
+  }
+
+  void showCreateContractDialog(String employeeName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Create Contract for $employeeName'),
+          content: const Text('No contract found for this employee. Would you like to create one?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Create'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts(name: employeeName)));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
+    batchController.dispose();
+    nameController.dispose();
     referenceController.dispose();
+    contractRefController.dispose();
+    structureController.dispose();
+    othersController.dispose();
+    statusController.dispose();
     startDateController.dispose();
     endDateController.dispose();
-    departmentController.dispose();
-    positionController.dispose();
-    scheduleController.dispose();
-    salaryStructureController.dispose();
-    contractTypeController.dispose();
-    tabController?.dispose();
     super.dispose();
   }
 
@@ -71,13 +103,6 @@ class _PayslipFormState extends State<PayslipForm> with SingleTickerProviderStat
         controller.text = picked.toString().substring(0, 10);
       });
     }
-  }
-
-  void _updateEmployeeInfo(EmployeeInf employee) {
-    setState(() {
-      departmentController.text = employee.department;
-      positionController.text = employee.role;
-    });
   }
 
   Widget buildTextFieldRow(String label, TextEditingController controller, {bool isDateField = false}) {
@@ -122,7 +147,7 @@ class _PayslipFormState extends State<PayslipForm> with SingleTickerProviderStat
     );
   }
 
-  Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController controller) {
+  Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {  
     return Row(
       children: [
         SizedBox(
@@ -133,23 +158,16 @@ class _PayslipFormState extends State<PayslipForm> with SingleTickerProviderStat
           ),
         ),
         Expanded(
-          child: DropdownButtonFormField<dynamic>(
+          child: DropdownButtonFormField<String>(
             dropdownColor: dropdownColor,
-            value: null,
-            items: items.map((item) {
-              return DropdownMenuItem<dynamic>(
-                value: item,
-                child: Text(item is EmployeeInf ? item.name : item.toString(), style: const TextStyle(color: textColor),),
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value, style: const TextStyle(color: textColor)),
               );
             }).toList(),
-            onChanged: (selectedItem) {
-              setState(() {
-                if (selectedItem is EmployeeInf) {
-                  _updateEmployeeInfo(selectedItem);
-                } else {
-                  controller.text = selectedItem.toString();
-                }
-              });
+            onChanged: (value) {
+              controller.text = value!;
             },
             decoration: const InputDecoration(
               filled: true,
@@ -165,144 +183,155 @@ class _PayslipFormState extends State<PayslipForm> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: snackBarColor,
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextField(
-                        controller: referenceController,
-                        style: const TextStyle(color: textColor, fontSize: 30.0),
-                        decoration: const InputDecoration(
-                          hintText: "Contract Reference",
-                          hintStyle: TextStyle(color: termTextColor, fontSize: 30.0),
-                        ),
-                      ),
-                    ],
+                  child: DropdownButtonFormField<String>(
+                    dropdownColor: dropdownColor,
+                    items: getNameEmp(employees).map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value, style: const TextStyle(color: textColor, fontSize: 18)),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          nameController.text = value;
+                          String? contractRef = findContractReference(value);
+                          if (contractRef != null) {
+                            contractRefController.text = contractRef;
+                          } else {
+                            contractRefController.text = '';
+                            showCreateContractDialog(value);
+                          }
+                        });
+                      }
+                    },
+                    style: const TextStyle(color: textColor, fontSize: 40),
+                    decoration: const InputDecoration(
+                      hintText: 'Employee',
+                      filled: true,
+                      fillColor: snackBarColor,
+                      hintStyle: TextStyle(color: termTextColor, fontSize: 40.0),
+
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
-                ToggleSwitch(
-                  minWidth: 120.0,
-                  initialLabelIndex: toggleIndex,
-                  cornerRadius: 20.0,
-                  activeFgColor: Colors.white,
-                  inactiveBgColor: Colors.grey,
-                  inactiveFgColor: Colors.white,
-                  totalSwitches: 3,
-                  labels: ['Running', 'Expired', 'Cancelled'],
-                  icons: [Icons.play_arrow, Icons.hourglass_empty, Icons.cancel],
-                  activeBgColors: [[Colors.green], [Colors.orange], [Colors.red]],
-                  onToggle: (index) {
+                ProgressStepper(
+                  width: 400,
+                  height: 50,
+                  padding: 1,
+                  currentStep: currentStep,
+                  onClick: (index) {
                     setState(() {
-                      toggleIndex = index!;
-                      statusController.text = ContractData.defaultStatus[index];
+                      currentStep = index;
                     });
                   },
+                  bluntHead: true,
+                  bluntTail: true,
+                  color: Colors.transparent,
+                  progressColor: Colors.green,
+                  stepCount: 4,
+                  labels: PayslipData.defaultStatus,
+                  defaultTextStyle: const TextStyle(
+                    fontSize: 16,
+                    color: textColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  selectedTextStyle: const TextStyle(
+                    fontSize: 16,
+                    color: textColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 20),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      buildDropdownRow('Employee', getNameEmp(employees), nameController),
-                      const SizedBox(height: 10),
-                      buildTextFieldRow('Contract Start Date', startDateController, isDateField: true),
-                      const SizedBox(height: 10),
-                      buildTextFieldRow('Contract End Date', endDateController, isDateField: true),
-                      const SizedBox(height: 10),
-                      buildDropdownRow('Working Schedule', ContractData.defaultSchedules, scheduleController),
-                    ],
+                const SizedBox(
+                  width: 200,
+                  child: Text(
+                    'Period',
+                    style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    children: [
-                      buildDropdownRow('Salary Structure Type', ContractData.defaultSalaryStructures, salaryStructureController),
-                      const SizedBox(height: 10),
-                      buildDropdownRow('Department', getDepartments(),departmentController),
-                      const SizedBox(height: 10),
-                      buildDropdownRow('Job Position', getJobPositions(jobPositions), positionController),
-                      const SizedBox(height: 10),
-                      buildDropdownRow('Contract Type', ContractData.defaultContractTypes, contractTypeController),
-                    ],
+                Container(
+                  width: 120,
+                  margin: const EdgeInsets.only(right: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      _selectDate(startDateController);
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: startDateController,
+                        style: const TextStyle(color: textColor),
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: snackBarColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const Text('-', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 20)),
+                Container(
+                  width: 120,
+                  margin: const EdgeInsets.only(left: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      _selectDate(endDateController);
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: endDateController,
+                        style: const TextStyle(color: textColor),
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: snackBarColor,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            TabBar(
-              labelColor: textColor,
-              unselectedLabelColor: termTextColor,
-              controller: tabController,
-              labelStyle: const TextStyle(color: textColor, fontSize: 16),
-              tabs: const [
-                Tab(text: 'Salary Information'),
-                Tab(text: 'Contract Details'),
+            const SizedBox(height: 10,),
+            Column(
+              children: [
+                buildTextFieldRow('Contract', contractRefController),
+                const SizedBox(height: 10,),
+                buildDropdownRow('Batch', batchController, getNameBatch(batches)),
+                const SizedBox(height: 10,),
+                buildDropdownRow('Structure', structureController, PayslipData.defaultStructures)
               ],
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 200,
-              child: TabBarView(
-                controller: tabController,
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        buildDropdownRow('Wage Type', ContractData.defaultWageTypes, wageTypeController),
-                        const SizedBox(height: 10),
-                        buildDropdownRow('Schedule Pay', ContractData.defaultSchedulePays, schedulePayController),
-                        const SizedBox(height: 10),
-                        buildTextFieldRow('Wages/salaries', salaryController),
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        buildTextFieldRow('Note', noteController),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            )
           ],
         ),
       ),
       floatingActionButton: isRefFilled
           ? FloatingActionButton(
             onPressed: () {
-              final newContract = ContractData(
-                name: nameController.text,
-                reference: referenceController.text,
-                department: departmentController.text,
-                position: positionController.text,
+              final newBatch = BatchData(
+                batch: batchController.text,
+                status: statusController.text,
                 startDate: DateTime.parse(startDateController.text),
                 endDate: DateTime.parse(endDateController.text),
-                schedule: scheduleController.text,
-                salaryStructure: salaryStructureController.text,
-                contractType: contractTypeController.text,
-                status: statusController.text,    
-                salary: double.parse(salaryController.text),
-                note: noteController.text,            
               );
               setState(() {
-                contracts.add(newContract);
+                batches.add(newBatch);
               });
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts()));
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) => BatchManage()));
             },
             child: const Icon(Icons.create),
           )

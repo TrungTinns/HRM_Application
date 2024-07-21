@@ -1,58 +1,40 @@
 class PayslipData {
   final String name;
   final String reference;
-  final String department;
-  final String position;
+  final String contractRef;
   final DateTime startDate;
   final DateTime endDate;
-  final String schedule;
-  final String salaryStructure;
-  final String contractType;
+  final String batch;
+  final String structure;
+  final String others;
   final String status;
-  final double? salary;
-  final String? note;
-  final String? wageType;
-  final String? schedulePay;
-  static final List<String> defaultSalaryStructures = ['Employee', 'Worker'];
-  static final List<String> defaultContractTypes = ['Permanent', 'Temporary', 'Seasonal', 'Full-time', 'Part-time'];
-  static final List<String> defaultSchedules = ['Standard 40 hours/week', 'Part-time 25 hours/week'];
-  static final List<String> defaultStatus = ['Running', 'Expired', 'Cancelled'];
-  static final List<String> defaultWageTypes = ['Fixed Wage', 'Hourly Wage'];
-  static final List<String> defaultSchedulePays = ['Annually', 'Semi-Annually', 'Quarterly', 'Bi-monthly', 'Monthly', 'Semi-Monthly', 'Bi-weekly', 'Weekly', 'Daily'];
+  static final List<String> defaultStatus = ['Draft', 'Waiting', 'Done', 'Paid'];
+  static final List<String> defaultStructures = ['Regular Pay', 'Worker Pay'];
+  static final List<String> defaultOthers = ['Deduction', 'Reimbursement', 'Attachment of Salary', ' Assignment of Salary', 'Child Support'];
 
   PayslipData({
     required this.name,
     required this.reference,
-    required this.department,
-    required this.position,
+    required this.contractRef,
     required this.startDate,
     required this.endDate,
-    required this.schedule,
-    required this.salaryStructure,
-    required this.contractType,
+    required this.batch,
+    required this.structure,
+    required this.others,
     required this.status,
-    this.salary,
-    this.note,
-    this.wageType,
-    this.schedulePay,
   });
 
   factory PayslipData.fromMap(Map<String, dynamic> data) {
     return PayslipData(
       name: data['Employee'],
       reference: data['Reference'],
-      department: data['Department'],
-      position: data['Position'],
+      contractRef: data['Contract Reference'],
       startDate: data['Start Date'],
       endDate: data['End Date'],
-      salaryStructure: data['Salary Structure'],
-      contractType: data['Contract Type'],
-      schedule: data['Schedule'],
+      batch: data['Batch'],
+      structure: data['Structure'],
+      others: data['Others'],
       status: data['Status'],
-      salary: data['Salary'],
-      note: data['Note'],
-      wageType: data['Wage Type'],
-      schedulePay: data['Schedule Pay'],
     );
   }
 
@@ -60,79 +42,104 @@ class PayslipData {
     return {
       'Employee': name,
       'Reference': reference,
-      'Department': department,
-      'Position': position,
+      'Contract Reference': contractRef,
       'Start Date': startDate,
       'End Date': endDate,
-      'Salary Structure': salaryStructure,
-      'Contract Type': contractType,
-      'Schedule': schedule,
+      'Batch': batch,
+      'Structure': structure,
+      'Others': others,
       'Status': status,
-      'Salary': salary,
-      'Note': note,
-      'Wage Type': wageType,
-      'Schedule Pay': schedulePay,
     };
   }
 }
 
-List<Map<String, dynamic>> getContracts() {
-  return contracts.map((contract) => contract.toMap()).toList();
+List<Map<String, dynamic>> getPayslips() {
+  return payslips.map((payslips) => payslips.toMap()).toList();
 }
 
-void updateContract(int index, Map<String, dynamic> updatedContract) {
-  if (index >= 0 && index < contracts.length) {
-    contracts[index] = PayslipData.fromMap(updatedContract);
+void updatePayslip(int index, Map<String, dynamic> updatePayslip) {
+  if (index >= 0 && index < payslips.length) {
+    payslips[index] = PayslipData.fromMap(updatePayslip);
   }
 }
 
-List<PayslipData> contracts = [
+List<PayslipData> payslips = [
   PayslipData(
     name: 'Son Tung MTP',
-    reference: 'REF123',
-    department: 'Administration',
-    position: 'Director',
-    startDate: DateTime(2021-06-15), 
-    endDate: DateTime(2021-06-15),
-    salaryStructure: 'Employee',
-    contractType: 'Permanent',
-    schedule: 'Standard 40 hours/week',
-    status: 'Running',
-    salary: 10000000,
-    note: 'This is a note',
-    wageType: 'Hourly Wage',
-    schedulePay: 'Monthly',
+    contractRef: 'REF123',
+    reference: 'SLIP/001',
+    startDate: DateTime(2024, 04, 01),
+    endDate: DateTime(2024, 04, 30),
+    batch: '04/2024',
+    structure: 'Regular Pay',
+    others: 'Deduction',
+    status: 'Done',
   ),
   PayslipData(
     name: 'Jack J97',
-    reference: 'REF124',
-    department: 'Research & Development',
-    position: 'Project Manager',
-    startDate: DateTime(2021-06-15),
-    endDate: DateTime(2021-06-15),
-    salaryStructure: 'Employee',
-    contractType: 'Temporary',
-    schedule: 'Part-time 25 hours/week',
-    status: 'Expired',
-    note: 'This is another note',
-    wageType: 'Fixed Wage',
-    schedulePay: 'Weekly',
+    contractRef: 'REF124',
+    reference: 'SLIP/002',
+    startDate: DateTime(2024, 04, 01),
+    endDate: DateTime(2024, 04, 30),
+    batch: '04/2024',
+    structure: 'Worker Pay',
+    others: 'Reimbursement',
+    status: 'Paid',
   ),
   PayslipData(
     name: 'Chi Pu',
-    reference: 'REF003',
-    department: 'Sales',
-    position: 'Content Creator',
-    startDate: DateTime(2021-06-15),
-    endDate: DateTime(2021-06-15),
-    salaryStructure: 'Employee',
-    contractType: 'Full-time',
-    schedule: 'Standard 40 hours/week',
-    status: 'Running',
-    salary: 20000000,
-    note: 'This is a note',
-    wageType: 'Hourly Wage',
-    schedulePay: 'Monthly',
+    contractRef: 'REF003',
+    reference: 'SLIP/003',
+    startDate: DateTime(2024, 05, 01),
+    endDate: DateTime(2024, 05, 31),
+    batch: '05/2024',
+    structure: 'Regular Pay',
+    others: 'Attachment of Salary',
+    status: 'Draft',
+  ),
+  PayslipData(
+    name: 'Decao',
+    contractRef: 'REF004',
+    reference: 'SLIP/004',
+    startDate: DateTime(2024, 06, 01),
+    endDate: DateTime(2024, 06, 30),
+    batch: '06/2024',
+    structure: 'Regular Pay',
+    others: 'Child Support',
+    status: 'Done',
+  ),
+  PayslipData(
+    name: 'HieuThuHai',
+    contractRef: 'REF005',
+    reference: 'SLIP/005',
+    startDate: DateTime(2024, 06, 01),
+    endDate: DateTime(2024, 06, 30),
+    batch: '06/2024',
+    structure: 'Worker Pay',
+    others: 'Child Support',
+    status: 'Paid',
+  ),
+  PayslipData(
+    name: 'Huong Tit',
+    contractRef: 'REF006',
+    reference: 'SLIP/006',
+    startDate: DateTime(2024, 06, 01),
+    endDate: DateTime(2024, 06, 30),
+    batch: '06/2024',
+    structure: 'Regular Pay',
+    others: 'Reimbursement',
+    status: 'Draft',
+  ),
+  PayslipData(
+    name: 'Hieu PC',
+    contractRef: 'REF007',
+    reference: 'SLIP/007',
+    startDate: DateTime(2024, 07, 01),
+    endDate: DateTime(2024, 07, 31),
+    batch: '07/2024',
+    structure: 'Worker Pay',
+    others: 'Deduction',
+    status: 'Waiting',
   ),
 ];
 

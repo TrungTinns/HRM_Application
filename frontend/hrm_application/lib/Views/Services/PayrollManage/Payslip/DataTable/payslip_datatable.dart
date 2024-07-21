@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/services/EmployeeManage/contract/contracts_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/contract/detail/contract_detail.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/Employee/employees_inf.dart';
-import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Batch/batches_inf.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Payslip/Detail/payslip_detail.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Payslip/payslips_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -13,28 +12,22 @@ class PayslipDataTable extends StatefulWidget {
 }
 
 class _PayslipDataTableState extends State<PayslipDataTable> {
-
   List<PlutoRow> rows = [];
 
   @override
   void initState() {
     super.initState();
-    rows = getContracts().map((contract) {
+    rows = getPayslips().map((payslip) {
       return PlutoRow(cells: {
-        'Employee': PlutoCell(value: contract['Employee']),
-        'Reference': PlutoCell(value: contract['Reference']),
-        'Department': PlutoCell(value: contract['Department']),
-        'Position': PlutoCell(value: contract['Position']),
-        'Start Date': PlutoCell(value: contract['Start Date'].toString()), 
-        'End Date': PlutoCell(value: contract['End Date'].toString()),   
-        'Salary Structure': PlutoCell(value: contract['Salary Structure']),
-        'Contract Type': PlutoCell(value: contract['Contract Type']),
-        'Schedule': PlutoCell(value: contract['Schedule']),
-        'Status': PlutoCell(value: contract['Status']),
-        'Salary': PlutoCell(value: contract['Salary']),
-        'Wage Type': PlutoCell(value: contract['Wage Type']),
-        'Schedule Pay': PlutoCell(value: contract['Schedule Pay']),
-        'Note': PlutoCell(value: contract['Note']),
+        'Employee': PlutoCell(value: payslip['Employee']),
+        'Reference': PlutoCell(value: payslip['Reference']),
+        'Contract Reference': PlutoCell(value: payslip['Contract Reference']),
+        'Start Date': PlutoCell(value: payslip['Start Date'].toString()),
+        'End Date': PlutoCell(value: payslip['End Date'].toString()),
+        'Batch': PlutoCell(value: payslip['Batch']),
+        'Structure': PlutoCell(value: payslip['Structure']),
+        'Others': PlutoCell(value: payslip['Others']),
+        'Status': PlutoCell(value: payslip['Status']),
       });
     }).toList();
   }
@@ -42,27 +35,22 @@ class _PayslipDataTableState extends State<PayslipDataTable> {
   void deleteRow(int index) {
     setState(() {
       rows.removeAt(index);
-      contracts.removeAt(index); 
+      batches.removeAt(index);
     });
   }
 
-  void updateContract(int index, ContractData updatedContract) {
+  void updatePayslip(int index, PayslipData updatedPayslip) {
     setState(() {
       rows[index] = PlutoRow(cells: {
-        'Employee': PlutoCell(value: updatedContract.name),
-        'Reference': PlutoCell(value: updatedContract.reference),
-        'Department': PlutoCell(value: updatedContract.department),
-        'Position': PlutoCell(value: updatedContract.position),
-        'Start Date': PlutoCell(value: updatedContract.startDate.toString()), 
-        'End Date': PlutoCell(value: updatedContract.endDate.toString()),    
-        'Salary Structure': PlutoCell(value: updatedContract.salaryStructure),
-        'Contract Type': PlutoCell(value: updatedContract.contractType),
-        'Schedule': PlutoCell(value: updatedContract.schedule),
-        'Status': PlutoCell(value: updatedContract.status),
-        'Salary': PlutoCell(value: updatedContract.salary),
-        'Wage Type': PlutoCell(value: updatedContract.wageType),
-        'Schedule Pay': PlutoCell(value: updatedContract.schedulePay),
-        'Note': PlutoCell(value: updatedContract.note),
+        'Employee': PlutoCell(value: updatedPayslip.name),
+        'Reference': PlutoCell(value: updatedPayslip.reference),
+        'Contract Reference': PlutoCell(value: updatedPayslip.contractRef),
+        'Start Date': PlutoCell(value: updatedPayslip.startDate.toString()),
+        'End Date': PlutoCell(value: updatedPayslip.endDate.toString()),
+        'Batch': PlutoCell(value: updatedPayslip.batch),
+        'Structure': PlutoCell(value: updatedPayslip.structure),
+        'Others': PlutoCell(value: updatedPayslip.others),
+        'Status': PlutoCell(value: updatedPayslip.status),
       });
     });
   }
@@ -71,54 +59,24 @@ class _PayslipDataTableState extends State<PayslipDataTable> {
   Widget build(BuildContext context) {
     List<PlutoColumn> columns = [
       PlutoColumn(
-        title: 'Employee',
-        field: 'Employee',
-        type: PlutoColumnType.select(getNameEmp(employees)),
-      ),
-      PlutoColumn(
         title: 'Reference',
         field: 'Reference',
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
-        title: 'Department',
-        field: 'Department',
-        type: PlutoColumnType.select(getDepartments()),
+        title: 'Employee',
+        field: 'Employee',
+        type: PlutoColumnType.select(getNameEmp(employees)),
       ),
       PlutoColumn(
-        title: 'Position',
-        field: 'Position',
-        type: PlutoColumnType.select(getJobPositions(jobPositions)),
-      ),
-      PlutoColumn(
-        title: 'Start Date',
-        field: 'Start Date',
-        type: PlutoColumnType.date(),
-      ),
-      PlutoColumn(
-        title: 'End Date',
-        field: 'End Date',
-        type: PlutoColumnType.date(),
-      ),
-      PlutoColumn(
-        title: 'Salary Structure',
-        field: 'Salary Structure',
-        type: PlutoColumnType.select(ContractData.defaultSalaryStructures),
-      ),
-      PlutoColumn(
-        title: 'Contract Type',
-        field: 'Contract Type',
-        type: PlutoColumnType.select(ContractData.defaultContractTypes),
-      ),
-      PlutoColumn(
-        title: 'Schedule',
-        field: 'Schedule',
-        type: PlutoColumnType.select(ContractData.defaultSchedules),
+        title: 'Batch',
+        field: 'Batch',
+        type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         title: 'Status',
         field: 'Status',
-        type: PlutoColumnType.select(ContractData.defaultStatus),
+        type: PlutoColumnType.select(PayslipData.defaultStatus),
       ),
     ];
 
@@ -126,7 +84,7 @@ class _PayslipDataTableState extends State<PayslipDataTable> {
       columns: columns,
       rows: rows,
       onChanged: (PlutoGridOnChangedEvent event) {
-
+        // Handle changes if necessary
       },
       onRowDoubleTap: (event) {
         final row = event.row;
@@ -134,29 +92,24 @@ class _PayslipDataTableState extends State<PayslipDataTable> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (ctx) => ContractDetail(
-              name: row.cells['Employee']!.value,
-              reference: row.cells['Reference']!.value,
-              department: row.cells['Department']!.value,
-              position: row.cells['Position']!.value,
+            builder: (ctx) => PayslipDetail(
+              batch: row.cells['Batch']!.value,
               startDate: row.cells['Start Date']!.value,
               endDate: row.cells['End Date']!.value,
-              salaryStructure: row.cells['Salary Structure']!.value,
-              contractType: row.cells['Contract Type']!.value,
-              schedule: row.cells['Schedule']!.value,
               status: row.cells['Status']!.value,
-              wageType: row.cells['Wage Type']!.value,
-              schedulePay: row.cells['Schedule Pay']!.value,
+              name: row.cells['Employee']!.value,
+              reference: row.cells['Reference']!.value,
+              contractRef: row.cells['Contract Reference']!.value,
+              structure: row.cells['Structure']!.value,
+              others: row.cells['Others']!.value,
               onDelete: () {
                 deleteRow(index);
               },
-              onUpdate: (updatedContract) {
-                final updatedContractMap = updatedContract.toMap();
-                final updatedContractData = ContractData.fromMap(updatedContractMap);
-                updateContract(index, updatedContractData);
+              onUpdate: (updatedPayslip) {
+                final updatedPayslipMap = updatedPayslip.toMap();
+                final updatedPayslipData = PayslipData.fromMap(updatedPayslipMap);
+                updatePayslip(index, updatedPayslipData);
               },
-              salary: row.cells['Salary']!.value,
-              note: row.cells['Note']!.value,
             ),
           ),
         );
