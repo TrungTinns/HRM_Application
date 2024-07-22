@@ -12,7 +12,7 @@ public class AxonConfig {
     public XStream xStream() {
         XStream xStream = new XStream();
         xStream.allowTypesByWildcard(new String[] {
-            "com.tdtu.employeeservice.**"
+            "com.tdtu.departmentservice.**"
         });
 //        xStream.processAnnotations(SkillCreatedEvent.class);
 //        xStream.processAnnotations(LevelDetailed.class);
