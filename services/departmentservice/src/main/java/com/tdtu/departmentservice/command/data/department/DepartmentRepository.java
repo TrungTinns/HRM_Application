@@ -25,9 +25,9 @@ public class DepartmentRepository {
 	public String save(Department e) throws InterruptedException, ExecutionException {		
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
-		skillMap.put("coachId", e.getName());
+		skillMap.put("name", e.getName());
 	    skillMap.put("managerId", e.getManagerId());
-	    skillMap.put("resume", e.getParentDepartmentId());
+	    skillMap.put("parentDepartmentId", e.getParentDepartmentId());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();
@@ -36,9 +36,9 @@ public class DepartmentRepository {
 	public String update(Department e) throws InterruptedException, ExecutionException {
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
-		skillMap.put("coachId", e.getName());
+		skillMap.put("name", e.getName());
 	    skillMap.put("managerId", e.getManagerId());
-	    skillMap.put("resume", e.getParentDepartmentId());
+	    skillMap.put("parentDepartmentId", e.getParentDepartmentId());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();
