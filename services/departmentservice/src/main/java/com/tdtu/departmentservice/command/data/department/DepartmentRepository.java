@@ -1,4 +1,4 @@
-package com.tdtu.employeeservice.command.data.employee;
+package com.tdtu.departmentservice.command.data.department;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,47 +19,26 @@ import com.google.firebase.cloud.FirestoreClient;
 import lombok.extern.slf4j.Slf4j;
 
 @Repository
-public class EmployeeRepository {
-	
-	private static final String COLLECTION_NAME = "Employee";
-	
-	public String save(Employee e) throws InterruptedException, ExecutionException {		
+public class DepartmentRepository {
+	private static final String COLLECTION_NAME = "Departments";
+		
+	public String save(Department e) throws InterruptedException, ExecutionException {		
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
-	    skillMap.put("firstName", e.getFirstName());
-	    skillMap.put("lastName", e.getLastName());
-	    skillMap.put("dateOfBirth", e.getDateOfBirth());
-	    skillMap.put("email", e.getEmail());
-	    skillMap.put("position", e.getPosition());
-	    skillMap.put("salary", e.getSalary());
-	    skillMap.put("department", e.getDepartment());
-	    skillMap.put("phone", e.getPhone());
-	    skillMap.put("img", e.getImg());
-	    skillMap.put("tags", e.getTags());
+		skillMap.put("coachId", e.getName());
 	    skillMap.put("managerId", e.getManagerId());
-	    skillMap.put("coachId", e.getCoachId());
-	    skillMap.put("resume", e.getResumeRef());
+	    skillMap.put("resume", e.getParentDepartmentId());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();
 	}
 
-	public String update(Employee e) throws InterruptedException, ExecutionException {
+	public String update(Department e) throws InterruptedException, ExecutionException {
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
-	    skillMap.put("firstName", e.getFirstName());
-	    skillMap.put("lastName", e.getLastName());
-	    skillMap.put("dateOfBirth", e.getDateOfBirth());
-	    skillMap.put("email", e.getEmail());
-	    skillMap.put("position", e.getPosition());
-	    skillMap.put("salary", e.getSalary());
-	    skillMap.put("department", e.getDepartment());
-	    skillMap.put("phone", e.getPhone());
-	    skillMap.put("img", e.getImg());
-	    skillMap.put("tags", e.getTags());
+		skillMap.put("coachId", e.getName());
 	    skillMap.put("managerId", e.getManagerId());
-	    skillMap.put("coachId", e.getCoachId());
-	    skillMap.put("resume", e.getResumeRef());
+	    skillMap.put("resume", e.getParentDepartmentId());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();
@@ -72,33 +51,32 @@ public class EmployeeRepository {
 		return "Sucessfully Delete " + id;
 	}
 
-	public Employee findById(String id) throws InterruptedException, ExecutionException {
+	public Department findById(String id) throws InterruptedException, ExecutionException {
 		Firestore db = FirestoreClient.getFirestore();
 		DocumentReference reference = db.collection(COLLECTION_NAME).document(id);
 		ApiFuture<DocumentSnapshot> future = reference.get();
 		DocumentSnapshot document = future.get();
 
-		Employee e;
+		Department e;
 		if (document.exists()) {
-			e = document.toObject(Employee.class);
+			e = document.toObject(Department.class);
 			e.setId(document.getId());
 			return e;
 		}
 		return null;
 	}
 
-	public List<Employee> findAll() throws InterruptedException, ExecutionException {
+	public List<Department> findAll() throws InterruptedException, ExecutionException {
 		Firestore db = FirestoreClient.getFirestore();
 		ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME).get();
 
-		List<Employee> employeeList = new ArrayList<>();
+		List<Department> DepartmentList = new ArrayList<>();
 		for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-			Employee e = document.toObject(Employee.class);
+			Department e = document.toObject(Department.class);
 			e.setId(document.getId());
-			employeeList.add(e);
+			DepartmentList.add(e);
 		}
 
-		return employeeList;
+		return DepartmentList;
 	}
 }
-

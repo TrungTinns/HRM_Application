@@ -1,10 +1,10 @@
 spring:
   application:
-    name: employee_service
+    name: department_service
 
     
 server:
-  port: 9001
+  port: 9002
 
 eureka:
   client:

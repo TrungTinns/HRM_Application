@@ -50,7 +50,6 @@ public class EmployeeCommandController {
         ResumeRequestModel resumeModel = new ResumeRequestModel();
         resumeModel.setExperience(model.getResume().getExperience());
         resumeModel.setSkillTypes(model.getResume().getSkillTypes());
-        log.info(resumeModel.toString());
         try {
             CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
                 try {
