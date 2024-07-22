@@ -9,11 +9,6 @@ services:
       - "8761:8761"
     networks:
       - hrm-network
-    environment:
-      - EUREKA_SERVER=http://discovery-server:8761/eureka
-      - AXON_SERVER_HOST=axon-server
-      - AXON_SERVER_PORT=8124
-      - FIREBASE_CONFIG_PATH=/app/src/main/resources/EmployeeServiceAccessKey.json
 
   api-gateway:
     build:
