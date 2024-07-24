@@ -28,19 +28,31 @@ public class EmployeeAggregate {
 
 	@AggregateIdentifier
 	private String id;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private Date dateOfBirth;
-	private String position;
-	private Double salary;
+	private String name;
+	private String mail;
+	private String mobile;
 	private String department;
-	private String phone;
-	private String img;
-	private List<String> tags;
 	private String managerId;
-	private String coachId;
-	private DocumentReference resume;
+	private boolean isManager;
+	private String workLocation;
+	private String schedule;
+	private String salaryStructure;
+	private String contractType;
+	private Double cost;
+	private String personalAddress;
+	private String personalMail;
+	private String personalMobile;
+	private String certification;
+	private String school;
+	private String maritalStatus;
+	private int child;
+	private String nationality;
+	private String idNum;
+	private String ssNum;
+	private String passport;
+	private String sex;
+	private Date birthDate;
+	private String birthPlace;
 
 	// CREATE EVENT
 	@CommandHandler
@@ -53,19 +65,32 @@ public class EmployeeAggregate {
 	@EventSourcingHandler
 	public void on(EmployeeCreatedEvent event) {
 		this.id = event.getId();
-		this.firstName = event.getFirstName();
-		this.lastName = event.getLastName();
-		this.email = event.getEmail();
-		this.dateOfBirth = event.getDateOfBirth();
-		this.position = event.getPosition();
-		this.salary = event.getSalary();
-		this.department = event.getDepartment();
-		this.phone = event.getPhone();
-		this.img = event.getImg();
-		this.tags = event.getTags();
+		this.name = event.getFirstName();
+		this.mail = event.getLastName();
+		this.mobile = event.getEmail();
+		this.department = event.getDateOfBirth();
+		this.managerId = event.getPosition();
+		this.isManager = event.getSalary();
+		this.workLocation = event.getDepartment();
+		this.schedule = event.getPhone();
+		this.salaryStructure = event.getImg();
+		this.contractType = event.getTags();
+		this.cost = event.getManagerId();
+		this.personalAddress = event.getCoachId();
+		this.personalMail = event.getResume();
+		this.personalMobile = event.getId();
+		this.certification = event.getFirstName();
+		this.school = event.getLastName();
+		this.maritalStatus = event.getEmail();
+		this.child = event.getDateOfBirth();
+		this.nationality = event.getPosition();
+		this.idNum = event.getSalary();
+		this.ssNum = event.getDepartment();
+		this.passport = event.getPhone();
+		this.sex = event.getImg();
+		this.birthDate = event.getTags();
 		this.managerId = event.getManagerId();
-		this.coachId = event.getCoachId();
-		this.resume = event.getResume();
+		this.birthPlace = event.getCoachId();
 	}
 
 	// UPDATED EVENT
@@ -79,19 +104,32 @@ public class EmployeeAggregate {
 	@EventSourcingHandler
 	public void on(EmployeeUpdatedEvent event) {
 		this.id = event.getId();
-		this.firstName = event.getFirstName();
-		this.lastName = event.getLastName();
-		this.email = event.getEmail();
-		this.dateOfBirth = event.getDateOfBirth();
-		this.position = event.getPosition();
-		this.salary = event.getSalary();
-		this.department = event.getDepartment();
-		this.phone = event.getPhone();
-		this.img = event.getImg();
-		this.tags = event.getTags();
+		this.name = event.getFirstName();
+		this.mail = event.getLastName();
+		this.mobile = event.getEmail();
+		this.department = event.getDateOfBirth();
+		this.managerId = event.getPosition();
+		this.isManager = event.getSalary();
+		this.workLocation = event.getDepartment();
+		this.schedule = event.getPhone();
+		this.salaryStructure = event.getImg();
+		this.contractType = event.getTags();
+		this.cost = event.getManagerId();
+		this.personalAddress = event.getCoachId();
+		this.personalMail = event.getResume();
+		this.personalMobile = event.getId();
+		this.certification = event.getFirstName();
+		this.school = event.getLastName();
+		this.maritalStatus = event.getEmail();
+		this.child = event.getDateOfBirth();
+		this.nationality = event.getPosition();
+		this.idNum = event.getSalary();
+		this.ssNum = event.getDepartment();
+		this.passport = event.getPhone();
+		this.sex = event.getImg();
+		this.birthDate = event.getTags();
 		this.managerId = event.getManagerId();
-		this.coachId = event.getCoachId();
-		this.resume = event.getResume();
+		this.birthPlace = event.getCoachId();
 	}
 
 	// DELETE EVENT
