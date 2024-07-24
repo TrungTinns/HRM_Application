@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import com.tdtu.employeeservice.command.data.employee.Employee;
 import com.tdtu.employeeservice.command.data.employee.EmployeeService;
 import com.tdtu.employeeservice.query.model.EmployeeResponseModel;
-import com.tdtu.employeeservice.query.model.ResumeResponseModel;
 import com.tdtu.employeeservice.query.queries.employee.GetAllEmployeesQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeeQuery;
 
@@ -31,11 +30,6 @@ public class EmployeeProjection {
 		if (empOptional.isPresent()) {
 			Employee employee = empOptional.get();
 			BeanUtils.copyProperties(employee, model);
-			ResumeResponseModel resume = new ResumeResponseModel();
-			resume.setId(employee.getResumeRef().getId());
-			resume.setExperience(employee.getResume().getExperience());
-			resume.setSkillTypes(employee.getResume().getSkillTypes());
-			model.setResume(resume);
 		}
 		return model;
 	}
@@ -48,11 +42,6 @@ public class EmployeeProjection {
 		for (Employee employee : lstEntity) {
 			EmployeeResponseModel model = new EmployeeResponseModel();
 			BeanUtils.copyProperties(employee, model);
-			ResumeResponseModel resume = new ResumeResponseModel();
-			resume.setId(employee.getResumeRef().getId());
-			resume.setExperience(employee.getResume().getExperience());
-			resume.setSkillTypes(employee.getResume().getSkillTypes());
-			model.setResume(resume);
 	        lstEmp.add(model);
 		}
 		return lstEmp;

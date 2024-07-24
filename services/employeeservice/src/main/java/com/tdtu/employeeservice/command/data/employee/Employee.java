@@ -14,6 +14,7 @@ import lombok.Setter;
 public class Employee {
 	private String id;
 	private String name;
+	private String role;
 	private String mail;
 	private String mobile;
 	private String department;
@@ -27,6 +28,8 @@ public class Employee {
 	private String personalAddress;
 	private String personalMail;
 	private String personalMobile;
+	private String relativeName;
+	private String relativeMobile;
 	private String certification;
 	private String school;
 	private String maritalStatus;

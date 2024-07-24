@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.google.firebase.cloud.FirestoreClient;
 import com.tdtu.employeeservice.command.data.employee.Employee;
 import com.tdtu.employeeservice.command.data.employee.EmployeeService;
-import com.tdtu.employeeservice.command.event.skill.SkillEventsHandler;
 
 import lombok.extern.slf4j.Slf4j;
 

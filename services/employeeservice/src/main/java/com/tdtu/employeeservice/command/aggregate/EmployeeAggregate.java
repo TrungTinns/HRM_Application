@@ -65,32 +65,31 @@ public class EmployeeAggregate {
 	@EventSourcingHandler
 	public void on(EmployeeCreatedEvent event) {
 		this.id = event.getId();
-		this.name = event.getFirstName();
-		this.mail = event.getLastName();
-		this.mobile = event.getEmail();
-		this.department = event.getDateOfBirth();
-		this.managerId = event.getPosition();
-		this.isManager = event.getSalary();
-		this.workLocation = event.getDepartment();
-		this.schedule = event.getPhone();
-		this.salaryStructure = event.getImg();
-		this.contractType = event.getTags();
-		this.cost = event.getManagerId();
-		this.personalAddress = event.getCoachId();
-		this.personalMail = event.getResume();
-		this.personalMobile = event.getId();
-		this.certification = event.getFirstName();
-		this.school = event.getLastName();
-		this.maritalStatus = event.getEmail();
-		this.child = event.getDateOfBirth();
-		this.nationality = event.getPosition();
-		this.idNum = event.getSalary();
-		this.ssNum = event.getDepartment();
-		this.passport = event.getPhone();
-		this.sex = event.getImg();
-		this.birthDate = event.getTags();
+		this.name = event.getName();
+		this.mail = event.getMail();
+		this.mobile = event.getMobile();
+		this.department = event.getDepartment();
 		this.managerId = event.getManagerId();
-		this.birthPlace = event.getCoachId();
+		this.isManager = event.isManager();
+		this.workLocation = event.getWorkLocation();
+		this.schedule = event.getSchedule();
+		this.salaryStructure = event.getSalaryStructure();
+		this.contractType = event.getContractType();
+		this.cost = event.getCost();
+		this.personalAddress = event.getPersonalAddress();
+		this.personalMail = event.getPersonalMail();
+		this.personalMobile = event.getPersonalMobile();
+		this.certification = event.getCertification();
+		this.school = event.getSchool();
+		this.maritalStatus = event.getMaritalStatus();
+		this.child = event.getChild();
+		this.nationality = event.getNationality();
+		this.idNum = event.getIdNum();
+		this.ssNum = event.getSsNum();
+		this.passport = event.getPassport();
+		this.sex = event.getSex();
+		this.birthDate = event.getBirthDate();
+		this.birthPlace = event.getBirthPlace();
 	}
 
 	// UPDATED EVENT
@@ -104,32 +103,31 @@ public class EmployeeAggregate {
 	@EventSourcingHandler
 	public void on(EmployeeUpdatedEvent event) {
 		this.id = event.getId();
-		this.name = event.getFirstName();
-		this.mail = event.getLastName();
-		this.mobile = event.getEmail();
-		this.department = event.getDateOfBirth();
-		this.managerId = event.getPosition();
-		this.isManager = event.getSalary();
-		this.workLocation = event.getDepartment();
-		this.schedule = event.getPhone();
-		this.salaryStructure = event.getImg();
-		this.contractType = event.getTags();
-		this.cost = event.getManagerId();
-		this.personalAddress = event.getCoachId();
-		this.personalMail = event.getResume();
-		this.personalMobile = event.getId();
-		this.certification = event.getFirstName();
-		this.school = event.getLastName();
-		this.maritalStatus = event.getEmail();
-		this.child = event.getDateOfBirth();
-		this.nationality = event.getPosition();
-		this.idNum = event.getSalary();
-		this.ssNum = event.getDepartment();
-		this.passport = event.getPhone();
-		this.sex = event.getImg();
-		this.birthDate = event.getTags();
+		this.name = event.getName();
+		this.mail = event.getMail();
+		this.mobile = event.getMobile();
+		this.department = event.getDepartment();
 		this.managerId = event.getManagerId();
-		this.birthPlace = event.getCoachId();
+		this.isManager = event.isManager();
+		this.workLocation = event.getWorkLocation();
+		this.schedule = event.getSchedule();
+		this.salaryStructure = event.getSalaryStructure();
+		this.contractType = event.getContractType();
+		this.cost = event.getCost();
+		this.personalAddress = event.getPersonalAddress();
+		this.personalMail = event.getPersonalMail();
+		this.personalMobile = event.getPersonalMobile();
+		this.certification = event.getCertification();
+		this.school = event.getSchool();
+		this.maritalStatus = event.getMaritalStatus();
+		this.child = event.getChild();
+		this.nationality = event.getNationality();
+		this.idNum = event.getIdNum();
+		this.ssNum = event.getSsNum();
+		this.passport = event.getPassport();
+		this.sex = event.getSex();
+		this.birthDate = event.getBirthDate();
+		this.birthPlace = event.getBirthPlace();
 	}
 
 	// DELETE EVENT
