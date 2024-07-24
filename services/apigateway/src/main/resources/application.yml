@@ -11,10 +11,6 @@ spring:
           uri: ${EMPLOYEE_SERVICE_URL}
           predicates:
             - Path=/api/v1/employee/**
-        - id: department-service
-          uri: ${DEPARTMENT_SERVICE_URL}
-          predicates:
-            - Path=/api/v1/department/**
             
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
