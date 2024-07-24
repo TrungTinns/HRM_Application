@@ -28,47 +28,47 @@ public class DepartmentAggregate {
 	private String parentDepartmentId;
 	
 	// CREATE EVENT
-		@CommandHandler
-		public DepartmentAggregate(CreateDepartmentCommand createDepartmentCommand) {
-			DepartmentCreatedEvent DepartmentCreatedEvent = new DepartmentCreatedEvent();
-			BeanUtils.copyProperties(createDepartmentCommand, DepartmentCreatedEvent);
-			AggregateLifecycle.apply(DepartmentCreatedEvent);
-		}
+	@CommandHandler
+	public DepartmentAggregate(CreateDepartmentCommand createDepartmentCommand) {
+		DepartmentCreatedEvent DepartmentCreatedEvent = new DepartmentCreatedEvent();
+		BeanUtils.copyProperties(createDepartmentCommand, DepartmentCreatedEvent);
+		AggregateLifecycle.apply(DepartmentCreatedEvent);
+	}
 
-		@EventSourcingHandler
-		public void on(DepartmentCreatedEvent event) {
-			this.id = event.getId();
-			this.name = event.getManagerId();
-			this.managerId = event.getManagerId();
-			this.parentDepartmentId = event.getParentDepartmentId();
-		}
+	@EventSourcingHandler
+	public void on(DepartmentCreatedEvent event) {
+		this.id = event.getId();
+		this.name = event.getManagerId();
+		this.managerId = event.getManagerId();
+		this.parentDepartmentId = event.getParentDepartmentId();
+	}
 
-		// UPDATED EVENT
-		@CommandHandler
-		public void handle(UpdateDepartmentCommand updateDepartmentCommand) {
-			DepartmentUpdatedEvent DepartmentUpdatedEvent = new DepartmentUpdatedEvent();
-			BeanUtils.copyProperties(updateDepartmentCommand, DepartmentUpdatedEvent);
-			AggregateLifecycle.apply(DepartmentUpdatedEvent);
-		}
+	// UPDATED EVENT
+	@CommandHandler
+	public void handle(UpdateDepartmentCommand updateDepartmentCommand) {
+		DepartmentUpdatedEvent DepartmentUpdatedEvent = new DepartmentUpdatedEvent();
+		BeanUtils.copyProperties(updateDepartmentCommand, DepartmentUpdatedEvent);
+		AggregateLifecycle.apply(DepartmentUpdatedEvent);
+	}
 
-		@EventSourcingHandler
-		public void on(DepartmentUpdatedEvent event) {
-			this.id = event.getId();
-			this.name = event.getManagerId();
-			this.managerId = event.getManagerId();
-			this.parentDepartmentId = event.getParentDepartmentId();
-		}
+	@EventSourcingHandler
+	public void on(DepartmentUpdatedEvent event) {
+		this.id = event.getId();
+		this.name = event.getManagerId();
+		this.managerId = event.getManagerId();
+		this.parentDepartmentId = event.getParentDepartmentId();
+	}
 
-		// DELETE EVENT
-		@CommandHandler
-		public void handle(DeleteDepartmentCommand deleteDepartmentCommand) {
-			DepartmentDeletedEvent DepartmentDeletedEvent = new DepartmentDeletedEvent();
-			BeanUtils.copyProperties(deleteDepartmentCommand, DepartmentDeletedEvent);
-			AggregateLifecycle.apply(DepartmentDeletedEvent);
-		}
+	// DELETE EVENT
+	@CommandHandler
+	public void handle(DeleteDepartmentCommand deleteDepartmentCommand) {
+		DepartmentDeletedEvent DepartmentDeletedEvent = new DepartmentDeletedEvent();
+		BeanUtils.copyProperties(deleteDepartmentCommand, DepartmentDeletedEvent);
+		AggregateLifecycle.apply(DepartmentDeletedEvent);
+	}
 
-		@EventSourcingHandler
-		public void on(DepartmentDeletedEvent event) {
-			this.id = event.getId();
-		}
+	@EventSourcingHandler
+	public void on(DepartmentDeletedEvent event) {
+		this.id = event.getId();
+	}
 }

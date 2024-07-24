@@ -21,10 +21,6 @@ public class Employee {
 	private String managerId;
 	private boolean isManager;
 	private String workLocation;
-	private String schedule;
-	private String salaryStructure;
-	private String contractType;
-	private Double cost;
 	private String personalAddress;
 	private String personalMail;
 	private String personalMobile;
