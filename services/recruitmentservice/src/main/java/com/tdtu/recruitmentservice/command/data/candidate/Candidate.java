@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import com.google.cloud.firestore.DocumentReference;
-import com.tdtu.employeeservice.command.data.contract.Contract;
-import com.tdtu.employeeservice.util.FirestoreUtil;
+import com.tdtu.recruitmentservice.command.data.contract.Contract;
+import com.tdtu.recruitmentservice.ulti.FirestoreUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
