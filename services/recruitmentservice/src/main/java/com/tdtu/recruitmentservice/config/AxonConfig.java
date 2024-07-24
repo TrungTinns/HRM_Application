@@ -13,7 +13,7 @@ public class AxonConfig {
 	    public XStream xStream() {
 	        XStream xStream = new XStream();
 	        xStream.allowTypesByWildcard(new String[] {
-	            "com.tdtu.employeeservice.**"
+	            "com.tdtu.recruitmentservice.**"
 	        });
 	        xStream.registerConverter(new DocumentReferenceConverter());
 	        return xStream;

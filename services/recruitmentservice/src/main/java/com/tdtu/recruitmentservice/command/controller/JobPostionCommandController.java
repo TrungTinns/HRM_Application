@@ -18,7 +18,7 @@ import com.tdtu.recruitmentservice.command.command.jobPosition.UpdateJobPosition
 import com.tdtu.recruitmentservice.command.model.JobPositionRequestModel;
 
 @RestController
-@RequestMapping("/api/v1/employee/jobPosition")
+@RequestMapping("/api/v1/recruitment/jobPosition")
 public class JobPostionCommandController {
 	@Autowired
 	private CommandGateway commandGateway;
