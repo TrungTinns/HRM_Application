@@ -1,6 +1,11 @@
 package com.tdtu.employeeservice.command.data.employee;
 
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+
+import com.google.cloud.firestore.DocumentReference;
+import com.tdtu.employeeservice.command.data.contract.Contract;
+import com.tdtu.employeeservice.util.FirestoreUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,4 +42,14 @@ public class Employee {
 	private String sex;
 	private Date birthDate;
 	private String birthPlace;
+	private DocumentReference contract;
+	
+	public Contract getContract() throws InterruptedException, ExecutionException {
+		return FirestoreUtil.getContract(contract);
+	}
+	
+	public DocumentReference getContractRef() {
+		return this.contract;
+	}
+	
 }

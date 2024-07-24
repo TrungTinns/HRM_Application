@@ -2,6 +2,8 @@ package com.tdtu.employeeservice.query.model;
 
 import java.util.Date;
 
+import com.tdtu.employeeservice.command.data.contract.Contract;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +25,6 @@ public class EmployeeResponseModel {
 	private String managerId;
 	private boolean isManager;
 	private String workLocation;
-	private String schedule;
-	private String salaryStructure;
-	private String contractType;
-	private Double cost;
 	private String personalAddress;
 	private String personalMail;
 	private String personalMobile;
@@ -43,4 +41,5 @@ public class EmployeeResponseModel {
 	private String sex;
 	private Date birthDate;
 	private String birthPlace;
+	private Contract contract;
 }

@@ -35,10 +35,6 @@ public class EmployeeAggregate {
 	private String managerId;
 	private boolean isManager;
 	private String workLocation;
-	private String schedule;
-	private String salaryStructure;
-	private String contractType;
-	private Double cost;
 	private String personalAddress;
 	private String personalMail;
 	private String personalMobile;
@@ -53,6 +49,7 @@ public class EmployeeAggregate {
 	private String sex;
 	private Date birthDate;
 	private String birthPlace;
+	private DocumentReference contract;
 
 	// CREATE EVENT
 	@CommandHandler
@@ -72,10 +69,6 @@ public class EmployeeAggregate {
 		this.managerId = event.getManagerId();
 		this.isManager = event.isManager();
 		this.workLocation = event.getWorkLocation();
-		this.schedule = event.getSchedule();
-		this.salaryStructure = event.getSalaryStructure();
-		this.contractType = event.getContractType();
-		this.cost = event.getCost();
 		this.personalAddress = event.getPersonalAddress();
 		this.personalMail = event.getPersonalMail();
 		this.personalMobile = event.getPersonalMobile();
@@ -90,6 +83,7 @@ public class EmployeeAggregate {
 		this.sex = event.getSex();
 		this.birthDate = event.getBirthDate();
 		this.birthPlace = event.getBirthPlace();
+		this.contract = event.getContract();
 	}
 
 	// UPDATED EVENT
@@ -110,10 +104,6 @@ public class EmployeeAggregate {
 		this.managerId = event.getManagerId();
 		this.isManager = event.isManager();
 		this.workLocation = event.getWorkLocation();
-		this.schedule = event.getSchedule();
-		this.salaryStructure = event.getSalaryStructure();
-		this.contractType = event.getContractType();
-		this.cost = event.getCost();
 		this.personalAddress = event.getPersonalAddress();
 		this.personalMail = event.getPersonalMail();
 		this.personalMobile = event.getPersonalMobile();
@@ -128,6 +118,7 @@ public class EmployeeAggregate {
 		this.sex = event.getSex();
 		this.birthDate = event.getBirthDate();
 		this.birthPlace = event.getBirthPlace();
+		this.contract = event.getContract();
 	}
 
 	// DELETE EVENT

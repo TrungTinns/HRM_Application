@@ -26,19 +26,15 @@ public class EmployeeRepository {
 	public String save(Employee e) throws InterruptedException, ExecutionException {		
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
-	    skillMap.put("id", e.getId());
+		
 	    skillMap.put("name", e.getName());
 	    skillMap.put("role", e.getRole());
-	    skillMap.put("email", e.getMail());
+	    skillMap.put("mail", e.getMail());
 	    skillMap.put("mobile", e.getMobile());
 	    skillMap.put("department", e.getDepartment());
 	    skillMap.put("managerId", e.getManagerId());
 	    skillMap.put("isManager", e.isManager());
 	    skillMap.put("workLocation", e.getWorkLocation());
-	    skillMap.put("schedule", e.getSchedule());
-	    skillMap.put("salaryStructure", e.getSalaryStructure());
-	    skillMap.put("contractType", e.getContractType());
-	    skillMap.put("cost", e.getCost());
 	    skillMap.put("personalAddress", e.getPersonalAddress());
 	    skillMap.put("personalMail", e.getPersonalMail());
 	    skillMap.put("personalMobile", e.getPersonalMobile());
@@ -55,6 +51,7 @@ public class EmployeeRepository {
 	    skillMap.put("sex", e.getSex());
 	    skillMap.put("birthDate", e.getBirthDate());
 	    skillMap.put("birthPlace", e.getBirthPlace());
+	    skillMap.put("contract", e.getContractRef());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();
@@ -63,19 +60,14 @@ public class EmployeeRepository {
 	public String update(Employee e) throws InterruptedException, ExecutionException {
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
-		skillMap.put("id", e.getId());
 	    skillMap.put("name", e.getName());
 	    skillMap.put("role", e.getRole());
-	    skillMap.put("email", e.getMail());
+	    skillMap.put("mail", e.getMail());
 	    skillMap.put("mobile", e.getMobile());
 	    skillMap.put("department", e.getDepartment());
 	    skillMap.put("managerId", e.getManagerId());
 	    skillMap.put("isManager", e.isManager());
-	    skillMap.put("workLocation", e.getWorkLocation());
-	    skillMap.put("schedule", e.getSchedule());
-	    skillMap.put("salaryStructure", e.getSalaryStructure());
-	    skillMap.put("contractType", e.getContractType());
-	    skillMap.put("cost", e.getCost());
+	    skillMap.put("workLocation", e.getWorkLocation());;
 	    skillMap.put("personalAddress", e.getPersonalAddress());
 	    skillMap.put("personalMail", e.getPersonalMail());
 	    skillMap.put("personalMobile", e.getPersonalMobile());
@@ -92,6 +84,7 @@ public class EmployeeRepository {
 	    skillMap.put("sex", e.getSex());
 	    skillMap.put("birthDate", e.getBirthDate());
 	    skillMap.put("birthPlace", e.getBirthPlace());
+	    skillMap.put("contract", e.getContractRef());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();

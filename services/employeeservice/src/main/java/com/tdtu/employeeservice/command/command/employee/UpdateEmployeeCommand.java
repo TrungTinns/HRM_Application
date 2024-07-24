@@ -29,10 +29,6 @@ public class UpdateEmployeeCommand {
 	private String managerId;
 	private boolean isManager;
 	private String workLocation;
-	private String schedule;
-	private String salaryStructure;
-	private String contractType;
-	private Double cost;
 	private String personalAddress;
 	private String personalMail;
 	private String personalMobile;
@@ -49,4 +45,5 @@ public class UpdateEmployeeCommand {
 	private String sex;
 	private Date birthDate;
 	private String birthPlace;
+	private DocumentReference contract;
 }

@@ -35,7 +35,7 @@ public class ContractCommandController {
 					 model.getEndDate()
 			);
 	         commandGateway.sendAndWait(command);
-	         return "Added an Contract with ID: " + command.getId();
+	         return command.getId();
 	    }
 
 
@@ -51,7 +51,7 @@ public class ContractCommandController {
 					model.getEndDate()
 			);
 			commandGateway.sendAndWait(command);
-			return "Updated an Contract with ID: " + model.getId().toString();
+			return model.getId().toString();
 		}
 
 		@DeleteMapping("/{id}")
