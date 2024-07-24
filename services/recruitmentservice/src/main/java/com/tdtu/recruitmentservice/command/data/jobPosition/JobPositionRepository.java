@@ -1,4 +1,4 @@
-package com.tdtu.recruitmentservice.comand.data.jobPosition;
+package com.tdtu.recruitmentservice.command.data.jobPosition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +16,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Repository
-@Slf4j
 public class JobPositionRepository {
     private static final String COLLECTION_NAME = "JobPositions";
 
@@ -27,8 +24,6 @@ public class JobPositionRepository {
         Firestore db = FirestoreClient.getFirestore();
         Map<String, Object> jobPositionMap = new HashMap<>();
         jobPositionMap.put("name", e.getName());
-        jobPositionMap.put("managerId", e.getManagerId());
-        jobPositionMap.put("parentDepartmentId", e.getParentDepartmentId());
         jobPositionMap.put("department", e.getDepartment());
         jobPositionMap.put("jobLocation", e.getJobLocation());
         jobPositionMap.put("mailAlias", e.getMailAlias());
@@ -47,8 +42,6 @@ public class JobPositionRepository {
         Firestore db = FirestoreClient.getFirestore();
         Map<String, Object> jobPositionMap = new HashMap<>();
         jobPositionMap.put("name", e.getName());
-        jobPositionMap.put("managerId", e.getManagerId());
-        jobPositionMap.put("parentDepartmentId", e.getParentDepartmentId());
         jobPositionMap.put("department", e.getDepartment());
         jobPositionMap.put("jobLocation", e.getJobLocation());
         jobPositionMap.put("mailAlias", e.getMailAlias());

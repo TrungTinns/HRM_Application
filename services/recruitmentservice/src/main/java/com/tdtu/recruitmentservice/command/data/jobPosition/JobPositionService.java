@@ -1,4 +1,4 @@
-package com.tdtu.recruitmentservice.comand.data.jobPosition;
+package com.tdtu.recruitmentservice.command.data.jobPosition;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

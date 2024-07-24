@@ -1,19 +1,21 @@
-package com.tdtu.recruitmentservice.comand.data.jobPosition;
+package com.tdtu.recruitmentservice.command.model;
+
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class JobPosition {
+@ToString
+public class JobPositionRequestModel {
 	private String id;
 	private String name;
-	private String managerId;
-	private String parentDepartmentId;
 	private String department;
 	private String jobLocation;
 	private String mailAlias;

@@ -1,4 +1,4 @@
-package com.tdtu.recruitmentservice.comand.data.candidate;
+package com.tdtu.recruitmentservice.command.data.candidate;
 
 import java.util.ArrayList;
 import java.util.List;
