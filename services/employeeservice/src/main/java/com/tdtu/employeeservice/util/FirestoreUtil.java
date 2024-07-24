@@ -25,36 +25,4 @@ public class FirestoreUtil {
 		}
 	}
 
-	public static Experience getExperience(DocumentReference documentReference)
-			throws InterruptedException, ExecutionException {
-		Firestore db = FirestoreClient.getFirestore();
-		ApiFuture<DocumentSnapshot> future = documentReference.get();
-		DocumentSnapshot document = future.get();
-		if (document.exists()) {
-			Experience r = document.toObject(Experience.class);
-			r.setId(document.getId());
-			return r;
-		} else {
-			throw new RuntimeException("Experience document not found for reference: " + documentReference.getPath());
-		}
-	}
-
-
-	public static Level getLevel(DocumentReference documentReference)
-			throws InterruptedException, ExecutionException {
-		Firestore db = FirestoreClient.getFirestore();
-		ApiFuture<DocumentSnapshot> future = documentReference.get();
-		DocumentSnapshot document = future.get();
-		if (document.exists()) {
-			return document.toObject(Level.class);
-		} else {
-			throw new RuntimeException("Level document not found for reference: " + documentReference.getPath());
-		}
-	}
-	
-	 public static DocumentReference getDocumentReference(String documentPath) {
-	        Firestore firestore = FirestoreClient.getFirestore();
-	        return firestore.document(documentPath);
-	  }
-
 }
