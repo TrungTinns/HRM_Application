@@ -21,8 +21,6 @@ public class FirebaseInitialization {
 	        throw new IllegalArgumentException("FIREBASE_CONFIG_PATH environment variable not set");
 	    }
 
-	    System.out.println("FIREBASE_CONFIG_PATH: " + firebaseConfigPath);
-
 	    try (FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath)) {
 	        FirebaseOptions options = new FirebaseOptions.Builder()
 	                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
