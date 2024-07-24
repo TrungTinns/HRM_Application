@@ -1,10 +1,10 @@
-package com.tdtu.recruitmentservice.command.data.candidate;
+package com.tdtu.recruitmentservice.comand.data.candidate;
 
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import com.google.cloud.firestore.DocumentReference;
-import com.tdtu.recruitmentservice.command.data.contract.Contract;
+import com.tdtu.recruitmentservice.comand.data.contract.Contract;
 import com.tdtu.recruitmentservice.ulti.FirestoreUtil;
 
 import lombok.AllArgsConstructor;

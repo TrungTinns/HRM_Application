@@ -1,4 +1,4 @@
-package com.tdtu.recruitmentservice.command.data.contract;
+package com.tdtu.recruitmentservice.comand.data.contract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
