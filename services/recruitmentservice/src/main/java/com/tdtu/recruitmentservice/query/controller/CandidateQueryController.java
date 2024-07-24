@@ -21,20 +21,20 @@ public class CandidateQueryController {
 	private QueryGateway queryGateway;
 
 	@GetMapping("/{id}")
-	public CandidateResponseModel getContractDetail(@PathVariable String id) {
-		GetCandidateQuery getContractQuery = new GetCandidateQuery();
-		getContractQuery.setId(id);
+	public CandidateResponseModel getCandidateDetail(@PathVariable String id) {
+		GetCandidateQuery getCandidateQuery = new GetCandidateQuery();
+		getCandidateQuery.setId(id);
 
 		CandidateResponseModel empResponseModel = queryGateway
-				.query(getContractQuery, ResponseTypes.instanceOf(CandidateResponseModel.class)).join();
+				.query(getCandidateQuery, ResponseTypes.instanceOf(CandidateResponseModel.class)).join();
 		return empResponseModel;
 	}
 
 	@GetMapping
-	public List<CandidateResponseModel> getAllContracts() {
-		GetAllCandidatesQuery getAllContractsQuery = new GetAllCandidatesQuery();
+	public List<CandidateResponseModel> getAllCandidates() {
+		GetAllCandidatesQuery getAllCandidatesQuery = new GetAllCandidatesQuery();
 		List<CandidateResponseModel> lstEmp = queryGateway
-				.query(getAllContractsQuery, ResponseTypes.multipleInstancesOf(CandidateResponseModel.class)).join();
+				.query(getAllCandidatesQuery, ResponseTypes.multipleInstancesOf(CandidateResponseModel.class)).join();
 		return lstEmp;
 	}
 }

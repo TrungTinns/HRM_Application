@@ -1,4 +1,6 @@
-package com.tdtu.recruitmentservice.command.model;
+package com.tdtu.recruitmentservice.command.command.jobPosition;
+
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +13,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class JobPositionRequestModel {
+public class UpdateJobPositionCommand {
+	@TargetAggregateIdentifier
 	private String id;
 	private String name;
 	private String department;
