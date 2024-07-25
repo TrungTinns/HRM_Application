@@ -21,6 +21,9 @@ import com.tdtu.recruitmentservice.command.data.candidate.CandidateService;
 import com.tdtu.recruitmentservice.command.model.RecruitmentRequestModel;
 import com.tdtu.recruitmentservice.kafka.KafkaProducer;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/recruitment")
 public class RecruitmentCommandController {
@@ -67,6 +70,7 @@ public class RecruitmentCommandController {
 		Candidate candidate = candidateService.findById(candidateId);
 		if (candidate != null) {
 			kafkaProducer.sendMessage(candidate);
+			return "Candidate offered with ID: " + candidateId;
         }
 		return "Not found candidate with ID: " + candidateId;
 	}
