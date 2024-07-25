@@ -16,7 +16,7 @@ import com.tdtu.recruitmentservice.query.queries.recruitment.GetRecruitmentQuery
 
 
 @RestController
-@RequestMapping("/api/v1/recruitment/")
+@RequestMapping("/api/v1/recruitment")
 public class RecruitmentQueryController {
 	@Autowired
 	private QueryGateway queryGateway;

@@ -18,7 +18,7 @@ import com.tdtu.recruitmentservice.command.command.recruitment.UpdateRecruitment
 import com.tdtu.recruitmentservice.command.model.RecruitmentRequestModel;
 
 @RestController
-@RequestMapping("/api/v1/recruitment/")
+@RequestMapping("/api/v1/recruitment")
 public class RecruitmentCommandController {
 	@Autowired
 	private CommandGateway commandGateway;
