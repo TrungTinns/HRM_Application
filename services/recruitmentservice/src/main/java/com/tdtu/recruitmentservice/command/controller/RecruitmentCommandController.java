@@ -21,20 +21,11 @@ import com.tdtu.recruitmentservice.command.data.candidate.CandidateService;
 import com.tdtu.recruitmentservice.command.model.RecruitmentRequestModel;
 import com.tdtu.recruitmentservice.kafka.KafkaProducer;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/recruitment")
 public class RecruitmentCommandController {
 	@Autowired
 	private CommandGateway commandGateway;
-	
-	@Autowired
-    private KafkaProducer kafkaProducer;
-	
-	@Autowired
-	private CandidateService candidateService;
 	
 	 @PostMapping
 	 public String addRecruitment(@RequestBody RecruitmentRequestModel model) {
@@ -63,17 +54,5 @@ public class RecruitmentCommandController {
 	public String deleteRecruitment(@PathVariable String id) {
 		commandGateway.sendAndWait(new DeleteRecruitmentCommand(id));
 		return "Deleted an Recruitment with ID: " + id;
-	}
-	
-	@PostMapping("/{candidateId}")
-	public String offerCandidate(@PathVariable String candidateId) throws InterruptedException, ExecutionException {
-		Candidate candidate = candidateService.findById(candidateId);
-		if (candidate != null) {
-			kafkaProducer.sendMessage(candidate);
-			return "Candidate offered with ID: " + candidateId;
-        }
-		return "Not found candidate with ID: " + candidateId;
-	}
-	
-	
+	}	
 }

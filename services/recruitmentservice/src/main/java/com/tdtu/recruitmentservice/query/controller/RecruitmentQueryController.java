@@ -1,6 +1,7 @@
 package com.tdtu.recruitmentservice.query.controller;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tdtu.recruitmentservice.command.data.candidate.Candidate;
+import com.tdtu.recruitmentservice.command.data.candidate.CandidateService;
+import com.tdtu.recruitmentservice.kafka.KafkaProducer;
 import com.tdtu.recruitmentservice.query.model.RecruitmentResponseModel;
 import com.tdtu.recruitmentservice.query.queries.recruitment.GetAllRecruitmentsQuery;
 import com.tdtu.recruitmentservice.query.queries.recruitment.GetRecruitmentQuery;
@@ -20,6 +24,12 @@ import com.tdtu.recruitmentservice.query.queries.recruitment.GetRecruitmentQuery
 public class RecruitmentQueryController {
 	@Autowired
 	private QueryGateway queryGateway;
+	
+	@Autowired
+    private KafkaProducer kafkaProducer;
+
+	@Autowired
+	private CandidateService candidateService;
 
 	@GetMapping("/{id}")
 	public RecruitmentResponseModel getRecruitmentDetail(@PathVariable String id) {
@@ -37,5 +47,15 @@ public class RecruitmentQueryController {
 		List<RecruitmentResponseModel> lstEmp = queryGateway
 				.query(getAllRecruitmentsQuery, ResponseTypes.multipleInstancesOf(RecruitmentResponseModel.class)).join();
 		return lstEmp;
+	}
+	
+	@GetMapping("/{candidateId}")
+	public String offerCandidate(@PathVariable String candidateId) throws InterruptedException, ExecutionException {
+		Candidate candidate = candidateService.findById(candidateId);
+		if (candidate != null) {
+			kafkaProducer.sendMessage(candidate);
+			return "Candidate offered with ID: " + candidateId;
+        }
+		return "Not found candidate with ID: " + candidateId;
 	}
 }
