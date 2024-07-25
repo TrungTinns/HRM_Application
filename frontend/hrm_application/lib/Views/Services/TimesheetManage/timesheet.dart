@@ -4,7 +4,9 @@ import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Component/FilterSearch/filter_search.dart';
 import 'package:hrm_application/Component/Search/searchBox.dart';
 import 'package:hrm_application/Views/Home/home.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
 import 'package:hrm_application/Widgets/colors.dart';
+import 'package:hrm_application/Views/Services/TimesheetManage/attendance_form.dart';
 import 'package:intl/intl.dart';
 
 class TimeSheet extends StatefulWidget {
@@ -14,11 +16,10 @@ class TimeSheet extends StatefulWidget {
 
 class _TimeSheetState extends State<TimeSheet> {
   String pageName = 'Attendances';
-  TextEditingController nameController= TextEditingController();
+  TextEditingController nameController = TextEditingController();
   String? activeDropdown;
   bool showCheckinForm = false;
   DateTime currentMonth = DateTime.now();
-  List<String> employees = ['hậu', 'minh tiến', 'nrgtinns'];
   Map<String, List<AttendanceData>> attendance = {};
 
   void setActiveDropdown(String? dropdown) {
@@ -29,7 +30,7 @@ class _TimeSheetState extends State<TimeSheet> {
 
   void toggleCheckinForm() {
     if (showCheckinForm) {
-      if(nameController.text.isEmpty) {
+      if (nameController.text.isEmpty) {
         showDialog(
           context: context,
           builder: (context) {
@@ -65,21 +66,6 @@ class _TimeSheetState extends State<TimeSheet> {
     });
   }
 
-  // void deleteRecord(String name) {
-  //   setState(() {
-  //     departments.removeWhere((department) => department.department == department);
-  //   });
-  // }
-
-  // void handleUpdate(DepartmentInf updatedDepartment) {
-  //   setState(() {
-  //     final index = departments.indexWhere((dpm) => dpm.department == updatedDepartment.department);
-  //     if (index != -1) {
-  //       departments[index] = updatedDepartment;
-  //     }
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -88,7 +74,7 @@ class _TimeSheetState extends State<TimeSheet> {
 
   void initializeAttendance() {
     for (var employee in employees) {
-      attendance[employee] = List.generate(31, (index) => AttendanceData());
+      attendance[employee.name] = List.generate(31, (index) => AttendanceData());
     }
   }
 
@@ -285,7 +271,7 @@ class _TimeSheetState extends State<TimeSheet> {
   Widget buildCalendarHeader() {
     return Row(
       children: [
-        Container(width: 100, child: Text('Employee', style: TextStyle(fontSize: 20, color: textColor))),
+      Container(width: 150, child: Text('Employee', style: TextStyle(fontSize: 20, color: Colors.white))),
         ...List.generate(
           getDaysInMonth(currentMonth),
           (index) => Expanded(child: Text('${index + 1}', textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: textColor))),
@@ -298,10 +284,10 @@ class _TimeSheetState extends State<TimeSheet> {
     return ListView.builder(
       itemCount: employees.length,
       itemBuilder: (context, index) {
-        String employee = employees[index];
+        String employee = employees[index].name;
         return Row(
           children: [
-            Container(width: 100, child: Text(employee, style: TextStyle(fontSize: 20, color: textColor))),
+          Container(width: 150, child: Text(employee, style: TextStyle(fontSize: 20, color: Colors.white))),
             ...List.generate(
               getDaysInMonth(currentMonth),
               (dayIndex) => Expanded(
@@ -332,79 +318,21 @@ class _TimeSheetState extends State<TimeSheet> {
   }
 
   void _showAttendanceForm(String employee, int dayIndex) {
+    AttendanceData data = attendance[employee]![dayIndex];
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        AttendanceData data = attendance[employee]![dayIndex];
-        return AlertDialog(
-          title: Text('Attendance Form'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Employee: $employee'),
-                Text('Date: ${DateFormat('dd/MM/yyyy').format(DateTime(currentMonth.year, currentMonth.month, dayIndex + 1))}'),
-                SizedBox(height: 10),
-                _buildTimeField('Check-in', data.checkIn, (time) => data.checkIn = time),
-                _buildTimeField('Check-out', data.checkOut, (time) => data.checkOut = time),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Overtime (hours)'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => data.overtime = double.tryParse(value) ?? 0,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: Text('Save'),
-              onPressed: () {
-                setState(() {
-                  data.isPresent = true;
-                  attendance[employee]![dayIndex] = data;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        return AttendanceForm(
+          employee: employee,
+          dayIndex: dayIndex,
+          data: data,
+          onSave: (updatedData) {
+            setState(() {
+              attendance[employee]![dayIndex] = updatedData;
+            });
+          },
         );
       },
     );
-  }
-
-  Widget _buildTimeField(String label, TimeOfDay? initialTime, Function(TimeOfDay) onChanged) {
-    return Row(
-      children: [
-        Text('$label: '),
-        TextButton(
-          child: Text(initialTime?.format(context) ?? 'Select time'),
-          onPressed: () async {
-            TimeOfDay? time = await showTimePicker(
-              context: context,
-              initialTime: initialTime ?? TimeOfDay.now(),
-            );
-            if (time != null) {
-              onChanged(time);
-            }
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class AttendanceData {
-  bool isPresent = false;
-  TimeOfDay? checkIn;
-  TimeOfDay? checkOut;
-  double overtime = 0;
-
-  Duration get workDuration {
-    if (checkIn == null || checkOut == null) return Duration.zero;
-    return Duration(hours: checkOut!.hour - checkIn!.hour, minutes: checkOut!.minute - checkIn!.minute);
   }
 }

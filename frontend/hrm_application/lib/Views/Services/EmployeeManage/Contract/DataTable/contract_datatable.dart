@@ -32,9 +32,9 @@ class _ContractDataTableState extends State<ContractDataTable> {
         'Schedule': PlutoCell(value: contract['Schedule']),
         'Status': PlutoCell(value: contract['Status']),
         'Salary': PlutoCell(value: contract['Salary']),
+        'Note': PlutoCell(value: contract['Note']),
         'Wage Type': PlutoCell(value: contract['Wage Type']),
         'Schedule Pay': PlutoCell(value: contract['Schedule Pay']),
-        'Note': PlutoCell(value: contract['Note']),
       });
     }).toList();
   }
@@ -60,9 +60,9 @@ class _ContractDataTableState extends State<ContractDataTable> {
         'Schedule': PlutoCell(value: updatedContract.schedule),
         'Status': PlutoCell(value: updatedContract.status),
         'Salary': PlutoCell(value: updatedContract.salary),
+        'Note': PlutoCell(value: updatedContract.note),
         'Wage Type': PlutoCell(value: updatedContract.wageType),
         'Schedule Pay': PlutoCell(value: updatedContract.schedulePay),
-        'Note': PlutoCell(value: updatedContract.note),
       });
     });
   }

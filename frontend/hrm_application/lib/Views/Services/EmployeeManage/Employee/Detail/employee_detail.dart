@@ -12,7 +12,7 @@ import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees
 import 'package:hrm_application/Views/Services/EmployeeManage/OrgChart/orgchart.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Position/position.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/jobposition_inf.dart';
-import 'package:hrm_application/Views/home/home.dart';
+import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Widgets/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

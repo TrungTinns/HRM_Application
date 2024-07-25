@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
 import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Component/FilterSearch/filter_search.dart';
 import 'package:hrm_application/Component/Search/searchBox.dart';
-import 'package:hrm_application/Component/appbar/custom_title_appbar.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/department.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/OrgChart/orgchart.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/department.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/employee/employees.dart';
-import 'package:hrm_application/views/services/EmployeeManage/Position/card/position_card.dart';
-import 'package:hrm_application/views/home/home.dart';
-import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/form/jobposition_form.dart';
-import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Position/Card/position_card.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Form/jobposition_form.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/jobposition_inf.dart';
+import 'package:hrm_application/Views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class PositionManage extends StatefulWidget {
@@ -318,7 +318,6 @@ class _PositionManageState extends State<PositionManage> {
                                               department.department,
                                               style: const TextStyle(color: textColor, fontSize: 16)
                                             ),
-                                            
                                             Text(
                                               '${countJobPositionsInDepartment(jobPositions, department.department)}',
                                               style: const TextStyle(
@@ -389,7 +388,6 @@ class _PositionManageState extends State<PositionManage> {
                       details: jobPosition.details,
                       onDelete: () => deleteJobPosition(jobPosition.role),
                       onUpdate: handleUpdate,
-                      
                     );
                   },
                 );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Dashboard/payroll_manage.dart';
+import 'package:hrm_application/Views/Services/TimesheetManage/timesheet.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: SignIn(),
-      home: PayrollManage(),
+      home: TimeSheet(),
     );
   }
 }

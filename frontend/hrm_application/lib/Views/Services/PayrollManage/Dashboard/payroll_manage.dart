@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
 import 'package:hrm_application/Component/Configuration/configuration.dart';
-import 'package:hrm_application/views/home/home.dart';
-import 'package:hrm_application/views/services/PayrollManage/Payslip/payslips.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Payslip/payslips.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
+import 'package:hrm_application/Views/Services/PayrollManage/Batch/batch.dart';
+import 'package:hrm_application/Views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
+
 
 class PayrollManage extends StatefulWidget {
   @override
@@ -47,26 +50,26 @@ class _PayrollManageState extends State<PayrollManage> {
             ['Recruitment Analysis', 'Source Analysis', 'Time In Stage Analysis', 'Team Performance']
           ],
           optionNavigations: [
-            [ () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayrollManage())),
+            [  
             ],
             [
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayrollManage())),
+                  context, MaterialPageRoute(builder: (ctx) => Contracts
+                  ())),
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
             [
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayrollManage())),
+                  context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
             [
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PayslipsManage())),
+                  context, MaterialPageRoute(builder: (ctx) => PayslipManage())),
               () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => Home())),
+                  context, MaterialPageRoute(builder: (ctx) => BatchManage())),
             ],
             [
               () => Navigator.push(

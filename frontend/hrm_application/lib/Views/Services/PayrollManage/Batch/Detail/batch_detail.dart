@@ -355,7 +355,7 @@ class _BatchDetailState extends State<BatchDetail> with SingleTickerProviderStat
                   color: Colors.transparent,
                   progressColor: Colors.green,
                   stepCount: 4,
-                  labels: const <String>['New', 'Confirmed', 'Done', 'Paid'],
+                  labels: BatchData.defaultStatus,
                   defaultTextStyle: const TextStyle(
                     fontSize: 16,
                     color: textColor,

@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts_inf.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Batch/batch.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Batch/batches_inf.dart';

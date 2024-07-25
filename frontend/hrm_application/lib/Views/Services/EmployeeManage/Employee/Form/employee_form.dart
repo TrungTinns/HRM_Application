@@ -18,7 +18,7 @@ class EmployeeForm extends StatefulWidget {
   final String? certification;
 
   const EmployeeForm({
-    Key? key,
+  Key? key,
   this.name,
   this.role,
   this.department,
@@ -59,7 +59,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   TextEditingController birthDateController = TextEditingController();
   TextEditingController birthPlaceController = TextEditingController();
   bool isManager = false;
-
+  FocusNode nameFocusNode = FocusNode();
   TabController? tabController;
   bool isNameFilled = false;
   
@@ -77,6 +77,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
       setState(() {
         isNameFilled = nameController.text.isNotEmpty;
       });
+    });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(nameFocusNode);
     });
   }
 
@@ -258,6 +261,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
+                        focusNode: nameFocusNode,
                         controller: nameController,
                         style: const TextStyle(color: textColor, fontSize: 40.0),
                         decoration: const InputDecoration(
@@ -444,9 +448,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                               buildTextFieldRow('Number of children', childController),
                             ]
                           ),
-                        ), 
+                        ),
                       ],
-                    ),                   
+                    ),
                   ),
                 ],
               ),
@@ -465,9 +469,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                   department: departmentController.text,
                   manager: managerController.text,
                   isManager: isManager,
-                  workLocation: workLocationController.text.isEmpty ? null : personalAddressController.text,
-                  schedule : scheduleController.text.isEmpty ? null : personalMailController.text,
-                  salaryStructure: salaryStructureController.text.isEmpty ? null : personalMobileController.text,
+                  workLocation: workLocationController.text.isEmpty ? null : workLocationController.text,
+                  schedule : scheduleController.text.isEmpty ? null : scheduleController.text,
+                  salaryStructure: salaryStructureController.text.isEmpty ? null : salaryStructureController.text,
                   contractType: contractTypeController.text.isEmpty ? null : contractTypeController.text,
                   cost: costController.text.isEmpty ? 0.0 : double.parse(costController.text),
                   personalAddress: personalAddressController.text.isEmpty ? null : personalAddressController.text,

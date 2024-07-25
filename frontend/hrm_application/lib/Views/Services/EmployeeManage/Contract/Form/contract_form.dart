@@ -10,6 +10,20 @@ import 'package:hrm_application/widgets/colors.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class ContractForm extends StatefulWidget {
+  final String? name;
+  final String? role;
+  final String? department;
+  final String? salaryStructureController;
+  final String? contractTypeController;
+
+  const ContractForm({
+    Key? key,
+    this.name,
+    this.role,
+    this.department,
+    this.salaryStructureController,
+    this.contractTypeController,
+  }) : super(key: key);
   @override
   _ContractFormState createState() => _ContractFormState();
 }
@@ -36,6 +50,11 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    nameController.text = widget.name?? '';
+    positionController.text = widget.role?? '';
+    departmentController.text = widget.department?? '';
+    salaryStructureController.text = widget.salaryStructureController?? '';
+    contractTypeController.text = widget.contractTypeController?? '';
     tabController = TabController(length: 2, vsync: this);
     referenceController.addListener(() {
       setState(() {
@@ -46,6 +65,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
 
   @override
   void dispose() {
+    nameController.dispose();
     referenceController.dispose();
     startDateController.dispose();
     endDateController.dispose();
@@ -72,12 +92,8 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
       });
     }
   }
-
-  void _updateEmployeeInfo(EmployeeInf employee) {
-    setState(() {
-      departmentController.text = employee.department;
-      positionController.text = employee.role;
-    });
+  EmployeeInf? findEmployeeByName(String name) {
+    return employees.firstWhere((employee) => employee.name == name);
   }
 
   Widget buildTextFieldRow(String label, TextEditingController controller, {bool isDateField = false}) {
@@ -122,7 +138,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
     );
   }
 
-  Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController controller) {
+  Widget buildDropdownRow(String label, List<String> items, TextEditingController controller, {Function(String?)? onChanged}) {
     return Row(
       children: [
         SizedBox(
@@ -133,23 +149,19 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
           ),
         ),
         Expanded(
-          child: DropdownButtonFormField<dynamic>(
+          child: DropdownButtonFormField<String>(
             dropdownColor: dropdownColor,
-            value: null,
-            items: items.map((item) {
-              return DropdownMenuItem<dynamic>(
-                value: item,
-                child: Text(item is EmployeeInf ? item.name : item.toString(), style: const TextStyle(color: textColor),),
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value, style: const TextStyle(color: textColor)),
               );
             }).toList(),
-            onChanged: (selectedItem) {
-              setState(() {
-                if (selectedItem is EmployeeInf) {
-                  _updateEmployeeInfo(selectedItem);
-                } else {
-                  controller.text = selectedItem.toString();
-                }
-              });
+            onChanged: (value) {
+              controller.text = value!;
+              if (onChanged != null) {
+                onChanged(value);
+              }
             },
             decoration: const InputDecoration(
               filled: true,
@@ -197,7 +209,7 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                   inactiveBgColor: Colors.grey,
                   inactiveFgColor: Colors.white,
                   totalSwitches: 3,
-                  labels: ['Running', 'Expired', 'Cancelled'],
+                  labels: ContractData.defaultStatus,
                   icons: [Icons.play_arrow, Icons.hourglass_empty, Icons.cancel],
                   activeBgColors: [[Colors.green], [Colors.orange], [Colors.red]],
                   onToggle: (index) {
@@ -215,7 +227,20 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Employee', getNameEmp(employees), nameController),
+                      buildDropdownRow('Employee', getNameEmp(employees), nameController,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              nameController.text = value;
+                              EmployeeInf? employee = findEmployeeByName(value);
+                              if (employee != null) {
+                                departmentController.text = employee.department;
+                                positionController.text = employee.role;
+                              }
+                            });
+                          }
+                        },
+                      ),
                       const SizedBox(height: 10),
                       buildTextFieldRow('Contract Start Date', startDateController, isDateField: true),
                       const SizedBox(height: 10),
@@ -231,9 +256,9 @@ class _ContractFormState extends State<ContractForm> with SingleTickerProviderSt
                     children: [
                       buildDropdownRow('Salary Structure Type', ContractData.defaultSalaryStructures, salaryStructureController),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Department', getDepartments(),departmentController),
+                      buildTextFieldRow('Department',departmentController),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Job Position', getJobPositions(jobPositions), positionController),
+                      buildTextFieldRow('Job Position', positionController),
                       const SizedBox(height: 10),
                       buildDropdownRow('Contract Type', ContractData.defaultContractTypes, contractTypeController),
                     ],

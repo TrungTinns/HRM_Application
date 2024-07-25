@@ -14,6 +14,19 @@ import 'package:hrm_application/widgets/colors.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class Contracts extends StatefulWidget {
+  final String? name;
+  final String? role;
+  final String? department;
+  final String? salaryStructureController;
+  final String? contractTypeController;
+
+  Contracts({
+    this.name,
+    this.role,
+    this.department,
+    this.salaryStructureController,
+    this.contractTypeController,
+  });
   @override
   _ContractsState createState() => _ContractsState();
 }
@@ -205,7 +218,19 @@ class _ContractsState extends State<Contracts> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body:showContractForm
+      body: widget.name != null 
+            // widget.role != null ||
+            // widget.department != null ||
+            // widget.contractTypeController != null ||
+            // widget.salaryStructureController != null
+      ? ContractForm(
+          name: widget.name,
+          // role: widget.role,
+          // department: widget.department,
+          // contractTypeController: widget.contractTypeController,
+          // salaryStructureController: widget.salaryStructureController
+        )
+      : showContractForm
           ? ContractForm()
           : ContractDataTable(),
     );

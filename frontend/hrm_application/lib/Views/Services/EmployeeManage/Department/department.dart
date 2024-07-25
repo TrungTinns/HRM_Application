@@ -3,15 +3,16 @@ import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
 import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Component/FilterSearch/filter_search.dart';
 import 'package:hrm_application/Component/Search/searchBox.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/Card/department_card.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/Form/department_form.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/OrgChart/orgchart.dart';
-import 'package:hrm_application/views/services/EmployeeManage/contract/contracts.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/card/department_card.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart'; 
-import 'package:hrm_application/views/services/EmployeeManage/department/form/department_form.dart';
-import 'package:hrm_application/views/services/EmployeeManage/employee/employees.dart';
-import 'package:hrm_application/views/services/EmployeeManage/Position/position.dart';
-import 'package:hrm_application/views/home/home.dart';
-import 'package:hrm_application/widgets/colors.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Position/position.dart';
+import 'package:hrm_application/Views/home/home.dart';
+import 'package:hrm_application/Widgets/colors.dart';
+
 
 class Department extends StatefulWidget {
   @override

@@ -35,6 +35,11 @@ List<Map<String, dynamic>> getBatches() {
   return batches.map((batches) => batches.toMap()).toList();
 }
 
+List<String> getNameBatch(List<BatchData> batches){
+  return batches.map((batch) => batch.batch).toSet().toList()..sort((a, b) => a.compareTo(b));
+}
+
+
 void updateBatch(int index, Map<String, dynamic> updateBatch) {
   if (index >= 0 && index < batches.length) {
     batches[index] = BatchData.fromMap(updateBatch);
@@ -43,46 +48,45 @@ void updateBatch(int index, Map<String, dynamic> updateBatch) {
 
 List<BatchData> batches = [
   BatchData(
-    startDate: DateTime(2024-04-01),
-    endDate: DateTime(2024-04-30),
+    startDate: DateTime(2024, 04, 01),
+    endDate: DateTime(2024, 04, 30),
     batch: '04/2024',
     status: 'New',
   ),
   BatchData(
-    startDate: DateTime(2024-04-01),
-    endDate: DateTime(2024-04-30),
+    startDate: DateTime(2024, 04, 01),
+    endDate: DateTime(2024, 04, 30),
     batch: '04/2024',
     status: 'Confirmed',
   ),
   BatchData(
-    startDate: DateTime(2024-05-01),
-    endDate: DateTime(2024-05-31),
+    startDate: DateTime(2024, 05, 01),
+    endDate: DateTime(2024, 05, 31),
     batch: '05/2024',
     status: 'Paid',
   ),
   BatchData(
-    startDate: DateTime(2024-06-01),
-    endDate: DateTime(2024-06-30),
+    startDate: DateTime(2024, 06, 01),
+    endDate: DateTime(2024, 06, 30),
     batch: '06/2024',
     status: 'New',
   ),
   BatchData(
-    startDate: DateTime(2024-06-01),
-    endDate: DateTime(2024-06-30),
+    startDate: DateTime(2024, 06, 01),
+    endDate: DateTime(2024, 06, 30),
     batch: '06/2024',
     status: 'Done',
   ),
   BatchData(
-    startDate: DateTime(2024-06-01),
-    endDate: DateTime(2024-06-30),
+    startDate: DateTime(2024, 06, 01),
+    endDate: DateTime(2024, 06, 30),
     batch: '06/2024',
     status: 'Done',
   ),
   BatchData(
-    startDate: DateTime(2024-07-01),
-    endDate: DateTime(2024-07-31),
+    startDate: DateTime(2024, 07, 01),
+    endDate: DateTime(2024, 07, 31),
     batch: '07/2024',
     status: 'New',
   ),
 ];
-

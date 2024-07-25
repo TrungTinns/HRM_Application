@@ -273,11 +273,11 @@ class _EmployeeManageState extends State<EmployeeManage> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: widget.name != null && 
-            widget.role != null && 
-            widget.department != null && 
-            widget.mobile != null && 
-            widget.mail != null && 
+      body: widget.name != null &&
+            widget.role != null &&
+            widget.department != null &&
+            widget.mobile != null &&
+            widget.mail != null &&
             widget.certification != null
       ? EmployeeForm(
           name: widget.name,

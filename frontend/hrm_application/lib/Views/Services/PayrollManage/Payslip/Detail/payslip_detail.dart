@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
 import 'package:hrm_application/Component/Configuration/configuration.dart';
-import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts_inf.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
-import 'package:hrm_application/Views/Services/PayrollManage/Batch/Form/batch_form.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Batch/batch.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Batch/batches_inf.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Dashboard/payroll_manage.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Payslip/Form/payslip_form.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Payslip/payslips.dart';
 import 'package:hrm_application/Views/Services/PayrollManage/Payslip/payslips_inf.dart';
+import 'package:hrm_application/Views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:progress_stepper/progress_stepper.dart';
 
@@ -204,11 +202,7 @@ class _PayslipDetailState extends State<PayslipDetail> with SingleTickerProvider
             TextButton(
               child: Text('Create'),
               onPressed: () {
-                // Here you would navigate to a contract creation form or implement the logic to create a new contract
-                // For now, we'll just close the dialog
                 Navigator.of(context).pop();
-                // You might want to call a method here to create a new contract
-                // createNewContract(employeeName);
               },
             ),
           ],
