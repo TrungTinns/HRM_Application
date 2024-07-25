@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tdtu.recruitmentservice.command.data.candidate.Candidate;
+
 @Service
 public class RecruitmentService {
 	@Autowired
@@ -29,5 +31,9 @@ public class RecruitmentService {
 
 	public List<Recruitment> findAll() throws InterruptedException, ExecutionException {
 		return repo.findAll();
+	}
+	
+	public void sendMessage(Candidate candidate) {
+		repo.sendMessage(candidate);
 	}
 }
