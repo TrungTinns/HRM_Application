@@ -39,4 +39,5 @@ public class UpdateCandidateCommand {
 	private String jobPositionId;
 	private int stage;
 	private boolean isHired;
+	private boolean isOffered;
 }

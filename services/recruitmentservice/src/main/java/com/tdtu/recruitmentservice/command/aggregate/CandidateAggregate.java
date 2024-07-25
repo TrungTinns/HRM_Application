@@ -46,6 +46,7 @@ public class CandidateAggregate {
 	private String jobPositionId;
 	private int stage;
 	private boolean isHired;
+	private boolean isOffered;
 	
 	// CREATE EVENT
 	@CommandHandler
@@ -79,6 +80,7 @@ public class CandidateAggregate {
         this.jobPositionId = event.getJobPositionId();
         this.stage = event.getStage();
         this.isHired = event.isHired();
+        this.isOffered = event.isOffered();
 	}
 
 	// UPDATED EVENT
@@ -112,7 +114,9 @@ public class CandidateAggregate {
         this.applicationSummary = event.getApplicationSummary();
         this.jobPositionId = event.getJobPositionId();
         this.stage = event.getStage();
-        this.isHired = event.isHired();	}
+        this.isHired = event.isHired();	
+        this.isOffered = event.isOffered();
+	}
 
 	// DELETE EVENT
 	@CommandHandler

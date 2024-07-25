@@ -39,5 +39,6 @@ public class CreateCandidateCommand {
 	private String jobPositionId;
 	private int stage;
 	private boolean isHired;
+	private boolean isOffered;
 
 }

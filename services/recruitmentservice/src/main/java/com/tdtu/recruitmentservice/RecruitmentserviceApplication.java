@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Import;
 
 import com.tdtu.recruitmentservice.config.AxonConfig;
 
-@EnableDiscoveryClient
 @SpringBootApplication
+@EnableDiscoveryClient
 @Import({AxonConfig.class})
 public class RecruitmentserviceApplication {
 
