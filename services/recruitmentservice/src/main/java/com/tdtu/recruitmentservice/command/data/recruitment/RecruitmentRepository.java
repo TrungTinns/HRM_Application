@@ -17,39 +17,25 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 
 @Repository
-public class RecruitmentPositionRepository {
-    private static final String COLLECTION_NAME = "JobPositions";
+public class RecruitmentRepository {
+    private static final String COLLECTION_NAME = "Recruitments";
 
-    public String save(RecruitmentPosition e) throws InterruptedException, ExecutionException {        
+    public String save(Recruitment e) throws InterruptedException, ExecutionException {        
         Firestore db = FirestoreClient.getFirestore();
         Map<String, Object> jobPositionMap = new HashMap<>();
-        jobPositionMap.put("name", e.getName());
-        jobPositionMap.put("department", e.getDepartment());
-        jobPositionMap.put("jobLocation", e.getJobLocation());
-        jobPositionMap.put("mailAlias", e.getMailAlias());
-        jobPositionMap.put("empType", e.getEmpType());
-        jobPositionMap.put("target", e.getTarget());
-        jobPositionMap.put("recruiterId", e.getRecruiterId());
-        jobPositionMap.put("interviewers", e.getInterviewers());
-        jobPositionMap.put("description", e.getDescription());
+        jobPositionMap.put("candidateId", e.getCandidateId());
+        jobPositionMap.put("offeredDate", e.getOfferedDate());
         
         ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(jobPositionMap);
 
         return collection.get().getUpdateTime().toString();
     }
 
-    public String update(RecruitmentPosition e) throws InterruptedException, ExecutionException {
+    public String update(Recruitment e) throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         Map<String, Object> jobPositionMap = new HashMap<>();
-        jobPositionMap.put("name", e.getName());
-        jobPositionMap.put("department", e.getDepartment());
-        jobPositionMap.put("jobLocation", e.getJobLocation());
-        jobPositionMap.put("mailAlias", e.getMailAlias());
-        jobPositionMap.put("empType", e.getEmpType());
-        jobPositionMap.put("target", e.getTarget());
-        jobPositionMap.put("recruiterId", e.getRecruiterId());
-        jobPositionMap.put("interviewers", e.getInterviewers());
-        jobPositionMap.put("description", e.getDescription());
+        jobPositionMap.put("candidateId", e.getCandidateId());
+        jobPositionMap.put("offeredDate", e.getOfferedDate());
         
         ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(jobPositionMap);
 
@@ -63,28 +49,28 @@ public class RecruitmentPositionRepository {
         return "Successfully Deleted " + id;
     }
 
-    public RecruitmentPosition findById(String id) throws InterruptedException, ExecutionException {
+    public Recruitment findById(String id) throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         DocumentReference reference = db.collection(COLLECTION_NAME).document(id);
         ApiFuture<DocumentSnapshot> future = reference.get();
         DocumentSnapshot document = future.get();
 
-        RecruitmentPosition e;
+        Recruitment e;
         if (document.exists()) {
-            e = document.toObject(RecruitmentPosition.class);
+            e = document.toObject(Recruitment.class);
             e.setId(document.getId());
             return e;
         }
         return null;
     }
 
-    public List<RecruitmentPosition> findAll() throws InterruptedException, ExecutionException {
+    public List<Recruitment> findAll() throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME).get();
 
-        List<RecruitmentPosition> jobPositionList = new ArrayList<>();
+        List<Recruitment> jobPositionList = new ArrayList<>();
         for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-            RecruitmentPosition e = document.toObject(RecruitmentPosition.class);
+            Recruitment e = document.toObject(Recruitment.class);
             e.setId(document.getId());
             jobPositionList.add(e);
         }
