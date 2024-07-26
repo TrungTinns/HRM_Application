@@ -44,10 +44,18 @@ public class EmployeeCommandController {
     public String addEmployee(@RequestBody EmployeeRequestModel model) throws InterruptedException, ExecutionException {
     	 Firestore db = FirestoreClient.getFirestore();
          ContractRequestModel contractModel = new ContractRequestModel();
+         contractModel.setReferenceName(model.getContract().getReferenceName());
+         contractModel.setDepartment(model.getContract().getDepartment());
+         contractModel.setEmpName(model.getContract().getEmpName());
+         contractModel.setPosition(model.getContract().getPosition());
+         contractModel.setStatus(model.getContract().getStatus());
          contractModel.setSchedule(model.getContract().getSchedule());
+         contractModel.setSchedulePay(model.getContract().getSchedulePay());
          contractModel.setSalaryStructure(model.getContract().getSalaryStructure());
          contractModel.setContractType(model.getContract().getContractType());
          contractModel.setCost(model.getContract().getCost());
+         contractModel.setNote(model.getContract().getNote());
+         contractModel.setWageType(model.getContract().getWageType());
          contractModel.setStartDate(model.getContract().getStartDate());
          contractModel.setEndDate(model.getContract().getEndDate());
          CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> contractCommandController.addContract(contractModel));
@@ -74,10 +82,18 @@ public class EmployeeCommandController {
         if (employee != null && employee.getContractRef() != null) {
             String contractId = employee.getContractRef().getId();
             ContractRequestModel contractModel = new ContractRequestModel();
+            contractModel.setReferenceName(model.getContract().getReferenceName());
+            contractModel.setDepartment(model.getContract().getDepartment());
+            contractModel.setEmpName(model.getContract().getEmpName());
+            contractModel.setPosition(model.getContract().getPosition());
+            contractModel.setStatus(model.getContract().getStatus());
             contractModel.setSchedule(model.getContract().getSchedule());
+            contractModel.setSchedulePay(model.getContract().getSchedulePay());
             contractModel.setSalaryStructure(model.getContract().getSalaryStructure());
             contractModel.setContractType(model.getContract().getContractType());
             contractModel.setCost(model.getContract().getCost());
+            contractModel.setNote(model.getContract().getNote());
+            contractModel.setWageType(model.getContract().getWageType());
             contractModel.setStartDate(model.getContract().getStartDate());
             contractModel.setEndDate(model.getContract().getEndDate());
             future = CompletableFuture.supplyAsync(() -> contractCommandController.updateContract(contractModel));
