@@ -25,10 +25,18 @@ import lombok.NoArgsConstructor;
 public class ContractAggregate {
 	@AggregateIdentifier
 	private String id;
+	private String referenceName;
+	private String department;
+	private String empName;
+	private String position;
+	private String status;
 	private String schedule;
+	private String schedulePay;
 	private String salaryStructure;
 	private String contractType;
 	private Double cost;
+	private String note;
+	private String wageType;
 	private Date startDate;
 	private Date endDate;
 	
@@ -43,12 +51,20 @@ public class ContractAggregate {
 	@EventSourcingHandler
 	public void on(ContractCreatedEvent event) {
 		this.id = event.getId();
-		this.schedule = event.getSchedule();
-		this.salaryStructure = event.getSalaryStructure();
-		this.contractType = event.getContractType();
-		this.cost = event.getCost();
-		this.startDate = event.getStartDate();
-		this.endDate = event.getEndDate();
+        this.referenceName = event.getReferenceName();
+        this.department = event.getDepartment();
+        this.empName = event.getEmpName();
+        this.position = event.getPosition();
+        this.status = event.getStatus();
+        this.schedule = event.getSchedule();
+        this.schedulePay = event.getSchedulePay();
+        this.salaryStructure = event.getSalaryStructure();
+        this.contractType = event.getContractType();
+        this.cost = event.getCost();
+        this.note = event.getNote();
+        this.wageType = event.getWageType();
+        this.startDate = event.getStartDate();
+        this.endDate = event.getEndDate();
 	}
 
 	// UPDATED EVENT
@@ -62,12 +78,20 @@ public class ContractAggregate {
 	@EventSourcingHandler
 	public void on(ContractUpdatedEvent event) {
 		this.id = event.getId();
-		this.schedule = event.getSchedule();
-		this.salaryStructure = event.getSalaryStructure();
-		this.contractType = event.getContractType();
-		this.cost = event.getCost();
-		this.startDate = event.getStartDate();
-		this.endDate = event.getEndDate();
+        this.referenceName = event.getReferenceName();
+        this.department = event.getDepartment();
+        this.empName = event.getEmpName();
+        this.position = event.getPosition();
+        this.status = event.getStatus();
+        this.schedule = event.getSchedule();
+        this.schedulePay = event.getSchedulePay();
+        this.salaryStructure = event.getSalaryStructure();
+        this.contractType = event.getContractType();
+        this.cost = event.getCost();
+        this.note = event.getNote();
+        this.wageType = event.getWageType();
+        this.startDate = event.getStartDate();
+        this.endDate = event.getEndDate();
 	}
 
 	// DELETE EVENT

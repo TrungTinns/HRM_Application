@@ -27,12 +27,20 @@ public class ContractCommandController {
 	    public String addContract(@RequestBody ContractRequestModel model) {
 			 CreateContractCommand command = new CreateContractCommand(
 					 UUID.randomUUID().toString(),
-					 model.getSchedule(),
-					 model.getSalaryStructure(),
-					 model.getContractType(),
-					 model.getCost(),
-					 model.getStartDate(),
-					 model.getEndDate()
+					 model.getReferenceName(),
+			         model.getDepartment(),
+			         model.getEmpName(),
+			         model.getPosition(),
+			         model.getStatus(),
+			         model.getSchedule(),
+			         model.getSchedulePay(),
+			         model.getSalaryStructure(),
+			         model.getContractType(),
+			         model.getCost(),
+			         model.getNote(),
+			         model.getWageType(),
+			         model.getStartDate(),
+			         model.getEndDate()
 			);
 	         commandGateway.sendAndWait(command);
 	         return command.getId();
@@ -43,12 +51,20 @@ public class ContractCommandController {
 		public String updateContract(@RequestBody ContractRequestModel model) {
 			UpdateContractCommand command = new UpdateContractCommand(
 					model.getId(),
-					model.getSchedule(),
-					model.getSalaryStructure(),
-					model.getContractType(),
-					model.getCost(),
-					model.getStartDate(),
-					model.getEndDate()
+					model.getReferenceName(),
+			        model.getDepartment(),
+			        model.getEmpName(),
+			        model.getPosition(),
+			        model.getStatus(),
+			        model.getSchedule(),
+			        model.getSchedulePay(),
+			        model.getSalaryStructure(),
+			        model.getContractType(),
+			        model.getCost(),
+			        model.getNote(),
+			        model.getWageType(),
+			        model.getStartDate(),
+			        model.getEndDate()
 			);
 			commandGateway.sendAndWait(command);
 			return model.getId().toString();

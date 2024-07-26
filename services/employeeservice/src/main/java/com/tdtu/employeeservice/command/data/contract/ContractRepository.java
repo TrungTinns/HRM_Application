@@ -23,13 +23,21 @@ public class ContractRepository {
 	public String save(Contract c) throws InterruptedException, ExecutionException {		
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
-	    skillMap.put("id", c.getId());
-	    skillMap.put("schedule", c.getSchedule());
-	    skillMap.put("salaryStructure", c.getSalaryStructure());
-	    skillMap.put("contractType", c.getContractType());
-	    skillMap.put("cost", c.getCost());
-	    skillMap.put("startDate", c.getStartDate());
-	    skillMap.put("endDate", c.getEndDate());
+		skillMap.put("id", c.getId());
+        skillMap.put("referenceName", c.getReferenceName());
+        skillMap.put("department", c.getDepartment());
+        skillMap.put("empName", c.getEmpName());
+        skillMap.put("position", c.getPosition());
+        skillMap.put("status", c.getStatus());
+        skillMap.put("schedule", c.getSchedule());
+        skillMap.put("schedulePay", c.getSchedulePay());
+        skillMap.put("salaryStructure", c.getSalaryStructure());
+        skillMap.put("contractType", c.getContractType());
+        skillMap.put("cost", c.getCost());
+        skillMap.put("note", c.getNote());
+        skillMap.put("wageType", c.getWageType());
+        skillMap.put("startDate", c.getStartDate());
+        skillMap.put("endDate", c.getEndDate());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(c.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();
@@ -39,12 +47,20 @@ public class ContractRepository {
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> skillMap = new HashMap<>();
 		skillMap.put("id", c.getId());
-	    skillMap.put("schedule", c.getSchedule());
-	    skillMap.put("salaryStructure", c.getSalaryStructure());
-	    skillMap.put("contractType", c.getContractType());
-	    skillMap.put("cost", c.getCost());
-	    skillMap.put("startDate", c.getStartDate());
-	    skillMap.put("endDate", c.getEndDate());
+        skillMap.put("referenceName", c.getReferenceName());
+        skillMap.put("department", c.getDepartment());
+        skillMap.put("empName", c.getEmpName());
+        skillMap.put("position", c.getPosition());
+        skillMap.put("status", c.getStatus());
+        skillMap.put("schedule", c.getSchedule());
+        skillMap.put("schedulePay", c.getSchedulePay());
+        skillMap.put("salaryStructure", c.getSalaryStructure());
+        skillMap.put("contractType", c.getContractType());
+        skillMap.put("cost", c.getCost());
+        skillMap.put("note", c.getNote());
+        skillMap.put("wageType", c.getWageType());
+        skillMap.put("startDate", c.getStartDate());
+        skillMap.put("endDate", c.getEndDate());
 		ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(c.getId()).set(skillMap);
 
 		return collection.get().getUpdateTime().toString();

@@ -15,10 +15,18 @@ import lombok.ToString;
 @ToString
 public class ContractResponseModel {
 	private String id;
+	private String referenceName;
+	private String department;
+	private String empName;
+	private String position;
+	private String status;
 	private String schedule;
+	private String schedulePay;
 	private String salaryStructure;
 	private String contractType;
 	private Double cost;
+	private String note;
+	private String wageType;
 	private Date startDate;
 	private Date endDate;
 }
