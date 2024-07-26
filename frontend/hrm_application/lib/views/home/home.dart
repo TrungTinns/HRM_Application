@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Component/Iconic/icon.dart';
 import 'package:hrm_application/Component/button/button.dart';
+import 'package:hrm_application/Views/Services/TimesheetManage/timesheet.dart';
+import 'package:hrm_application/Views/login/login.dart';
 import 'package:hrm_application/views/services/EmployeeManage/employee/employees.dart';
 import 'package:hrm_application/views/services/PayrollManage/Dashboard/payroll_manage.dart';
 import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
@@ -46,6 +48,7 @@ class _HomeState extends State<Home> {
                 color: textColor,
                 iconSize: 30,
                 onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => AuthScreen()));
                 },
               ),
               const SizedBox(width: 8),
@@ -70,7 +73,7 @@ class _HomeState extends State<Home> {
               int crossAxisCount;
               if (constraints.maxWidth >= 1200) {
                 // Desktop
-                crossAxisCount = 6;
+                crossAxisCount = 4;
               } else if (constraints.maxWidth >= 800) {
                 // Tablet
                 crossAxisCount = 3;
@@ -80,7 +83,7 @@ class _HomeState extends State<Home> {
               }
               return SizedBox(
                 width: crossAxisCount * 130.0,
-                height: (6 / crossAxisCount).ceil() * 130.0,
+                height: (4 / crossAxisCount).ceil() * 130.0,
                 child: GridView.builder(
                   padding: const EdgeInsets.all(0),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -89,31 +92,25 @@ class _HomeState extends State<Home> {
                     mainAxisSpacing: 8.0,
                     childAspectRatio: 1,
                   ),
-                  itemCount: 6,
+                  itemCount: 4,
                   itemBuilder: (context, index) {
                     final iconData = [
                       Icons.people_alt,
                       Icons.person_search,
                       Icons.monetization_on,
-                      Icons.tips_and_updates,
                       Icons.timer_outlined,
-                      Icons.analytics_outlined,
                     ][index];
                     final labels = [
                       'Employees',
                       'Recruitment',
                       'Payroll',
-                      'Performance',
                       'Timesheets',
-                      'Analytics',
                     ][index];
                     final pages = [
                       EmployeeManage(),
                       RecruitmentManage(),
                       PayrollManage(),
-                      EmployeeManage(),
-                      EmployeeManage(),
-                      EmployeeManage(),
+                      TimeSheet()
                     ][index];
                     return serviceButton(context, iconData, labels, pages);
                   },

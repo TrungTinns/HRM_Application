@@ -391,13 +391,13 @@ Widget buildDropdownRow(String label, List<dynamic> items, TextEditingController
                       icon: const Icon(Icons.clear),
                       color: Colors.white,
                       iconSize: 24,
-                      tooltip: showContractForm ? "Discard all changes" : "Delete this department",
+                      tooltip: showContractForm ? "Discard all changes" : "Delete this contract",
                       onPressed: showContractForm ? clearDepartmentForm : () {
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Do you want to delete this department?'),
+                              title: const Text('Do you want to delete this contract?'),
                               content: const Text(''),
                               actions: [
                                 TextButton(

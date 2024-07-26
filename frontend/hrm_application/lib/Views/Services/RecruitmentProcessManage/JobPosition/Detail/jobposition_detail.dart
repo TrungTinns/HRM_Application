@@ -332,7 +332,7 @@ class _JobPositionDetailState extends State<JobPositionDetail> with SingleTicker
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Do you want to delete this department?'),
+                              title: const Text('Do you want to delete this position?'),
                               content: const Text(''),
                               actions: [
                                 TextButton(

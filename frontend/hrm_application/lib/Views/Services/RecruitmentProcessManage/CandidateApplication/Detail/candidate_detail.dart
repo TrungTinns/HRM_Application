@@ -470,7 +470,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Do you want to delete this department?'),
+                              title: const Text('Do you want to delete this candidate?'),
                               content: const Text(''),
                               actions: [
                                 TextButton(
