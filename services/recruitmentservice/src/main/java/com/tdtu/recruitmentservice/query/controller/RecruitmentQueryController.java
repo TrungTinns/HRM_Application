@@ -49,7 +49,7 @@ public class RecruitmentQueryController {
 		return lstEmp;
 	}
 	
-	@GetMapping("/{candidateId}")
+	@GetMapping("/offered/{candidateId}")
 	public String offerCandidate(@PathVariable String candidateId) throws InterruptedException, ExecutionException {
 		Candidate candidate = candidateService.findById(candidateId);
 		if (candidate != null) {
