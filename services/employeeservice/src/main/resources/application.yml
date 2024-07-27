@@ -2,7 +2,7 @@ spring:
   application:
     name: employee_service
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: employee-group
       auto-offset-reset: earliest
