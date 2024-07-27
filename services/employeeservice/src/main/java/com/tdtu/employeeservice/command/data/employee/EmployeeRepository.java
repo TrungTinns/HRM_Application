@@ -33,7 +33,7 @@ public class EmployeeRepository {
 	    skillMap.put("mobile", e.getMobile());
 	    skillMap.put("department", e.getDepartment());
 	    skillMap.put("managerId", e.getManagerId());
-	    skillMap.put("isManager", e.isManager());
+	    skillMap.put("isManager", e.getIsManager());
 	    skillMap.put("workLocation", e.getWorkLocation());
 	    skillMap.put("personalAddress", e.getPersonalAddress());
 	    skillMap.put("personalMail", e.getPersonalMail());
@@ -66,7 +66,7 @@ public class EmployeeRepository {
 	    skillMap.put("mobile", e.getMobile());
 	    skillMap.put("department", e.getDepartment());
 	    skillMap.put("managerId", e.getManagerId());
-	    skillMap.put("isManager", e.isManager());
+	    skillMap.put("isManager", e.getIsManager());
 	    skillMap.put("workLocation", e.getWorkLocation());;
 	    skillMap.put("personalAddress", e.getPersonalAddress());
 	    skillMap.put("personalMail", e.getPersonalMail());

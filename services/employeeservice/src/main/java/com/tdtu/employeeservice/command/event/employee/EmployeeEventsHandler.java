@@ -8,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.firebase.cloud.FirestoreClient;
 import com.tdtu.employeeservice.command.data.employee.Employee;
 import com.tdtu.employeeservice.command.data.employee.EmployeeService;
 

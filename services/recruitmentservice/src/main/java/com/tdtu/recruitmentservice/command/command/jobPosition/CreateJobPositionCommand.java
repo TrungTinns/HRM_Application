@@ -1,7 +1,5 @@
 package com.tdtu.recruitmentservice.command.command.jobPosition;
 
-import java.util.Date;
-
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import lombok.AllArgsConstructor;

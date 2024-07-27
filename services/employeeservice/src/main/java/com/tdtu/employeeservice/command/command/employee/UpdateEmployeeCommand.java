@@ -1,7 +1,6 @@
 package com.tdtu.employeeservice.command.command.employee;
 
 import java.util.Date;
-import java.util.List;
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 

@@ -1,10 +1,5 @@
 package com.tdtu.recruitmentservice.command.event.jobPosition;
 
-import java.util.Date;
-import java.util.List;
-
-import com.google.cloud.firestore.DocumentReference;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

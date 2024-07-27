@@ -44,6 +44,14 @@ public class Employee {
 	private String birthPlace;
 	private DocumentReference contract;
 	
+	public void setIsManager(boolean isManager) {
+		this.isManager = isManager;
+	}
+	
+	public boolean getIsManager() {
+		return this.isManager;
+	}
+	
 	public Contract getContract() throws InterruptedException, ExecutionException {
 		return FirestoreUtil.getContract(contract);
 	}

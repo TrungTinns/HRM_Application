@@ -1,9 +1,6 @@
 package com.tdtu.employeeservice.command.event.contract;
 
 import java.util.Date;
-import java.util.List;
-
-import com.google.cloud.firestore.DocumentReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

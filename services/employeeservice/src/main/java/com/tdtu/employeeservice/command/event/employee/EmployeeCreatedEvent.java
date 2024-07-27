@@ -1,7 +1,6 @@
 package com.tdtu.employeeservice.command.event.employee;
 
 import java.util.Date;
-import java.util.List;
 
 import com.google.cloud.firestore.DocumentReference;
 

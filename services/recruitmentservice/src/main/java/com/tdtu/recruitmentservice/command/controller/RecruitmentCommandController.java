@@ -1,7 +1,6 @@
 package com.tdtu.recruitmentservice.command.controller;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tdtu.recruitmentservice.command.command.recruitment.CreateRecruitmentCommand;
 import com.tdtu.recruitmentservice.command.command.recruitment.DeleteRecruitmentCommand;
 import com.tdtu.recruitmentservice.command.command.recruitment.UpdateRecruitmentCommand;
-import com.tdtu.recruitmentservice.command.data.candidate.Candidate;
-import com.tdtu.recruitmentservice.command.data.candidate.CandidateService;
 import com.tdtu.recruitmentservice.command.model.RecruitmentRequestModel;
-import com.tdtu.recruitmentservice.kafka.KafkaProducer;
 
 @RestController
 @RequestMapping("/api/v1/recruitment")

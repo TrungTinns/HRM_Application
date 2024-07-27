@@ -1,7 +1,6 @@
 package com.tdtu.employeeservice.command.aggregate;
 
 import java.util.Date;
-import java.util.List;
 
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
