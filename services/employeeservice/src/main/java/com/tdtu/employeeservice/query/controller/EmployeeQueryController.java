@@ -16,6 +16,7 @@ import com.tdtu.employeeservice.query.queries.employee.GetAllEmployeesQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeeQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeesByDepartmentQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeesByRoleQuery;
+import com.tdtu.employeeservice.query.queries.employee.GetManagersQuery;
 
 @RestController
 @RequestMapping("/api/v1/employee")
@@ -23,6 +24,7 @@ public class EmployeeQueryController {
 
 	@Autowired
 	private QueryGateway queryGateway;
+	
 
 	@GetMapping("/{id}")
 	public EmployeeResponseModel getEmployeeDetail(@PathVariable String id) {
@@ -54,5 +56,12 @@ public class EmployeeQueryController {
 		 GetEmployeesByRoleQuery getEmployeesByDepartmentQuery = new GetEmployeesByRoleQuery(role);
 	     List<EmployeeResponseModel> lstEmp = queryGateway.query(getEmployeesByDepartmentQuery, ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
 	        return lstEmp;
+	}
+	
+	@GetMapping("/managers")
+	public List<EmployeeResponseModel> getManagers() {
+		 GetManagersQuery getManagersQuery = new GetManagersQuery();
+	     List<EmployeeResponseModel> lstEmp = queryGateway.query(getManagersQuery, ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
+	     return lstEmp;
 	}
 }

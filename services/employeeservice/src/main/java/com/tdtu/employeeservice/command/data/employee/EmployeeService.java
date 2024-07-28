@@ -39,4 +39,8 @@ public class EmployeeService {
 	public List<Employee> findByRole(String role) throws InterruptedException, ExecutionException {
 		return repo.findByRole(role);
 	}
+
+	public List<Employee> findManagers() throws InterruptedException, ExecutionException {
+		return repo.findManagers();
+	}
 }
