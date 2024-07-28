@@ -15,6 +15,8 @@ import com.tdtu.employeeservice.command.data.employee.EmployeeService;
 import com.tdtu.employeeservice.query.model.EmployeeResponseModel;
 import com.tdtu.employeeservice.query.queries.employee.GetAllEmployeesQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeeQuery;
+import com.tdtu.employeeservice.query.queries.employee.GetEmployeesByDepartmentQuery;
+import com.tdtu.employeeservice.query.queries.employee.GetEmployeesByRoleQuery;
 
 @Component
 public class EmployeeProjection {
@@ -38,6 +40,32 @@ public class EmployeeProjection {
 	public List<EmployeeResponseModel> handle(GetAllEmployeesQuery getAllEmployeesQuery)
 			throws InterruptedException, ExecutionException {
 		List<Employee> lstEntity = empService.findAll();
+		List<EmployeeResponseModel> lstEmp = new ArrayList<>();
+		for (Employee employee : lstEntity) {
+			EmployeeResponseModel model = new EmployeeResponseModel();
+			BeanUtils.copyProperties(employee, model);
+	        lstEmp.add(model);
+		}
+		return lstEmp;
+	}
+	
+	@QueryHandler
+	public List<EmployeeResponseModel> handle(GetEmployeesByDepartmentQuery getEmployeesByDepartmentQuery)
+			throws InterruptedException, ExecutionException {
+		List<Employee> lstEntity = empService.findByDepartmentName(getEmployeesByDepartmentQuery.getDepartment());
+		List<EmployeeResponseModel> lstEmp = new ArrayList<>();
+		for (Employee employee : lstEntity) {
+			EmployeeResponseModel model = new EmployeeResponseModel();
+			BeanUtils.copyProperties(employee, model);
+	        lstEmp.add(model);
+		}
+		return lstEmp;
+	}
+	
+	@QueryHandler
+	public List<EmployeeResponseModel> handle(GetEmployeesByRoleQuery getEmployeesByRoleQuery)
+			throws InterruptedException, ExecutionException {
+		List<Employee> lstEntity = empService.findByRole(getEmployeesByRoleQuery.getRole());
 		List<EmployeeResponseModel> lstEmp = new ArrayList<>();
 		for (Employee employee : lstEntity) {
 			EmployeeResponseModel model = new EmployeeResponseModel();

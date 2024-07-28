@@ -15,6 +15,7 @@ import com.tdtu.employeeservice.query.model.EmployeeResponseModel;
 import com.tdtu.employeeservice.query.queries.employee.GetAllEmployeesQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeeQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeesByDepartmentQuery;
+import com.tdtu.employeeservice.query.queries.employee.GetEmployeesByRoleQuery;
 
 @RestController
 @RequestMapping("/api/v1/employee")
@@ -44,6 +45,13 @@ public class EmployeeQueryController {
 	@GetMapping(params = "department")
 	public List<EmployeeResponseModel> getEmployeesByDepartment(@RequestParam String department) {
 		 GetEmployeesByDepartmentQuery getEmployeesByDepartmentQuery = new GetEmployeesByDepartmentQuery(department);
+	     List<EmployeeResponseModel> lstEmp = queryGateway.query(getEmployeesByDepartmentQuery, ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
+	        return lstEmp;
+	}
+	
+	@GetMapping(params = "role")
+	public List<EmployeeResponseModel> getEmployeesByPosition(@RequestParam String role) {
+		 GetEmployeesByRoleQuery getEmployeesByDepartmentQuery = new GetEmployeesByRoleQuery(role);
 	     List<EmployeeResponseModel> lstEmp = queryGateway.query(getEmployeesByDepartmentQuery, ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
 	        return lstEmp;
 	}
