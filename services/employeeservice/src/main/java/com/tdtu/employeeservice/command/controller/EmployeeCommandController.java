@@ -79,9 +79,9 @@ public class EmployeeCommandController {
 		Employee employee = empService.findById(model.getId());
         CompletableFuture<String> future = null;
         
-        if (employee != null && employee.getContractRef() != null) {
-            String contractId = employee.getContractRef().getId();
-            ContractRequestModel contractModel = new ContractRequestModel();
+        if (employee != null && employee.getContractRef() != null) {           
+        	ContractRequestModel contractModel = new ContractRequestModel();
+        	contractModel.setId(model.getContract().getId());
             contractModel.setReferenceName(model.getContract().getReferenceName());
             contractModel.setDepartment(model.getContract().getDepartment());
             contractModel.setEmpName(model.getContract().getEmpName());
@@ -96,6 +96,7 @@ public class EmployeeCommandController {
             contractModel.setWageType(model.getContract().getWageType());
             contractModel.setStartDate(model.getContract().getStartDate());
             contractModel.setEndDate(model.getContract().getEndDate());
+            
             future = CompletableFuture.supplyAsync(() -> contractCommandController.updateContract(contractModel));
             future.get();
         }
