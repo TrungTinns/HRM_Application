@@ -125,5 +125,19 @@ public class EmployeeRepository {
 
 		return employeeList;
 	}
+	
+	public List<Employee> findByDepartmentName(String departmentName) throws InterruptedException, ExecutionException {
+		Firestore db = FirestoreClient.getFirestore();
+		ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME).whereEqualTo("department",departmentName).get();
+
+		List<Employee> employeeList = new ArrayList<>();
+		for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+			Employee e = document.toObject(Employee.class);
+			e.setId(document.getId());
+			employeeList.add(e);
+		}
+
+		return employeeList;
+	}
 }
 

@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tdtu.employeeservice.query.model.EmployeeResponseModel;
 import com.tdtu.employeeservice.query.queries.employee.GetAllEmployeesQuery;
 import com.tdtu.employeeservice.query.queries.employee.GetEmployeeQuery;
+import com.tdtu.employeeservice.query.queries.employee.GetEmployeesByDepartmentQuery;
 
 @RestController
 @RequestMapping("/api/v1/employee")
@@ -37,5 +39,12 @@ public class EmployeeQueryController {
 		List<EmployeeResponseModel> lstEmp = queryGateway
 				.query(getAllEmployeesQuery, ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
 		return lstEmp;
+	}
+	
+	@GetMapping(params = "department")
+	public List<EmployeeResponseModel> getEmployeesByDepartment(@RequestParam String department) {
+		 GetEmployeesByDepartmentQuery getEmployeesByDepartmentQuery = new GetEmployeesByDepartmentQuery(department);
+	     List<EmployeeResponseModel> lstEmp = queryGateway.query(getEmployeesByDepartmentQuery, ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
+	        return lstEmp;
 	}
 }

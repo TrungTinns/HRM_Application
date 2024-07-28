@@ -31,4 +31,8 @@ public class EmployeeService {
 	public List<Employee> findAll() throws InterruptedException, ExecutionException {
 		return repo.findAll();
 	}
+	
+	public List<Employee> findByDepartmentName(String departmentName) throws InterruptedException, ExecutionException {
+		return repo.findByDepartmentName(departmentName);
+	}
 }
