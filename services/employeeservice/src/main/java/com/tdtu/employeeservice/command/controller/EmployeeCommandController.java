@@ -64,7 +64,7 @@ public class EmployeeCommandController {
          
     	CreateEmployeeCommand command = new CreateEmployeeCommand(UUID.randomUUID().toString(), model.getName(),
                 model.getRole(), model.getMail(), model.getMobile(), model.getDepartment(), model.getManagerId(),
-                model.isManager(), model.getWorkLocation(), model.getPersonalAddress(), model.getPersonalMail(), model.getPersonalMobile(), 
+                model.getIsManager(), model.getWorkLocation(), model.getPersonalAddress(), model.getPersonalMail(), model.getPersonalMobile(), 
                 model.getRelativeName(), model.getRelativeMobile(), model.getCertification(), model.getSchool(), model.getMaritalStatus(), model.getChild(), 
                 model.getNationality(), model.getIdNum(), model.getSsNum(), model.getPassport(), model.getSex(), model.getBirthDate(), model.getBirthPlace(), contractRef
         );
@@ -103,7 +103,7 @@ public class EmployeeCommandController {
         
 		UpdateEmployeeCommand command = new UpdateEmployeeCommand(model.getId(), model.getName(),
 				model.getRole(), model.getMail(), model.getMobile(), model.getDepartment(), model.getManagerId(),
-	            model.isManager(), model.getWorkLocation(), model.getPersonalAddress(), model.getPersonalMail(), model.getPersonalMobile(), 
+	            model.getIsManager(), model.getWorkLocation(), model.getPersonalAddress(), model.getPersonalMail(), model.getPersonalMobile(), 
 	            model.getRelativeName(), model.getRelativeMobile(), model.getCertification(), model.getSchool(), model.getMaritalStatus(), model.getChild(), 
 	            model.getNationality(), model.getIdNum(), model.getSsNum(), model.getPassport(), model.getSex(), model.getBirthDate(), model.getBirthPlace(), employee.getContractRef()
 	    );

@@ -42,4 +42,12 @@ public class EmployeeResponseModel {
 	private Date birthDate;
 	private String birthPlace;
 	private Contract contract;
+	
+	public void setIsManager(boolean isManager) {
+		this.isManager = isManager;
+	}
+	
+	public boolean getIsManager() {
+		return this.isManager;
+	}
 }

@@ -45,4 +45,12 @@ public class UpdateEmployeeCommand {
 	private Date birthDate;
 	private String birthPlace;
 	private DocumentReference contract;
+	
+	public void setIsManager(boolean isManager) {
+		this.isManager = isManager;
+	}
+	
+	public boolean getIsManager() {
+		return this.isManager;
+	}
 }

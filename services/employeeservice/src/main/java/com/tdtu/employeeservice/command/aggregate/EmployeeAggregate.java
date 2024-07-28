@@ -66,7 +66,7 @@ public class EmployeeAggregate {
 		this.mobile = event.getMobile();
 		this.department = event.getDepartment();
 		this.managerId = event.getManagerId();
-		this.isManager = event.isManager();
+		this.isManager = event.getIsManager();
 		this.workLocation = event.getWorkLocation();
 		this.personalAddress = event.getPersonalAddress();
 		this.personalMail = event.getPersonalMail();
@@ -101,7 +101,7 @@ public class EmployeeAggregate {
 		this.mobile = event.getMobile();
 		this.department = event.getDepartment();
 		this.managerId = event.getManagerId();
-		this.isManager = event.isManager();
+		this.isManager = event.getIsManager();
 		this.workLocation = event.getWorkLocation();
 		this.personalAddress = event.getPersonalAddress();
 		this.personalMail = event.getPersonalMail();

@@ -15,7 +15,7 @@ import com.tdtu.employeeservice.query.queries.department.GetAllDepartmentsQuery;
 import com.tdtu.employeeservice.query.queries.department.GetDepartmentQuery;
 
 @RestController
-@RequestMapping("/api/v1/department")
+@RequestMapping("/api/v1/employee/department")
 public class DepartmentQueryController {
 	@Autowired
 	private QueryGateway queryGateway;

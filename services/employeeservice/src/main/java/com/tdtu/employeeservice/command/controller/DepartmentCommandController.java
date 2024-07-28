@@ -18,7 +18,7 @@ import com.tdtu.employeeservice.command.command.department.UpdateDepartmentComma
 import com.tdtu.employeeservice.command.model.DepartmentRequestModel;
 
 @RestController
-@RequestMapping("/api/v1/department")
+@RequestMapping("/api/v1/employee/department")
 public class DepartmentCommandController {
 	@Autowired
 	private CommandGateway commandGateway;
