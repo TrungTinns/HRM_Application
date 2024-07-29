@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tdtu.recruitmentservice.command.data.candidate.Candidate;
-import com.tdtu.recruitmentservice.command.data.candidate.CandidateService;
 import com.tdtu.recruitmentservice.kafka.KafkaProducer;
+import com.tdtu.recruitmentservice.query.model.CandidateResponseModel;
 import com.tdtu.recruitmentservice.query.model.RecruitmentResponseModel;
 import com.tdtu.recruitmentservice.query.queries.recruitment.GetAllRecruitmentsQuery;
 import com.tdtu.recruitmentservice.query.queries.recruitment.GetRecruitmentQuery;
@@ -29,7 +28,7 @@ public class RecruitmentQueryController {
     private KafkaProducer kafkaProducer;
 
 	@Autowired
-	private CandidateService candidateService;
+	private CandidateQueryController candidateQueryController;
 
 	@GetMapping("/{id}")
 	public RecruitmentResponseModel getRecruitmentDetail(@PathVariable String id) {
@@ -51,7 +50,7 @@ public class RecruitmentQueryController {
 	
 	@GetMapping("/offered/{candidateId}")
 	public String offerCandidate(@PathVariable String candidateId) throws InterruptedException, ExecutionException {
-		Candidate candidate = candidateService.findById(candidateId);
+		CandidateResponseModel candidate = candidateQueryController.getCandidateDetail(candidateId);
 		if (candidate != null) {
 			kafkaProducer.sendMessage(candidate);
 			return "Candidate offered with ID: " + candidateId;
