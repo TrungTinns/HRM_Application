@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tdtu.recruitmentservice.command.data.candidate.Candidate;
+import com.tdtu.recruitmentservice.query.model.CandidateResponseModel;
 
 @Service
 public class RecruitmentService {
@@ -33,7 +33,7 @@ public class RecruitmentService {
 		return repo.findAll();
 	}
 	
-	public void sendMessage(Candidate candidate) {
+	public void sendMessage(CandidateResponseModel candidate) {
 		repo.sendMessage(candidate);
 	}
 }

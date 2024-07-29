@@ -1,6 +1,11 @@
 spring:
   application:
     name: employee_service
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    time-zone: GMT
+    serialization:
+      fail-on-empty-beans: false
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
     consumer:

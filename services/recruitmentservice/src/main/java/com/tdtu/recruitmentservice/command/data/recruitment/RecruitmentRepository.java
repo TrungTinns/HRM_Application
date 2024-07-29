@@ -16,8 +16,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
-import com.tdtu.recruitmentservice.command.data.candidate.Candidate;
 import com.tdtu.recruitmentservice.kafka.KafkaProducer;
+import com.tdtu.recruitmentservice.query.model.CandidateResponseModel;
 
 @Repository
 public class RecruitmentRepository {
@@ -84,7 +84,7 @@ public class RecruitmentRepository {
         return jobPositionList;
     }
     
-    public void sendMessage(Candidate candidate) {
+    public void sendMessage(CandidateResponseModel candidate) {
     	producer.sendMessage(candidate);
 	}
 }

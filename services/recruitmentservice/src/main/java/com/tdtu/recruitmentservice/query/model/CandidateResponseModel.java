@@ -2,6 +2,8 @@ package com.tdtu.recruitmentservice.query.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +30,7 @@ public class CandidateResponseModel {
 	private String department;
 	private String source;
 	private String medium;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "EEE MMM dd HH:mm:ss zzz yyyy")
 	private Date availability;
 	private int evaluation;
 	private Double expectedSalary;
