@@ -3,6 +3,7 @@ package com.tdtu.recruitmentservice.command.controller;
 import java.util.UUID;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tdtu.recruitmentservice.command.command.recruitment.CreateRecruitmentCommand;
 import com.tdtu.recruitmentservice.command.command.recruitment.DeleteRecruitmentCommand;
 import com.tdtu.recruitmentservice.command.command.recruitment.UpdateRecruitmentCommand;
+import com.tdtu.recruitmentservice.command.model.CandidateRequestModel;
 import com.tdtu.recruitmentservice.command.model.RecruitmentRequestModel;
+import com.tdtu.recruitmentservice.kafka.KafkaProducer;
+import com.tdtu.recruitmentservice.query.controller.CandidateQueryController;
+import com.tdtu.recruitmentservice.query.model.CandidateResponseModel;
 
 @RestController
 @RequestMapping("/api/v1/recruitment")
@@ -23,8 +28,30 @@ public class RecruitmentCommandController {
 	@Autowired
 	private CommandGateway commandGateway;
 	
+	
+	@Autowired
+    private KafkaProducer kafkaProducer;
+
+	@Autowired
+	private CandidateCommandController candidateCommandController;
+	
+	@Autowired
+	private CandidateQueryController candidateQueryController;
+	
 	 @PostMapping
 	 public String addRecruitment(@RequestBody RecruitmentRequestModel model) {
+		CandidateResponseModel respModel = candidateQueryController.getCandidateDetail(model.getCandidateId());
+		if (respModel == null) {
+			return "Not found candidate with ID: " + model.getCandidateId();
+	    }
+		respModel.setIsOffered(true);
+		
+		CandidateRequestModel reqModel= new CandidateRequestModel();
+		BeanUtils.copyProperties(respModel, reqModel);
+		
+		candidateCommandController.updateCandidate(reqModel);
+		kafkaProducer.sendMessage(respModel);
+			
 		 CreateRecruitmentCommand command = new CreateRecruitmentCommand(
 				 UUID.randomUUID().toString(),
 		         model.getCandidateId(),

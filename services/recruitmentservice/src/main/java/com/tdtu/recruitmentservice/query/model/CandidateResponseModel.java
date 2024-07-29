@@ -40,4 +40,20 @@ public class CandidateResponseModel {
 	private int stage;
 	private boolean isHired;
 	private boolean isOffered;
+	
+	public void setIsHired(boolean isHired) {
+        this.isHired = isHired;
+    }
+    
+    public boolean getIsHired() {
+        return this.isHired;
+    }
+    
+    public void setIsOffered(boolean isOffered) {
+        this.isOffered = isOffered;
+    }
+    
+    public boolean getIsOffered() {
+        return this.isOffered;
+    }
 }

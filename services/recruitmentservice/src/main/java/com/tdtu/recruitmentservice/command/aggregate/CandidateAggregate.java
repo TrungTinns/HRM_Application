@@ -79,8 +79,8 @@ public class CandidateAggregate {
         this.applicationSummary = event.getApplicationSummary();
         this.jobPositionId = event.getJobPositionId();
         this.stage = event.getStage();
-        this.isHired = event.isHired();
-        this.isOffered = event.isOffered();
+        this.isHired = event.getIsHired();
+        this.isOffered = event.getIsOffered();
 	}
 
 	// UPDATED EVENT
@@ -114,8 +114,8 @@ public class CandidateAggregate {
         this.applicationSummary = event.getApplicationSummary();
         this.jobPositionId = event.getJobPositionId();
         this.stage = event.getStage();
-        this.isHired = event.isHired();	
-        this.isOffered = event.isOffered();
+        this.isHired = event.getIsHired();	
+        this.isOffered = event.getIsOffered();
 	}
 
 	// DELETE EVENT

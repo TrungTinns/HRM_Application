@@ -44,8 +44,8 @@ public class CandidateRepository {
         candidateMap.put("applicationSummary", e.getApplicationSummary());
         candidateMap.put("jobPositionId", e.getJobPositionId());
         candidateMap.put("stage", e.getStage());
-        candidateMap.put("isHired", e.isHired());
-        candidateMap.put("isOffered", e.isOffered());
+        candidateMap.put("isHired", e.getIsHired());
+        candidateMap.put("isOffered", e.getIsOffered());
         
         ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(candidateMap);
 
@@ -75,8 +75,8 @@ public class CandidateRepository {
         candidateMap.put("applicationSummary", e.getApplicationSummary());
         candidateMap.put("jobPositionId", e.getJobPositionId());
         candidateMap.put("stage", e.getStage());
-        candidateMap.put("isHired", e.isHired());
-        candidateMap.put("isOffered", e.isOffered());
+        candidateMap.put("isHired", e.getIsHired());
+        candidateMap.put("isOffered", e.getIsOffered());
 
         ApiFuture<WriteResult> collection = db.collection(COLLECTION_NAME).document(e.getId()).set(candidateMap);
 

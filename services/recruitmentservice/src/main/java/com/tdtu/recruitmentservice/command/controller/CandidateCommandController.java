@@ -47,8 +47,8 @@ public class CandidateCommandController {
                 model.getApplicationSummary(),
                 model.getJobPositionId(),
                 model.getStage(),
-                model.isHired(),
-                model.isOffered()
+                model.getIsHired(),
+                model.getIsOffered()
         );
         commandGateway.sendAndWait(command);
         return command.getId();
@@ -78,8 +78,8 @@ public class CandidateCommandController {
                 model.getApplicationSummary(),
                 model.getJobPositionId(),
                 model.getStage(),
-                model.isHired(),
-                model.isOffered()
+                model.getIsHired(),
+                model.getIsOffered()
         );
         commandGateway.sendAndWait(command);
         return model.getId();
