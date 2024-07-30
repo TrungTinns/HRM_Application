@@ -41,9 +41,13 @@ public class RecruitmentCommandController {
 	 @PostMapping
 	 public String addRecruitment(@RequestBody RecruitmentRequestModel model) {
 		CandidateResponseModel respModel = candidateQueryController.getCandidateDetail(model.getCandidateId());
-		if (respModel == null) {
+		if (respModel.getId() == null) {
 			return "Not found candidate with ID: " + model.getCandidateId();
 	    }
+		
+		if (respModel.getIsOffered()) {
+			return "Candidate with ID " + model.getCandidateId() + " was hired";
+		}
 		respModel.setIsOffered(true);
 		
 		CandidateRequestModel reqModel= new CandidateRequestModel();
