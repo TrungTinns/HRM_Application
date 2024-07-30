@@ -11,7 +11,10 @@ spring:
           uri: ${EMPLOYEE_SERVICE_URL}
           predicates:
             - Path=/api/v1/employee/**
-            
+        - id: recruitment-service
+          uri: ${RECRUITMENT_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/recruitment/**
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       globalcors:  
@@ -23,6 +26,6 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_SERVER}
     register-with-eureka: true
     fetch-registry: true
