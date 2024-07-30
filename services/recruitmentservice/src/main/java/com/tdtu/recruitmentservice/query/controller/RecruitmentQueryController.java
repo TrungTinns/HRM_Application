@@ -23,12 +23,6 @@ import com.tdtu.recruitmentservice.query.queries.recruitment.GetRecruitmentQuery
 public class RecruitmentQueryController {
 	@Autowired
 	private QueryGateway queryGateway;
-	
-	@Autowired
-    private KafkaProducer kafkaProducer;
-
-	@Autowired
-	private CandidateQueryController candidateQueryController;
 
 	@GetMapping("/{id}")
 	public RecruitmentResponseModel getRecruitmentDetail(@PathVariable String id) {
@@ -46,15 +40,5 @@ public class RecruitmentQueryController {
 		List<RecruitmentResponseModel> lstEmp = queryGateway
 				.query(getAllRecruitmentsQuery, ResponseTypes.multipleInstancesOf(RecruitmentResponseModel.class)).join();
 		return lstEmp;
-	}
-	
-	@GetMapping("/offered/{candidateId}")
-	public String offerCandidate(@PathVariable String candidateId) throws InterruptedException, ExecutionException {
-		CandidateResponseModel candidate = candidateQueryController.getCandidateDetail(candidateId);
-		if (candidate != null) {
-			kafkaProducer.sendMessage(candidate);
-			return "Candidate offered with ID: " + candidateId;
-        }
-		return "Not found candidate with ID: " + candidateId;
 	}
 }
