@@ -1,6 +1,8 @@
-package com.tdtu.timesheetservice.query.model;
+package com.tdtu.timesheetservice.command.command.timeOffRequest;
 
 import java.util.Date;
+
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +15,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProjectAllocationResponseModel {
+public class CreateTimeOffRequestCommand {
+	@TargetAggregateIdentifier
 	private String id;
 	private String empId;
 	private String leaveType;

@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.query.model;
+package com.tdtu.timesheetservice.command.event.timeOffRequest;
 
 import java.util.Date;
 
@@ -6,14 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
-public class ProjectAllocationResponseModel {
+public class TimeOffRequestCreatedEvent {
 	private String id;
 	private String empId;
 	private String leaveType;

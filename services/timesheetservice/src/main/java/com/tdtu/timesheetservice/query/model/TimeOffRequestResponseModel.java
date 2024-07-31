@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProjectAllocationResponseModel {
+public class TimeOffRequestResponseModel {
 	private String id;
 	private String empId;
 	private String leaveType;

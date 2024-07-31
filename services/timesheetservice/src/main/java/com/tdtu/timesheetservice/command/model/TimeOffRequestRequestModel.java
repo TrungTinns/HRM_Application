@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.query.model;
+package com.tdtu.timesheetservice.command.model;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProjectAllocationResponseModel {
+public class TimeOffRequestRequestModel {
 	private String id;
 	private String empId;
 	private String leaveType;
