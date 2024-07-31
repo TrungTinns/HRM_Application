@@ -1,4 +1,4 @@
-package com.tdtu.recruitmentservice.ulti;
+package com.tdtu.recruitmentservice.util;
 
 import java.util.concurrent.ExecutionException;
 

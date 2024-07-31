@@ -1,7 +1,7 @@
-package com.tdtu.recruitmentservice.converter;
+package com.tdtu.timesheetservice.converter;
 
 import com.google.cloud.firestore.DocumentReference;
-import com.tdtu.recruitmentservice.util.FirestoreUtil;
+import com.tdtu.timesheetservice.util.FirestoreUtil;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

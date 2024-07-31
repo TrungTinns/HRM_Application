@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: timesheet_service
+  
+server:
+  port: 9003
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER}
+
+axon:
+  axonserver:
+    servers: ${AXON_SERVER_HOST}:${AXON_SERVER_PORT}
+    context: default
+  
