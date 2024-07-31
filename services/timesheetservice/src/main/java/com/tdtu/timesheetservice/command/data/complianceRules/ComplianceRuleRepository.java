@@ -18,7 +18,7 @@ import com.google.firebase.cloud.FirestoreClient;
 
 @Repository
 public class ComplianceRuleRepository {
-	private static final String COLLECTION_NAME = "Entries";
+	private static final String COLLECTION_NAME = "ComplianceRules";
 	public String save(ComplianceRule e) throws InterruptedException, ExecutionException {
 		 Firestore db = FirestoreClient.getFirestore();
 	     Map<String, Object> ComplianceRuleMap = new HashMap<>();
