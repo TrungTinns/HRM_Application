@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.entrie;
+package com.tdtu.timesheetservice.command.event.entrie;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Entry {
+public class EntryUpdatedEvent {
 	private String id;
 	private String empId;
 	private Date clockIn;

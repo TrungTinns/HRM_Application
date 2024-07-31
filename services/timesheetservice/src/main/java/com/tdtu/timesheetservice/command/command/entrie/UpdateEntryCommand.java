@@ -1,17 +1,22 @@
-package com.tdtu.timesheetservice.command.data.entrie;
+package com.tdtu.timesheetservice.command.command.entrie;
 
 import java.util.Date;
+
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Entry {
+@ToString
+public class UpdateEntryCommand {
+	@TargetAggregateIdentifier
 	private String id;
 	private String empId;
 	private Date clockIn;
