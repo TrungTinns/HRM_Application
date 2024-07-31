@@ -18,7 +18,7 @@ import com.google.firebase.cloud.FirestoreClient;
 
 @Repository
 public class ViolationRecordRepository {
-	private static final String COLLECTION_NAME = "ViolationRules";
+	private static final String COLLECTION_NAME = "ViolationRecords";
 	public String save(ViolationRecord e) throws InterruptedException, ExecutionException {
 		 Firestore db = FirestoreClient.getFirestore();
 	     Map<String, Object> ViolationRecordMap = new HashMap<>();
