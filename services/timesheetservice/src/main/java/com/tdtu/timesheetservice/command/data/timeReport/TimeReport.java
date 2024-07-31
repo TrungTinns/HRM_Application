@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.entries;
+package com.tdtu.timesheetservice.command.data.timeReport;
 
 import java.util.Date;
 
@@ -11,13 +11,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Entry {
+public class TimeReport {
 	private String id;
 	private String empId;
-	private Date clockIn;
-	private Date clockOut;
-	private Date breakStart;
-	private Date breakEnd;
+	private String reportType;
+	private Date startDate;
+	private Date endDate;
+	private Double totalHours;
 	private Double overTimeHours;
+	private int leaveDays;
 	
 }

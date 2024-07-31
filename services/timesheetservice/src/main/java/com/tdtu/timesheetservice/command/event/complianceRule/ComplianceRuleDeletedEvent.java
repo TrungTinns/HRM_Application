@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.event.complianceRules;
+package com.tdtu.timesheetservice.command.event.complianceRule;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -12,9 +12,9 @@ import org.springframework.beans.BeanUtils;
 import com.tdtu.timesheetservice.command.command.complianceRule.CreateComplianceRuleCommand;
 import com.tdtu.timesheetservice.command.command.complianceRule.DeleteComplianceRuleCommand;
 import com.tdtu.timesheetservice.command.command.complianceRule.UpdateComplianceRuleCommand;
-import com.tdtu.timesheetservice.command.event.complianceRules.ComplianceRuleCreatedEvent;
-import com.tdtu.timesheetservice.command.event.complianceRules.ComplianceRuleDeletedEvent;
-import com.tdtu.timesheetservice.command.event.complianceRules.ComplianceRuleUpdatedEvent;
+import com.tdtu.timesheetservice.command.event.complianceRule.ComplianceRuleCreatedEvent;
+import com.tdtu.timesheetservice.command.event.complianceRule.ComplianceRuleDeletedEvent;
+import com.tdtu.timesheetservice.command.event.complianceRule.ComplianceRuleUpdatedEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.violationRecords;
+package com.tdtu.timesheetservice.command.data.violationRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;

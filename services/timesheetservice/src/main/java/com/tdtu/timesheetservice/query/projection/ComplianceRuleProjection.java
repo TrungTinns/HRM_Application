@@ -10,8 +10,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tdtu.timesheetservice.command.data.complianceRules.ComplianceRule;
-import com.tdtu.timesheetservice.command.data.complianceRules.ComplianceRuleService;
+import com.tdtu.timesheetservice.command.data.complianceRule.ComplianceRule;
+import com.tdtu.timesheetservice.command.data.complianceRule.ComplianceRuleService;
 import com.tdtu.timesheetservice.query.model.ComplianceRuleResponseModel;
 import com.tdtu.timesheetservice.query.queries.complianceRule.GetAllComplianceRulesQuery;
 import com.tdtu.timesheetservice.query.queries.complianceRule.GetComplianceRuleQuery;

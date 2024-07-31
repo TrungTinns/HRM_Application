@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.projectAllocations;
+package com.tdtu.timesheetservice.command.data.projectAllocation;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

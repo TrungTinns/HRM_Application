@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.entries;
+package com.tdtu.timesheetservice.command.data.entrie;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

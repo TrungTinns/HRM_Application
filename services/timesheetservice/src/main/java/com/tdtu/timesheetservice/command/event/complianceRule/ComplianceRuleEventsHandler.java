@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.event.complianceRules;
+package com.tdtu.timesheetservice.command.event.complianceRule;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -8,8 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tdtu.timesheetservice.command.data.complianceRules.ComplianceRule;
-import com.tdtu.timesheetservice.command.data.complianceRules.ComplianceRuleService;
+import com.tdtu.timesheetservice.command.data.complianceRule.ComplianceRule;
+import com.tdtu.timesheetservice.command.data.complianceRule.ComplianceRuleService;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.timeReports;
+package com.tdtu.timesheetservice.command.data.timeReport;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.violationRecords;
+package com.tdtu.timesheetservice.command.data.violationRecord;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.timeOffRequests;
+package com.tdtu.timesheetservice.command.data.timeOffRequest;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

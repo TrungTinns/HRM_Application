@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.complianceRules;
+package com.tdtu.timesheetservice.command.data.complianceRule;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

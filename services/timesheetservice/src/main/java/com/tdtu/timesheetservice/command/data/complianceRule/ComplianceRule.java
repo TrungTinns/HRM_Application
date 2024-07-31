@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.event.complianceRules;
+package com.tdtu.timesheetservice.command.data.complianceRule;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ComplianceRuleUpdatedEvent {
+public class ComplianceRule {
 	private String id;
 	private String ruleDescription;
 	private String penaltyDescription;
