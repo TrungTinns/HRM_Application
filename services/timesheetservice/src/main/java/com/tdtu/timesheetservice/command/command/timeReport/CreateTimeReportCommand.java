@@ -1,17 +1,22 @@
-package com.tdtu.timesheetservice.command.data.timeReport;
+package com.tdtu.timesheetservice.command.command.timeReport;
 
 import java.util.Date;
+
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class TimeReport {
+@ToString
+public class CreateTimeReportCommand {
+	@TargetAggregateIdentifier
 	private String id;
 	private String empId;
 	private String reportType;

@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.timeReport;
+package com.tdtu.timesheetservice.command.model;
 
 import java.util.Date;
 
@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class TimeReport {
+@ToString
+public class TimeReportRequestModel {
 	private String id;
 	private String empId;
 	private String reportType;

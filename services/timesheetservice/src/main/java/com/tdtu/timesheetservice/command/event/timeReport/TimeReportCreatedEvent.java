@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.timeReport;
+package com.tdtu.timesheetservice.command.event.timeReport;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TimeReport {
+public class TimeReportCreatedEvent {
 	private String id;
 	private String empId;
 	private String reportType;

@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Aggregate
 @AllArgsConstructor
 @NoArgsConstructor
-public class TimeOffRequestAggregate {
+public class TimeOffAggregate {
 	@AggregateIdentifier
 	private String id;
 	private String empId;
@@ -35,7 +35,7 @@ public class TimeOffRequestAggregate {
 	
 	// CREATE EVENT
 	@CommandHandler
-	public TimeOffRequestAggregate(CreateTimeOffRequestCommand createTimeOffRequestCommand) {
+	public TimeOffAggregate(CreateTimeOffRequestCommand createTimeOffRequestCommand) {
 		TimeOffRequestCreatedEvent TimeOffRequestCreatedEvent = new TimeOffRequestCreatedEvent();
 		BeanUtils.copyProperties(createTimeOffRequestCommand, TimeOffRequestCreatedEvent);
 		AggregateLifecycle.apply(TimeOffRequestCreatedEvent);
