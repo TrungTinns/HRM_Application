@@ -31,7 +31,6 @@ public class CandidateResponseModel {
     private String department;
     private String source;
     private String medium;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "EEE MMM dd HH:mm:ss zzz yyyy")
     private Date availability;
     private int evaluation;
     private Double expectedSalary;

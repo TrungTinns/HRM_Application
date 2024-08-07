@@ -1,4 +1,4 @@
-package com.tdtu.timesheetservice.command.data.entrie;
+package com.tdtu.timesheetservice.command.data.entry;
 
 import java.util.Date;
 

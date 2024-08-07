@@ -8,8 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tdtu.timesheetservice.command.data.entrie.Entry;
-import com.tdtu.timesheetservice.command.data.entrie.EntryService;
+import com.tdtu.timesheetservice.command.data.entry.Entry;
+import com.tdtu.timesheetservice.command.data.entry.EntryService;
 
 import lombok.extern.slf4j.Slf4j;
 
