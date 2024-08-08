@@ -57,7 +57,7 @@ public class EntryProjection {
 	@QueryHandler
 	public List<EntryResponseModel> handle(GetEntriesByEmpIdQuery query)
 			throws InterruptedException, ExecutionException {
-		List<Entry> lstEntity = EntryService.findAll();
+		List<Entry> lstEntity = EntryService.findByEmpId(query.getEmpId());
 		List<EntryResponseModel> lstEmp = new ArrayList<>();
 		for (Entry Entry : lstEntity) {
 			EntryResponseModel model = new EntryResponseModel();
