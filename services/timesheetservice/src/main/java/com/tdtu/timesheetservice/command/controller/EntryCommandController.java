@@ -1,6 +1,7 @@
 package com.tdtu.timesheetservice.command.controller;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -23,6 +24,7 @@ import com.tdtu.timesheetservice.command.command.entrie.UpdateEntryCommand;
 import com.tdtu.timesheetservice.command.model.EntryRequestModel;
 import com.tdtu.timesheetservice.query.controller.EntryQueryController;
 import com.tdtu.timesheetservice.query.model.EntryResponseModel;
+import com.tdtu.timesheetservice.query.model.ErrorResponseModel;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +39,15 @@ public class EntryCommandController {
     private EntryQueryController entryQueryController;
     
     @PostMapping("/clock-in")
-    public ResponseEntity<String> addEntry(@RequestBody EntryRequestModel model) throws ParseException {
+    public ResponseEntity<ErrorResponseModel> addEntry(@RequestBody EntryRequestModel model) throws ParseException {
+    	SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+    	String formattedClockInDate = outputFormat.format(model.getClockIn());
+
+        EntryResponseModel queryModel = entryQueryController.getEntryByEmpIdAndClockInDate(model.getEmpId(), formattedClockInDate);
+        if (queryModel != null && queryModel.getEmpId() != null) {
+        	ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.BAD_REQUEST.value(), "Employee has already clocked in on " + formattedClockInDate);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
         CreateEntryCommand command = new CreateEntryCommand(
                 UUID.randomUUID().toString(),
                 model.getEmpId(),
@@ -48,10 +58,11 @@ public class EntryCommandController {
                 model.getOverTimeHours()
         );
         commandGateway.sendAndWait(command);
-        return ResponseEntity.ok(command.getId());
+        ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.OK.value(), command.getEmpId());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/clock-out")
+    @PutMapping("/entry")
     public ResponseEntity<String> updateEntry(@RequestBody EntryRequestModel model) {
         UpdateEntryCommand command = new UpdateEntryCommand(
                 model.getId(),
