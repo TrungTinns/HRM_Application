@@ -9,6 +9,7 @@ import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.tdtu.timesheetservice.query.model.EntryResponseModel;
+import com.tdtu.timesheetservice.query.model.ErrorResponseModel;
 import com.tdtu.timesheetservice.query.queries.entry.GetAllEntriesQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntriesByEmpIdQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
@@ -67,14 +69,6 @@ public class EntryQueryController {
 	
 	@GetMapping("/entry/find-by-clock-in")
 	public EntryResponseModel getEntryByEmpIdAndLockInDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockInDate") String clockInDate){
-		if (empId == null || empId.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: empId");
-        }
-		
-		if (clockInDate == null || clockInDate.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: clockInDate");
-        }
-		
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			Date parsedDate = sdf.parse(clockInDate);
@@ -84,22 +78,16 @@ public class EntryQueryController {
                     .query(query, EntryResponseModel.class)
                     .join();
             return empResponseModel;
-		} catch (Exception e) {
+		} catch (ParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid clockInDate value, expected yyyy-MM-dd");
         }
+		catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+		}
 	}
 	
 	@GetMapping("/entry/find-by-clock-out")
 	public EntryResponseModel getEntryByEmpIdAndLockOutDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockOutDate") String clockOutDate) throws ParseException{
-		if (empId == null || empId.isEmpty()) {
-			log.info("Missisng");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: empId");
-        }
-		
-		if (clockOutDate == null || clockOutDate.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: clockOutDate");
-        }
-		
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			Date parsedDate = sdf.parse(clockOutDate);
@@ -109,14 +97,26 @@ public class EntryQueryController {
                     .query(query, EntryResponseModel.class)
                     .join();
             return empResponseModel;
-		} catch (Exception e) {
+		}
+		catch (ParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid clockOutDate value, expected yyyy-MM-dd");
-        }
+        } 
+		catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+		}
 	}
 	
+	@ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponseModel> handleResponseStatusException(ResponseStatusException e) {
+        String message = e.getReason() != null ? e.getReason() : "An unexpected error occurred";
+        ErrorResponseModel errorResponse = new ErrorResponseModel(e.getStatusCode().value(), message);
+        return new ResponseEntity<>(errorResponse, e.getStatusCode());
+    }
+		
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    public ResponseEntity<ErrorResponseModel> handleException(Exception e) {
+    	ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
 }
