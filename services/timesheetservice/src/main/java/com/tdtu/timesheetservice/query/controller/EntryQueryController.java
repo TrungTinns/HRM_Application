@@ -1,5 +1,6 @@
 package com.tdtu.timesheetservice.query.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,7 @@ import com.tdtu.timesheetservice.query.model.EntryResponseModel;
 import com.tdtu.timesheetservice.query.queries.entry.GetAllEntriesQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntriesByEmpIdQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
+import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
 
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +65,16 @@ public class EntryQueryController {
  	}
 	
 	
-	@GetMapping("/entry")
+	@GetMapping("/entry/find-by-clock-in")
 	public EntryResponseModel getEntryByEmpIdAndLockInDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockInDate") String clockInDate){
+		if (empId == null || empId.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: empId");
+        }
+		
+		if (clockInDate == null || clockInDate.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: clockInDate");
+        }
+		
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			Date parsedDate = sdf.parse(clockInDate);
@@ -79,9 +89,34 @@ public class EntryQueryController {
         }
 	}
 	
+	@GetMapping("/entry/find-by-clock-out")
+	public EntryResponseModel getEntryByEmpIdAndLockOutDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockOutDate") String clockOutDate) throws ParseException{
+		if (empId == null || empId.isEmpty()) {
+			log.info("Missisng");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: empId");
+        }
+		
+		if (clockOutDate == null || clockOutDate.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameter: clockOutDate");
+        }
+		
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+			Date parsedDate = sdf.parse(clockOutDate);
+			
+			GetEntryByEmpIdAndClockOutDateQuery query = new GetEntryByEmpIdAndClockOutDateQuery(empId, clockOutDate);
+            EntryResponseModel empResponseModel = queryGateway
+                    .query(query, EntryResponseModel.class)
+                    .join();
+            return empResponseModel;
+		} catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid clockOutDate value, expected yyyy-MM-dd");
+        }
+	}
+	
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid clockInDate value, expected yyyy-MM-dd");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
-
+    
 }

@@ -1,7 +1,6 @@
 package com.tdtu.timesheetservice.query.projection;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +17,7 @@ import com.tdtu.timesheetservice.query.model.EntryResponseModel;
 import com.tdtu.timesheetservice.query.queries.entry.GetAllEntriesQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntriesByEmpIdQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
+import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
 
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +71,17 @@ public class EntryProjection {
 	public EntryResponseModel handle(GetEntryByEmpIdAndClockInDateQuery query)
 			throws InterruptedException, ExecutionException, ParseException {
 		Entry entry = EntryService.findByEmpIdAndClockInDate(query.getEmpId(), query.getClockInDate());
+		EntryResponseModel model = new EntryResponseModel();
+		if (entry != null) {
+			BeanUtils.copyProperties(entry, model);
+		}
+		return model;
+	}
+	
+	@QueryHandler
+	public EntryResponseModel handle(GetEntryByEmpIdAndClockOutDateQuery query)
+			throws InterruptedException, ExecutionException, ParseException {
+		Entry entry = EntryService.findByEmpIdAndClockOutDate(query.getEmpId(), query.getClockOutDate());
 		EntryResponseModel model = new EntryResponseModel();
 		if (entry != null) {
 			BeanUtils.copyProperties(entry, model);
