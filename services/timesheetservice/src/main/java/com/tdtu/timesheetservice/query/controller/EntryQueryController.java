@@ -23,6 +23,7 @@ import com.tdtu.timesheetservice.query.model.ErrorResponseModel;
 import com.tdtu.timesheetservice.query.queries.entry.GetAllEntriesQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntriesByEmpIdQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockInDateQuery;
+import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
@@ -68,7 +69,7 @@ public class EntryQueryController {
 	
 	
 	@GetMapping("/entry/by-empId-and-clockInDate")
-	public EntryResponseModel getEntryByEmpIdAndLockInDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockInDate") String clockInDate){
+	public EntryResponseModel getEntryByEmpIdAndClockInDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockInDate") String clockInDate){
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			Date parsedDate = sdf.parse(clockInDate);
@@ -87,7 +88,7 @@ public class EntryQueryController {
 	}
 	
 	@GetMapping("/entry/by-empId-and-clockOutDate")
-	public EntryResponseModel getEntryByEmpIdAndLockOutDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockOutDate") String clockOutDate) throws ParseException{
+	public EntryResponseModel getEntryByEmpIdAndClockOutDate(@RequestParam(name = "empId") String empId, @RequestParam(name = "clockOutDate") String clockOutDate) throws ParseException{
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			Date parsedDate = sdf.parse(clockOutDate);
@@ -107,7 +108,7 @@ public class EntryQueryController {
 	}
 	
 	@GetMapping("/entry/by-clockInDate")
-	public List<EntryResponseModel> getEntryByLockIntDate(@RequestParam(name = "clockInDate") String clockInDate) throws ParseException{
+	public List<EntryResponseModel> getEntryByClockIntDate(@RequestParam(name = "clockInDate") String clockInDate) throws ParseException{
 		try {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
@@ -119,14 +120,32 @@ public class EntryQueryController {
     		return lst;
 		}
 		catch (ParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid clockOutDate value, expected yyyy-MM-dd");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid clockInDate value, expected yyyy-MM-dd");
         } 
 		catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
 		}
 	}
 	
-	
+	@GetMapping("/entry/by-clockOutDate")
+	public List<EntryResponseModel> getEntryByClockOutDate(@RequestParam(name = "clockOutDate") String clockOutDate) throws ParseException{
+		try {
+			
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+			Date parsedDate = sdf.parse(clockOutDate);
+
+			GetEntryByClockOutDateQuery query = new GetEntryByClockOutDateQuery(clockOutDate);
+    		List<EntryResponseModel> lst = queryGateway
+    				.query(query, ResponseTypes.multipleInstancesOf(EntryResponseModel.class)).join();
+    		return lst;
+		}
+		catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid clockOutDate value, expected yyyy-MM-dd");
+        } 
+		catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+		}
+	}
 	
 	@ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponseModel> handleResponseStatusException(ResponseStatusException e) {

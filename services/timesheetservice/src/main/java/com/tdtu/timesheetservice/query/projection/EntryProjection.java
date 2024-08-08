@@ -17,6 +17,7 @@ import com.tdtu.timesheetservice.query.model.EntryResponseModel;
 import com.tdtu.timesheetservice.query.queries.entry.GetAllEntriesQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntriesByEmpIdQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockInDateQuery;
+import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
@@ -94,6 +95,19 @@ public class EntryProjection {
 	public List<EntryResponseModel> handle(GetEntryByClockInDateQuery query)
 			throws InterruptedException, ExecutionException, ParseException {
 		List<Entry> lstEntity = EntryService.findByLockInDate(query.getClockInDate());
+		List<EntryResponseModel> lstEntry = new ArrayList<>();
+		for (Entry Entry : lstEntity) {
+			EntryResponseModel model = new EntryResponseModel();
+			BeanUtils.copyProperties(Entry, model);
+	        lstEntry.add(model);
+		}
+		return lstEntry;
+	}
+	
+	@QueryHandler
+	public List<EntryResponseModel> handle(GetEntryByClockOutDateQuery query)
+			throws InterruptedException, ExecutionException, ParseException {
+		List<Entry> lstEntity = EntryService.findByLockOutDate(query.getClockOutDate());
 		List<EntryResponseModel> lstEntry = new ArrayList<>();
 		for (Entry Entry : lstEntity) {
 			EntryResponseModel model = new EntryResponseModel();

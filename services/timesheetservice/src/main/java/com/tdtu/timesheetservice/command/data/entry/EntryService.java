@@ -44,7 +44,7 @@ public class EntryService {
         return repo.findByLockInDate(date);
     }
     
-    public List<Entry> findByLockOutDate(String date)  throws InterruptedException, ExecutionException {
+    public List<Entry> findByLockOutDate(String date)  throws InterruptedException, ExecutionException, ParseException {
         return repo.findByLockOutDate(date);
     }
     
