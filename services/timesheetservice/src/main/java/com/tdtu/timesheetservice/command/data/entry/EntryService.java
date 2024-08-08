@@ -40,7 +40,7 @@ public class EntryService {
 		return repo.findByEmpId(id);
 	}
 	
-    public List<Entry> findByLockInDate(String date) throws InterruptedException, ExecutionException {
+    public List<Entry> findByLockInDate(String date) throws InterruptedException, ExecutionException, ParseException {
         return repo.findByLockInDate(date);
     }
     

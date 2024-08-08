@@ -107,18 +107,28 @@ public class EntryRepository {
         return EntryList;
 	}
     
-    public List<Entry> findByLockInDate(String date) {
-    	Firestore db = FirestoreClient.getFirestore();
-//        ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME).whereEqualTo("empId",id).get();
-//
-//        List<Entry> EntryList = new ArrayList<>();
-//        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-//            Entry e = document.toObject(Entry.class);
-//            e.setId(document.getId());
-//            EntryList.add(e);
-//        }
+    public List<Entry> findByLockInDate(String date) throws ParseException, InterruptedException, ExecutionException {
+    	
+    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-        return new ArrayList<>();
+        Date startOfDay = formatter.parse(date + "T00:00:00");
+        Date endOfDay = formatter.parse(date + "T23:59:59");
+        
+        Firestore db = FirestoreClient.getFirestore();
+        Query query = db.collection(COLLECTION_NAME)
+                .whereGreaterThanOrEqualTo("clockIn", startOfDay)
+                .whereLessThanOrEqualTo("clockIn", endOfDay);
+
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        
+        List<Entry> EntryList = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+            Entry e = document.toObject(Entry.class);
+            e.setId(document.getId());
+            EntryList.add(e);
+        }
+
+        return EntryList;
     }
     
     public List<Entry> findByLockOutDate(String date) {

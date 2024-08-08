@@ -16,6 +16,7 @@ import com.tdtu.timesheetservice.command.data.entry.EntryService;
 import com.tdtu.timesheetservice.query.model.EntryResponseModel;
 import com.tdtu.timesheetservice.query.queries.entry.GetAllEntriesQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntriesByEmpIdQuery;
+import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockInDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
@@ -45,26 +46,26 @@ public class EntryProjection {
 	public List<EntryResponseModel> handle(GetAllEntriesQuery query)
 			throws InterruptedException, ExecutionException {
 		List<Entry> lstEntity = EntryService.findAll();
-		List<EntryResponseModel> lstEmp = new ArrayList<>();
+		List<EntryResponseModel> lstEntry = new ArrayList<>();
 		for (Entry Entry : lstEntity) {
 			EntryResponseModel model = new EntryResponseModel();
 			BeanUtils.copyProperties(Entry, model);
-	        lstEmp.add(model);
+	        lstEntry.add(model);
 		}
-		return lstEmp;
+		return lstEntry;
 	}
 	
 	@QueryHandler
 	public List<EntryResponseModel> handle(GetEntriesByEmpIdQuery query)
 			throws InterruptedException, ExecutionException {
 		List<Entry> lstEntity = EntryService.findByEmpId(query.getEmpId());
-		List<EntryResponseModel> lstEmp = new ArrayList<>();
+		List<EntryResponseModel> lstEntry = new ArrayList<>();
 		for (Entry Entry : lstEntity) {
 			EntryResponseModel model = new EntryResponseModel();
 			BeanUtils.copyProperties(Entry, model);
-	        lstEmp.add(model);
+	        lstEntry.add(model);
 		}
-		return lstEmp;
+		return lstEntry;
 	}
 	
 	@QueryHandler
@@ -87,5 +88,18 @@ public class EntryProjection {
 			BeanUtils.copyProperties(entry, model);
 		}
 		return model;
+	}
+	
+	@QueryHandler
+	public List<EntryResponseModel> handle(GetEntryByClockInDateQuery query)
+			throws InterruptedException, ExecutionException, ParseException {
+		List<Entry> lstEntity = EntryService.findByLockInDate(query.getClockInDate());
+		List<EntryResponseModel> lstEntry = new ArrayList<>();
+		for (Entry Entry : lstEntity) {
+			EntryResponseModel model = new EntryResponseModel();
+			BeanUtils.copyProperties(Entry, model);
+	        lstEntry.add(model);
+		}
+		return lstEntry;
 	}
 }
