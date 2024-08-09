@@ -15,6 +15,7 @@ import com.tdtu.timesheetservice.command.data.violationRecord.ViolationRecordSer
 import com.tdtu.timesheetservice.query.model.ViolationRecordResponseModel;
 import com.tdtu.timesheetservice.query.queries.violationRecord.GetAllViolationRecordsQuery;
 import com.tdtu.timesheetservice.query.queries.violationRecord.GetViolationRecordQuery;
+import com.tdtu.timesheetservice.query.queries.violationRecord.GetViolationRecordsByEmpIdAndTimeQuery;
 import com.tdtu.timesheetservice.query.queries.violationRecord.GetViolationRecordsByEmpIdQuery;
 
 
@@ -52,6 +53,19 @@ public class ViolationRecordProjection {
 	public List<ViolationRecordResponseModel> handle(GetViolationRecordsByEmpIdQuery getViolationRecordsByEmpIdQuery)
 			throws InterruptedException, ExecutionException {
 		List<ViolationRecord> lstRecord = ViolationRecordService.findByEmpId(getViolationRecordsByEmpIdQuery.getEmpId());
+		List<ViolationRecordResponseModel> lst = new ArrayList<>();
+		for (ViolationRecord ViolationRecord : lstRecord) {
+			ViolationRecordResponseModel model = new ViolationRecordResponseModel();
+			BeanUtils.copyProperties(ViolationRecord, model);
+			lst.add(model);
+		}
+		return lst;
+	}
+	
+	@QueryHandler
+	public List<ViolationRecordResponseModel> handle(GetViolationRecordsByEmpIdAndTimeQuery query)
+			throws InterruptedException, ExecutionException {
+		List<ViolationRecord> lstRecord = ViolationRecordService.findByEmpIdAndTime(query.getEmpId(), query.getMonth(), query.getYear());
 		List<ViolationRecordResponseModel> lst = new ArrayList<>();
 		for (ViolationRecord ViolationRecord : lstRecord) {
 			ViolationRecordResponseModel model = new ViolationRecordResponseModel();
