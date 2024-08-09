@@ -27,8 +27,7 @@ import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockOutDateQuery
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
-
-import lombok.extern.slf4j.Slf4j;
+import com.tdtu.timesheetservice.query.queries.entry.GetEntryRecordsByEmpIdAndTimeQuery;
 
 @RestController
 @RequestMapping("/api/v1/timesheet")
@@ -145,6 +144,36 @@ public class EntryQueryController {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
 		}
 	}
+	
+	@GetMapping("/entry/by-empId-time")
+	public List<EntryResponseModel> getEntryByEmpIdAndTime(@RequestParam(name = "empId") String empId ,@RequestParam(name = "month") String monthStr,@RequestParam(name = "year") String yearStr) throws ParseException{
+		Integer month = convertStringIntoInteger(monthStr,"month");
+		Integer year = convertStringIntoInteger(yearStr,"year");
+		GetEntryRecordsByEmpIdAndTimeQuery getAllViolationRecordsQuery = new GetEntryRecordsByEmpIdAndTimeQuery(empId,month,year);
+		List<EntryResponseModel> lstEntry = queryGateway
+				.query(getAllViolationRecordsQuery, ResponseTypes.multipleInstancesOf(EntryResponseModel.class)).join();
+		return lstEntry;
+	}
+	
+	public Integer convertStringIntoInteger(String source, String field) {
+		Integer target;
+		try {
+			target = Integer.parseInt(source);
+			
+			if (field == "month" && (target < 1  || target > 12)) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Month value must be in range [1,12]"); 
+			}
+			
+			if (field == "year" && target < 0) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Year value must be greater than 0"); 
+			}
+		}
+		catch (NumberFormatException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid " + field + " value"); 
+		}
+		return target;
+	}
+		
 	
 	@ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponseModel> handleResponseStatusException(ResponseStatusException e) {

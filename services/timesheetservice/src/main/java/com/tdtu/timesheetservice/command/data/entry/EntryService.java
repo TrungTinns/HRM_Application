@@ -56,4 +56,7 @@ public class EntryService {
 		return repo.findByEmpIdAndClockOutDate(id,date);
 	}
   
+    public List<Entry> findByEmpIdAndTime(String empId, Integer month, Integer year) throws InterruptedException, ExecutionException {
+    	return repo.findByEmpIdAndTime(empId,month,year);
+    }
 }

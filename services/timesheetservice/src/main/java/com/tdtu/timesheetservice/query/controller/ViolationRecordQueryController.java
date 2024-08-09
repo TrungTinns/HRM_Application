@@ -41,17 +41,17 @@ public class ViolationRecordQueryController {
 	@GetMapping
 	public List<ViolationRecordResponseModel> getAllViolationRecords() {
 		GetAllViolationRecordsQuery getAllViolationRecordsQuery = new GetAllViolationRecordsQuery();
-		List<ViolationRecordResponseModel> lstEmp = queryGateway
+		List<ViolationRecordResponseModel> lstRecord = queryGateway
 				.query(getAllViolationRecordsQuery, ResponseTypes.multipleInstancesOf(ViolationRecordResponseModel.class)).join();
-		return lstEmp;
+		return lstRecord;
 	}
 	
 	@GetMapping("/by-empId")
 	public List<ViolationRecordResponseModel> getViolationRecordsByEmpId(@RequestParam(name = "empId") String empId) {
 		GetViolationRecordsByEmpIdQuery getAllViolationRecordsQuery = new GetViolationRecordsByEmpIdQuery(empId);
-		List<ViolationRecordResponseModel> lstEmp = queryGateway
+		List<ViolationRecordResponseModel> lstRecord = queryGateway
 				.query(getAllViolationRecordsQuery, ResponseTypes.multipleInstancesOf(ViolationRecordResponseModel.class)).join();
-		return lstEmp;
+		return lstRecord;
 	}
 	
 	@GetMapping("/by-empId-time")
@@ -60,9 +60,9 @@ public class ViolationRecordQueryController {
 		Integer year = convertStringIntoInteger(yearStr,"year");
 		
 		GetViolationRecordsByEmpIdAndTimeQuery getAllViolationRecordsQuery = new GetViolationRecordsByEmpIdAndTimeQuery(empId,month,year);
-		List<ViolationRecordResponseModel> lstEmp = queryGateway
+		List<ViolationRecordResponseModel> lstRecord = queryGateway
 				.query(getAllViolationRecordsQuery, ResponseTypes.multipleInstancesOf(ViolationRecordResponseModel.class)).join();
-		return lstEmp;
+		return lstRecord;
 	}
 	
 	public Integer convertStringIntoInteger(String source, String field) {

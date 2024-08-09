@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 
 import com.tdtu.timesheetservice.command.data.entry.Entry;
 import com.tdtu.timesheetservice.command.data.entry.EntryService;
+import com.tdtu.timesheetservice.command.data.violationRecord.ViolationRecord;
 import com.tdtu.timesheetservice.query.model.EntryResponseModel;
+import com.tdtu.timesheetservice.query.model.ViolationRecordResponseModel;
 import com.tdtu.timesheetservice.query.queries.entry.GetAllEntriesQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntriesByEmpIdQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockInDateQuery;
@@ -21,6 +23,8 @@ import com.tdtu.timesheetservice.query.queries.entry.GetEntryByClockOutDateQuery
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockInDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryByEmpIdAndClockOutDateQuery;
 import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
+import com.tdtu.timesheetservice.query.queries.entry.GetEntryRecordsByEmpIdAndTimeQuery;
+import com.tdtu.timesheetservice.query.queries.violationRecord.GetViolationRecordsByEmpIdAndTimeQuery;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -115,5 +119,18 @@ public class EntryProjection {
 	        lstEntry.add(model);
 		}
 		return lstEntry;
+	}
+	
+	@QueryHandler
+	public List<EntryResponseModel> handle(GetEntryRecordsByEmpIdAndTimeQuery query)
+			throws InterruptedException, ExecutionException {
+		List<Entry> lstRecord = EntryService.findByEmpIdAndTime(query.getEmpId(), query.getMonth(), query.getYear());
+		List<EntryResponseModel> lst = new ArrayList<>();
+		for (Entry record : lstRecord) {
+			EntryResponseModel model = new EntryResponseModel();
+			BeanUtils.copyProperties(record, model);
+			lst.add(model);
+		}
+		return lst;
 	}
 }

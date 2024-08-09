@@ -3,6 +3,7 @@ package com.tdtu.timesheetservice.command.data.entry;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
+import com.tdtu.timesheetservice.command.data.violationRecord.ViolationRecord;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -199,5 +201,46 @@ public class EntryRepository {
             return entry;
         }
         return null;
+	}
+    
+    public List<Entry> findByEmpIdAndTime(String empId, Integer month, Integer year) throws InterruptedException, ExecutionException {
+    	Firestore db = FirestoreClient.getFirestore();
+    	
+    	// START DATE
+    	Calendar startCalendar = Calendar.getInstance();
+    	startCalendar.set(Calendar.YEAR, year);
+    	startCalendar.set(Calendar.MONTH, month - 1);
+    	startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+    	startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        startCalendar.set(Calendar.MINUTE, 0);
+        startCalendar.set(Calendar.SECOND, 0);
+        
+    	Date startDate = startCalendar.getTime();
+    	
+    	// END DATE
+    	Calendar endCalendar = Calendar.getInstance();
+    	endCalendar.set(Calendar.YEAR, year);
+    	endCalendar.set(Calendar.MONTH, month - 1);
+    	endCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+    	endCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        endCalendar.set(Calendar.MINUTE, 59);
+        endCalendar.set(Calendar.SECOND, 59);
+        
+    	Date endDate = endCalendar.getTime();
+    	
+        ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME)
+        		.whereEqualTo("empId", empId)
+        		.whereGreaterThanOrEqualTo("clockIn", startDate)
+        		.whereLessThan("clockIn", endDate)
+        		.get();
+        
+        List<Entry> lstEntry = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+        	Entry e = document.toObject(Entry.class);
+            e.setId(document.getId());
+            lstEntry.add(e);
+        }
+
+        return lstEntry;
 	}
 }
