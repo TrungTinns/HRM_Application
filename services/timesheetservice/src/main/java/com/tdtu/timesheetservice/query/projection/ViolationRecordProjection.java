@@ -15,6 +15,7 @@ import com.tdtu.timesheetservice.command.data.violationRecord.ViolationRecordSer
 import com.tdtu.timesheetservice.query.model.ViolationRecordResponseModel;
 import com.tdtu.timesheetservice.query.queries.violationRecord.GetAllViolationRecordsQuery;
 import com.tdtu.timesheetservice.query.queries.violationRecord.GetViolationRecordQuery;
+import com.tdtu.timesheetservice.query.queries.violationRecord.GetViolationRecordsByEmpIdQuery;
 
 
 @Component
@@ -45,5 +46,18 @@ public class ViolationRecordProjection {
 	        lstEmp.add(model);
 		}
 		return lstEmp;
+	}
+	
+	@QueryHandler
+	public List<ViolationRecordResponseModel> handle(GetViolationRecordsByEmpIdQuery getViolationRecordsByEmpIdQuery)
+			throws InterruptedException, ExecutionException {
+		List<ViolationRecord> lstRecord = ViolationRecordService.findByEmpId(getViolationRecordsByEmpIdQuery.getEmpId());
+		List<ViolationRecordResponseModel> lst = new ArrayList<>();
+		for (ViolationRecord ViolationRecord : lstRecord) {
+			ViolationRecordResponseModel model = new ViolationRecordResponseModel();
+			BeanUtils.copyProperties(ViolationRecord, model);
+			lst.add(model);
+		}
+		return lst;
 	}
 }

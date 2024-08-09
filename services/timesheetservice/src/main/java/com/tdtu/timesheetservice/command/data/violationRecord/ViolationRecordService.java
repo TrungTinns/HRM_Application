@@ -31,4 +31,8 @@ public class ViolationRecordService {
 	public List<ViolationRecord> findAll() throws InterruptedException, ExecutionException {
 		return repo.findAll();
 	}
+	
+	public List<ViolationRecord> findByEmpId(String empId) throws InterruptedException, ExecutionException {
+		return repo.findByEmpId(empId);
+	}
 }

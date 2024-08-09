@@ -30,7 +30,6 @@ import com.tdtu.timesheetservice.query.queries.entry.GetEntryQuery;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/timesheet")
 public class EntryQueryController {

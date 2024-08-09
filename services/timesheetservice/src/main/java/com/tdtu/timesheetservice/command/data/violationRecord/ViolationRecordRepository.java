@@ -82,4 +82,18 @@ public class ViolationRecordRepository {
 
         return ViolationRecordList;
     }
+    
+    public List<ViolationRecord> findByEmpId(String empId) throws InterruptedException, ExecutionException {
+    	Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME).whereEqualTo("empId", empId).get();
+
+        List<ViolationRecord> ViolationRecordList = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+            ViolationRecord e = document.toObject(ViolationRecord.class);
+            e.setId(document.getId());
+            ViolationRecordList.add(e);
+        }
+
+        return ViolationRecordList;
+	}
 }
