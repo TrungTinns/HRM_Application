@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.tdtu.timesheetservice.command.command.entrie.CreateEntryCommand;
@@ -48,6 +49,12 @@ public class EntryCommandController {
         	ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.BAD_REQUEST.value(), "Employee has already clocked in on " + formattedClockInDate);
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
+        
+        if ( model.getClockOut() != null && model.getClockIn().after(model.getClockOut())) {
+        	ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.BAD_REQUEST.value(), "ClockIn date cannot be after the ClockOut date");
+        	return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    	}
+        
         CreateEntryCommand command = new CreateEntryCommand(
                 UUID.randomUUID().toString(),
                 model.getEmpId(),
@@ -59,11 +66,16 @@ public class EntryCommandController {
         );
         commandGateway.sendAndWait(command);
         ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.OK.value(), command.getEmpId());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.OK);
     }
 
     @PutMapping("/entry")
-    public ResponseEntity<String> updateEntry(@RequestBody EntryRequestModel model) {
+    public ResponseEntity<ErrorResponseModel> updateEntry(@RequestBody EntryRequestModel model) {
+    	if ( model.getClockOut() != null && model.getClockIn().after(model.getClockOut())) {
+        	ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.BAD_REQUEST.value(), "ClockIn date cannot be after the ClockOut date");
+        	return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    	}
+    	
         UpdateEntryCommand command = new UpdateEntryCommand(
                 model.getId(),
                 model.getEmpId(),
@@ -74,7 +86,8 @@ public class EntryCommandController {
                 model.getOverTimeHours()
         );
         commandGateway.sendAndWait(command);
-        return ResponseEntity.ok(model.getId());
+        ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.OK.value(), command.getEmpId());
+        return new ResponseEntity<>(errorResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -87,9 +100,10 @@ public class EntryCommandController {
     public ResponseEntity<String> handleInvalidFormat(InvalidFormatException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid date format");
     }
-
+    
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid Format please convert it into 'yyyy-MM-dd'T'HH:mm:ss'");
+    public ResponseEntity<ErrorResponseModel> handleException(Exception e) {
+    	ErrorResponseModel errorResponse = new ErrorResponseModel(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
