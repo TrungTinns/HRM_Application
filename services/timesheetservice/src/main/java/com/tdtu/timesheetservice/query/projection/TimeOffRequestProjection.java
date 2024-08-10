@@ -15,6 +15,7 @@ import com.tdtu.timesheetservice.command.data.timeOffRequest.TimeOffRequestServi
 import com.tdtu.timesheetservice.query.model.TimeOffRequestResponseModel;
 import com.tdtu.timesheetservice.query.queries.timeOffRequest.GetAllTimeOffRequestsQuery;
 import com.tdtu.timesheetservice.query.queries.timeOffRequest.GetTimeOffRequestQuery;
+import com.tdtu.timesheetservice.query.queries.timeOffRequest.GetTimeOffRequestsByEmpIdQuery;
 
 @Component
 public class TimeOffRequestProjection {
@@ -37,6 +38,19 @@ public class TimeOffRequestProjection {
 	public List<TimeOffRequestResponseModel> handle(GetAllTimeOffRequestsQuery getAllTimeOffRequestsQuery)
 			throws InterruptedException, ExecutionException {
 		List<TimeOffRequest> lstEntity = TimeOffRequestService.findAll();
+		List<TimeOffRequestResponseModel> lstEmp = new ArrayList<>();
+		for (TimeOffRequest TimeOffRequest : lstEntity) {
+			TimeOffRequestResponseModel model = new TimeOffRequestResponseModel();
+			BeanUtils.copyProperties(TimeOffRequest, model);
+	        lstEmp.add(model);
+		}
+		return lstEmp;
+	}
+	
+	@QueryHandler
+	public List<TimeOffRequestResponseModel> handle(GetTimeOffRequestsByEmpIdQuery getTimeOffRequestsByEmpIdQuery)
+			throws InterruptedException, ExecutionException {
+		List<TimeOffRequest> lstEntity = TimeOffRequestService.findByEmpId(getTimeOffRequestsByEmpIdQuery.getEmpId());
 		List<TimeOffRequestResponseModel> lstEmp = new ArrayList<>();
 		for (TimeOffRequest TimeOffRequest : lstEntity) {
 			TimeOffRequestResponseModel model = new TimeOffRequestResponseModel();

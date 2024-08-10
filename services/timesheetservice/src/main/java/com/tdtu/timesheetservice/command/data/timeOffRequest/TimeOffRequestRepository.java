@@ -84,4 +84,20 @@ public class TimeOffRequestRepository {
 
         return TimeOffRequestList;
     }
+    
+    public List<TimeOffRequest> findByEmpId(String empId) throws InterruptedException, ExecutionException {
+    	Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> querySnapshot = db.collection(COLLECTION_NAME)
+        		.whereEqualTo("empId", empId)
+        		.get();
+
+        List<TimeOffRequest> TimeOffRequestList = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+            TimeOffRequest e = document.toObject(TimeOffRequest.class);
+            e.setId(document.getId());
+            TimeOffRequestList.add(e);
+        }
+
+        return TimeOffRequestList;
+	}
 }

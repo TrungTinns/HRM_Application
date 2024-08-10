@@ -30,4 +30,8 @@ public class TimeOffRequestService {
 	public List<TimeOffRequest> findAll() throws InterruptedException, ExecutionException {
 		return repo.findAll();
 	}
+	
+	public List<TimeOffRequest> findByEmpId(String empId) throws InterruptedException, ExecutionException {
+		return repo.findByEmpId(empId);
+	}
 }
