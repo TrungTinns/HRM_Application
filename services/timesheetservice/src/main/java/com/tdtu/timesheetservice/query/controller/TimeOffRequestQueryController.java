@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.tdtu.timesheetservice.query.model.ErrorResponseModel;
 import com.tdtu.timesheetservice.query.model.TimeOffRequestResponseModel;
 import com.tdtu.timesheetservice.query.queries.timeOffRequest.GetAllTimeOffRequestsQuery;
+import com.tdtu.timesheetservice.query.queries.timeOffRequest.GetTimeOfRequestsByEmpIdAndTimeQuery;
 import com.tdtu.timesheetservice.query.queries.timeOffRequest.GetTimeOffRequestQuery;
 import com.tdtu.timesheetservice.query.queries.timeOffRequest.GetTimeOffRequestsByEmpIdQuery;
 
@@ -51,6 +52,36 @@ public class TimeOffRequestQueryController {
 		List<TimeOffRequestResponseModel> lstEmp = queryGateway
 				.query(getAllTimeOffRequestsQuery, ResponseTypes.multipleInstancesOf(TimeOffRequestResponseModel.class)).join();
 		return lstEmp;
+	}
+	
+	@GetMapping("/by-empId-time")
+	public List<TimeOffRequestResponseModel> getTimeOffRequestsByEmpIdAndTime(@RequestParam(name ="empId") String empId,@RequestParam(name = "month") String monthStr,@RequestParam(name = "year") String yearStr) {
+		Integer month = convertStringIntoInteger(monthStr,"month");
+		Integer year = convertStringIntoInteger(yearStr,"year");
+		
+		GetTimeOfRequestsByEmpIdAndTimeQuery getAllTimeOffRequestsQuery = new GetTimeOfRequestsByEmpIdAndTimeQuery(empId, month, year);
+		List<TimeOffRequestResponseModel> lstEmp = queryGateway
+				.query(getAllTimeOffRequestsQuery, ResponseTypes.multipleInstancesOf(TimeOffRequestResponseModel.class)).join();
+		return lstEmp;
+	}
+	
+	public Integer convertStringIntoInteger(String source, String field) {
+		Integer target;
+		try {
+			target = Integer.parseInt(source);
+			
+			if (field == "month" && (target < 1  || target > 12)) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Month value must be in range [1,12]"); 
+			}
+			
+			if (field == "year" && target < 0) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Year value must be greater than 0"); 
+			}
+		}
+		catch (NumberFormatException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid " + field + " value"); 
+		}
+		return target;
 	}
 	
 	@ExceptionHandler(ResponseStatusException.class)
