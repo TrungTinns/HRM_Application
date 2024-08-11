@@ -62,6 +62,7 @@ public class TimesheetserviceApplication {
 		List<EntryResponseModel> entries = entryController.getEntryByEmpIdAndTime(empId, month, year);
 		List<ViolationRecordResponseModel> violations = violationRecordController.getViolationRecordsByEmpIdAndTime(empId, month, year);
 		List<TimeOffRequestResponseModel> timeOff = timeOffRequestController.getTimeOffRequestsByEmpIdAndTime(empId, month, year);
+		int totalDay = 0;
 		double totalOverTimes = 0;
 		double penaltyAmount = 0;
 		double totalOfficalHours = 0;
@@ -75,6 +76,7 @@ public class TimesheetserviceApplication {
 				long hours = duration.toHours();
 				long minutes = duration.toMinutes() % 60;
 				totalOfficalHours += hours + minutes / 60.0;
+				totalDay += 1;
 			}
 			
 			if (entry.getOverTimeHours() != null) totalOverTimes += entry.getOverTimeHours();
@@ -91,9 +93,10 @@ public class TimesheetserviceApplication {
 		}
 		
 		TimeSheetResponseModel resp = new TimeSheetResponseModel();
-		resp.setEntries(entries);
-		resp.setTimeOff(timeOff);
-		resp.setViolation(violations);
+//		resp.setEntries(entries);
+//		resp.setTimeOff(timeOff);
+//		resp.setViolation(violations);
+		resp.setTotalDay(totalDay);
 		resp.setTotalOfficalHours(totalOfficalHours);
 		resp.setTotalOverTimes(totalOverTimes);
 		resp.setPenaltyAmount(penaltyAmount);

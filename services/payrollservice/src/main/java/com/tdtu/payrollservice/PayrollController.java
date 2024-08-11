@@ -1,5 +1,6 @@
 package com.tdtu.payrollservice;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import com.tdtu.payrollservice.kafka.ConsumerService;
 import com.tdtu.payrollservice.kafka.ProducerService;
 import com.tdtu.payrollservice.model.ErrorResponseModel;
 import com.tdtu.payrollservice.model.employee.EmployeeResponseModel;
+import com.tdtu.payrollservice.model.timesheet.TimeSheetResponseModel;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +34,11 @@ public class PayrollController {
 	public PayrollResponseModel calculatePayrolll(
 			@RequestParam("empId") String empId,
 			@RequestParam("month") String monthStr,
-			@RequestParam("year") String yearStr) throws InterruptedException{
+			@RequestParam("year") String yearStr,
+			@RequestParam("otBounus") String otBounus,
+			@RequestParam("tax") String tax,
+			@RequestParam("hourlySalary") String hourlySalary,
+			@RequestParam("dailySalary") String dailySalary) throws InterruptedException{
 		
 		Integer month = convertStringIntoInteger(monthStr,"month");
 		Integer year = convertStringIntoInteger(yearStr,"year");
@@ -42,8 +48,26 @@ public class PayrollController {
 		
 		Thread.sleep(2000);
 		EmployeeResponseModel employee = consumer.getEmployee();
-		log.info(employee.toString());
-		return null;
+		TimeSheetResponseModel timesheet = consumer.getTimeSheet();
+		
+		double salary = 0;
+		if (employee.getContract().getSchedulePay().equals("Daily")) {
+			salary = (timesheet.getTotalDay() * Double.parseDouble(dailySalary) 
+			        + timesheet.getTotalOverTimes() * Double.parseDouble(otBounus)) 
+			        * (1 - Double.parseDouble(tax)) - timesheet.getPenaltyAmount();
+		}
+		else {
+			salary = (timesheet.getTotalOfficalHours() * Double.parseDouble(hourlySalary) 
+			        + timesheet.getTotalOverTimes() * Double.parseDouble(otBounus)) 
+			        * (1 - Double.parseDouble(tax)) - timesheet.getPenaltyAmount();
+		}
+		
+		PayrollResponseModel resp = new PayrollResponseModel();
+		resp.setEmpId(empId);
+		resp.setSalary(salary);
+		BeanUtils.copyProperties(timesheet, resp);
+		
+		return resp;
 		
 	}
 	

@@ -1,7 +1,5 @@
 package com.tdtu.timesheetservice.query.model;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TimeSheetResponseModel {
-	private List<EntryResponseModel> entries;
-	private List<ViolationRecordResponseModel> violation;
-	private List<TimeOffRequestResponseModel> timeOff;
+	private int totalDay;
 	private double totalOverTimes;
 	private double penaltyAmount;
 	private double totalOfficalHours;
