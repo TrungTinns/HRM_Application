@@ -36,8 +36,9 @@ public class ConsumerService {
 		
 	}
 	
-	@KafkaListener(topics="timesheet-request", groupId ="timesheet-group")
+	@KafkaListener(topics="timesheet-response", groupId ="timesheet-group")
 	public void consumeTimeSheetResponse(@Payload String message, Acknowledgment acknowledgment) {
+		log.info(message);
 		acknowledgment.acknowledge();
 	}
 }

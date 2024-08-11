@@ -21,7 +21,7 @@ public class ComplianceRuleQueryController {
 	private QueryGateway queryGateway;
 
 	@GetMapping("/{id}")
-	public ComplianceRuleResponseModel getCandidateDetail(@PathVariable String id) {
+	public ComplianceRuleResponseModel getComplianceruleDetail(@PathVariable String id) {
 		GetComplianceRuleQuery getCandidateQuery = new GetComplianceRuleQuery();
 		getCandidateQuery.setId(id);
 
@@ -31,7 +31,7 @@ public class ComplianceRuleQueryController {
 	}
 
 	@GetMapping
-	public List<ComplianceRuleResponseModel> getAllCandidates() {
+	public List<ComplianceRuleResponseModel> getAllComplianceRules() {
 		GetAllComplianceRulesQuery getAllCandidatesQuery = new GetAllComplianceRulesQuery();
 		List<ComplianceRuleResponseModel> lstEmp = queryGateway
 				.query(getAllCandidatesQuery, ResponseTypes.multipleInstancesOf(ComplianceRuleResponseModel.class)).join();
