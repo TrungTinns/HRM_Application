@@ -1,6 +1,6 @@
 spring:
   application:
-    name: employee_service
+    name: payroll_service
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     time-zone: GMT
@@ -12,7 +12,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: employee-group
+      group-id: payroll-group
       auto-offset-reset: earliest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -21,14 +21,10 @@ spring:
       ack-mode: manual
 
 server:
-  port: 9001
+  port: 9004
 
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER}
 
-axon:
-  axonserver:
-    servers: ${AXON_SERVER_HOST}:${AXON_SERVER_PORT}
-    context: default
