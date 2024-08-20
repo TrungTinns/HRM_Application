@@ -20,6 +20,7 @@ class ProgressBoard extends StatefulWidget {
 class _ProgressBoardState extends State<ProgressBoard> {
   final AppFlowyBoardController controller = AppFlowyBoardController();
   late AppFlowyBoardScrollController boardController;
+  late List<CandidateData> candidates;
   // List<CandidateData> candidates = [];
   // List<String> candidateNames = [];
 
@@ -237,6 +238,7 @@ class _ProgressBoardState extends State<ProgressBoard> {
 }
 
 List<CandidateData> getCandidatesByStageAndRole(int stage, String? role) {
+  List<CandidateData> candidates = [];
   if (role == null) {
     return candidates.where((candidate) => candidate.stage == stage).toList();
   } else {
