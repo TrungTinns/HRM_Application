@@ -33,4 +33,4 @@ Before you begin, make sure you have the following installed:
 4. **Run the Project: **
     Run the project on the available device with:
     bashCopyflutter run
-    You can also run the project directly from your IDE (e.g., Android Studio,      Visual Studio Code) by selecting the target device and pressing Run.
+    You can also run the project directly from your IDE (e.g., Android Studio, Visual Studio Code) by selecting the target device and pressing Run.
