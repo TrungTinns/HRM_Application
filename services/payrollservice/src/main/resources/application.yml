@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: payroll_service
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    time-zone: GMT
+    serialization:
+      fail-on-empty-beans: false
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: payroll-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual
+
+server:
+  port: 9004
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER}
+

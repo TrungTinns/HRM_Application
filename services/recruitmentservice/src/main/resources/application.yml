@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: recruitment_service
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    time-zone: GMT
+    serialization:
+      fail-on-empty-beans: false
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  
+server:
+  port: 9002
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER}
+
+axon:
+  axonserver:
+    servers: ${AXON_SERVER_HOST}:${AXON_SERVER_PORT}
+    context: default
+  
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+     

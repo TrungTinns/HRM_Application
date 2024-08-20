@@ -1,0 +1,31 @@
+server:
+  port: 9000
+
+spring:
+  application:  
+    name: api-gateway
+  cloud:
+    gateway:  
+      routes:
+        - id: employee-service
+          uri: ${EMPLOYEE_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/employee/**
+        - id: recruitment-service
+          uri: ${RECRUITMENT_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/recruitment/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:  
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER}
+    register-with-eureka: true
+    fetch-registry: true

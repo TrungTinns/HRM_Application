@@ -1,7 +1,9 @@
 version: '3.8'
 services:
   discovery-server:
-    image: neit1803/hrm-application:discovery-server
+    build:
+      context: ./services/discoveryserver
+      dockerfile: Dockerfile
     container_name: discovery-server
     ports:
       - "8761:8761"
@@ -9,7 +11,9 @@ services:
       - hrm-network
 
   api-gateway:
-    image: neit1803/hrm-application:api-gateway
+    build:
+      context: ./services/apigateway
+      dockerfile: Dockerfile
     container_name: api-gateway
     ports:
       - "9000:9000"
@@ -25,7 +29,9 @@ services:
       - RECRUITMENT_SERVICE_URL=http://recruitment-service:9002
 
   employee-service:
-    image: neit1803/hrm-application:employee-service
+    build:
+      context: ./services/employeeservice
+      dockerfile: Dockerfile
     container_name: employee-service
     ports:
       - "9001:9001"
@@ -45,7 +51,9 @@ services:
       - hrm-network
 
   recruitment-service:
-    image: neit1803/hrm-application:recruitment-service
+    build:
+      context: ./services/recruitmentservice
+      dockerfile: Dockerfile
     container_name: recruitment-service
     ports:
       - "9002:9002"

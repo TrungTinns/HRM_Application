@@ -1,0 +1,102 @@
+version: '3.8'
+services:
+  discovery-server:
+    image: neit1803/hrm-application:discovery-server
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    networks:
+      - hrm-network
+
+  api-gateway:
+    image: neit1803/hrm-application:api-gateway
+    container_name: api-gateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      - discovery-server
+      - employee-service
+      - recruitment-service
+    networks:
+      - hrm-network
+    environment:
+      - EUREKA_SERVER=http://discovery-server:8761/eureka
+      - EMPLOYEE_SERVICE_URL=http://employee-service:9001
+      - RECRUITMENT_SERVICE_URL=http://recruitment-service:9002
+
+  employee-service:
+    image: neit1803/hrm-application:employee-service
+    container_name: employee-service
+    ports:
+      - "9001:9001"
+    depends_on:
+      - discovery-server
+      - axon-server
+      - kafka
+    volumes:
+      - ./services/employeeservice/src/main/resources/EmployeeServiceAccessKey.json:/app/src/main/resources/EmployeeServiceAccessKey.json
+    environment:
+      - EUREKA_SERVER=http://discovery-server:8761/eureka
+      - AXON_SERVER_HOST=axon-server
+      - AXON_SERVER_PORT=8124
+      - FIREBASE_CONFIG_PATH=/app/src/main/resources/EmployeeServiceAccessKey.json
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    networks:
+      - hrm-network
+
+  recruitment-service:
+    image: neit1803/hrm-application:recruitment-service
+    container_name: recruitment-service
+    ports:
+      - "9002:9002"
+    depends_on:
+      - discovery-server
+      - axon-server
+      - kafka
+    volumes:
+      - ./services/recruitmentservice/src/main/resources/RecruitmentServiceAccessKey.json:/app/src/main/resources/RecruitmentServiceAccessKey.json
+    environment:
+      - EUREKA_SERVER=http://discovery-server:8761/eureka
+      - AXON_SERVER_HOST=axon-server
+      - AXON_SERVER_PORT=8124
+      - FIREBASE_CONFIG_PATH=/app/src/main/resources/RecruitmentServiceAccessKey.json
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    networks:
+      - hrm-network
+
+  axon-server:
+    image: axoniq/axonserver
+    container_name: axon-server
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+      - "8224:8224"
+    networks:
+      - hrm-network
+  
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - hrm-network
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    networks:
+      - hrm-network
+
+networks:
+  hrm-network:
+    driver: bridge
