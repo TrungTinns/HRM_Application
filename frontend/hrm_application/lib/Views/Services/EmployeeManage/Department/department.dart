@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
-import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Component/FilterSearch/filter_search.dart';
 import 'package:hrm_application/Component/Search/searchBox.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Department/Card/department_card.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Department/Form/department_form.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/OrgChart/orgchart.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Position/position.dart';
-import 'package:hrm_application/Views/home/home.dart';
 import 'package:hrm_application/Widgets/colors.dart';
 
 
@@ -20,17 +15,32 @@ class Department extends StatefulWidget {
 }
 
 class _DepartmentState extends State<Department> {
-  String pageName = 'Department';
   TextEditingController departmentController = TextEditingController();
+  String pageName = 'Department';
   String? activeDropdown;
   bool showDepartmentForm = false;
+  List<DepartmentData> departments = [];
+  List<String> departmentNames = [];
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
       activeDropdown = dropdown;
     });
+    fetchAndSetDepartments();
   }
-  
+
+  Future<void> fetchAndSetDepartments() async {
+    try {
+      departments = await fetchDepartments();
+      setState(() {
+        departmentNames = departments.map((dept) => dept.department).toList();
+        departmentNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching departments: $e');
+    }
+  }
+
   void toggleDepartmentForm() {
     if (showDepartmentForm) {
       if(departmentController.text.isEmpty) {
@@ -69,21 +79,6 @@ class _DepartmentState extends State<Department> {
     });
   }
 
-  void deleteDepartment(String department) {
-    setState(() {
-      departments.removeWhere((department) => department.department == department);
-    });
-  }
-
-  void handleUpdate(DepartmentInf updatedDepartment) {
-    setState(() {
-      final index = departments.indexWhere((dpm) => dpm.department == updatedDepartment.department);
-      if (index != -1) {
-        departments[index] = updatedDepartment;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,51 +94,27 @@ class _DepartmentState extends State<Department> {
           ],
           optionNavigations: [
             [
-              () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => Contracts())),
-              () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+                            () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+
+              // () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              // () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
-            [ 
-              () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => Department())),              
-              () => Navigator.push(
-                  context, MaterialPageRoute(builder: (ctx) => PositionManage())),
+            [
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+
+              // () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],
-          setActiveDropdown: (dropdown) {            
-          }, 
-          config: configuration(
-            isActive: activeDropdown == 'Configuration',
-            onOpen: () => setActiveDropdown('Configuration'),
-            onClose: () => setActiveDropdown(null),
-            titles: const ['Setting', 'Employee', 'Recruitment'],
-            options: const [
-              ['Setting', 'Activity Plan'],
-              ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
-              ['Job Positions', 'Employment Types']
-            ],
-            navigators: [
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-            ],
-          )
+          setActiveDropdown: (dropdown) {
+            setState(() {
+              activeDropdown = dropdown;
+            });
+          },
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -225,45 +196,42 @@ class _DepartmentState extends State<Department> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: showDepartmentForm
-          ? DepartmentForm() 
-          : Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                int crossAxisCount;
-                if (constraints.maxWidth >= 1200) {
-                  // Desktop
-                  crossAxisCount = 3;
-                } else if (constraints.maxWidth >= 800) {
-                  // Tablet
-                  crossAxisCount = 2;
-                } else {
-                  // Mobile
-                  crossAxisCount = 1;
-                }
+      body:
+      showDepartmentForm
+          ? DepartmentForm()
+          :
+          FutureBuilder<List<DepartmentData>>(
+            future: fetchDepartments(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData) {
+                return Center(child: Text('No data found'));
+              } else {
                 return GridView.builder(
                   padding: const EdgeInsets.all(10),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
+                    crossAxisCount: 3,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 3.8,
+                    childAspectRatio: 2.8,
                   ),
-                  itemCount: departments.length,
+                  itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    final department = departments[index];
+                    final department = snapshot.data![index];
                     return DepartmentCard(
+                      id: department.id,
                       department: department.department,
-                      manager: department.manager,
+                      managerId: department.managerId,
                       superior: department.superior,
-                      onDelete: () => deleteDepartment(department.department),
-                      onUpdate: handleUpdate,
                     );
                   },
                 );
-              },
-            ),
-          ),
+              }
+            },
+          )
         );
-  }
+      }
 }

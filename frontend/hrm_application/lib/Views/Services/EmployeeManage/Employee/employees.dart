@@ -1,55 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
-import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Component/FilterSearch/filter_search.dart';
 import 'package:hrm_application/Component/Search/searchBox.dart';
-import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
+import 'package:hrm_application/API/api.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Department/department.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Card/employee_card.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Form/employee_form.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/OrgChart/orgchart.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Position/position.dart';
 import 'package:hrm_application/Widgets/colors.dart';
 
-
 class EmployeeManage extends StatefulWidget {
-  final String? name;
-  final String? role;
-  final String? department;
-  final String? mobile;
-  final String? mail;
-  final String? certification;
+  // final String? name;
+  // final String? role;
+  // final String? department;
+  // final String? mobile;
+  // final String? mail;
+  // final String? certification;
 
-  EmployeeManage({
-    this.name,
-    this.role,
-    this.department,
-    this.mobile,
-    this.mail,
-    this.certification,
-  });
+  // EmployeeManage({
+  //   this.name,
+  //   this.role,
+  //   this.department,
+  //   this.mobile,
+  //   this.mail,
+  //   this.certification,
+  // });
 
   @override
   _EmployeeManageState createState() => _EmployeeManageState();
 }
 
 class _EmployeeManageState extends State<EmployeeManage> {
+  final TextEditingController nameController = TextEditingController();
   String pageName = 'Employees';
   bool _isSidebarOpen = true;
   bool showEmployeeForm = false;
   bool showAllEmployees = true;
   String? activeDropdown;
-  final TextEditingController nameController = TextEditingController();
-  List<EmployeeInf> filteredEmployees = [];
+  List<EmployeeData> filteredEmployees = [];
+  List<DepartmentData> departments = [];
+  List<String> departmentNames = [];
   String? selectedDepartment;
 
   @override
   void initState() {
     super.initState();
-    filteredEmployees = List.from(employees);
+    fetchAndSetEmployees();
+    fetchAndSetDepartments();
+  }
+
+  Future<void> fetchAndSetDepartments() async {
+    try {
+      departments = await fetchDepartments();
+      setState(() {
+        departmentNames = departments.map((dept) => dept.department).toList();
+        departmentNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching departments: $e');
+    }
   }
 
   void setActiveDropdown(String? dropdown) {
@@ -96,42 +108,40 @@ class _EmployeeManageState extends State<EmployeeManage> {
     });
   }
 
-  void deleteEmployee(String name) {
-    setState(() {
-      employees.removeWhere((employee) => employee.name == name);
-      filteredEmployees.removeWhere((employee) => employee.name == name);
-    });
+  void filterEmployeesAll() async {
+    try {
+      List<EmployeeData> employees = await fetchEmployees();
+      setState(() {
+        filteredEmployees = employees;
+      });
+    } catch (e) {
+      print('Error fetching all employees: $e');
+    }
   }
 
-  void handleUpdate(EmployeeInf updatedEmployee) {
-    setState(() {
-      final index =
-          employees.indexWhere((emp) => emp.name == updatedEmployee.name);
-      if (index != -1) {
-        employees[index] = updatedEmployee;
-        if (selectedDepartment == null ||
-            updatedEmployee.department == selectedDepartment) {
-          final filteredIndex = filteredEmployees
-              .indexWhere((emp) => emp.name == updatedEmployee.name);
-          if (filteredIndex != -1) {
-            filteredEmployees[filteredIndex] = updatedEmployee;
-          }
-        }
-      }
-    });
+  void filterEmployeesByDepartment(String department) async {
+    try {
+      List<EmployeeData> employees = await fetchAPI<EmployeeData>(
+        apiUrl: 'http://localhost:9001/api/v1/employee?department=$department',
+        fromJson: EmployeeData.fromJson,
+      );
+      setState(() {
+        filteredEmployees = employees;
+      });
+    } catch (e) {
+      print('Error filtering employees by department: $e');
+    }
   }
 
-  void filterEmployees(String? department) {
-    setState(() {
-      if (department == null || department.isEmpty || department == 'All') {
-        filteredEmployees = List.from(employees);
-        selectedDepartment = null;
-      } else {
-        filteredEmployees =
-            employees.where((emp) => emp.department == department).toList();
-        selectedDepartment = department;
-      }
-    });
+  void fetchAndSetEmployees() async {
+    try {
+      List<EmployeeData> employees = await fetchEmployees();
+      setState(() {
+        filteredEmployees = employees;
+      });
+    } catch (e) {
+      print('Error fetching employees: $e');
+    }
   }
 
   @override
@@ -153,9 +163,10 @@ class _EmployeeManageState extends State<EmployeeManage> {
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
-            [ 
+            [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+              // () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],
@@ -164,34 +175,6 @@ class _EmployeeManageState extends State<EmployeeManage> {
               activeDropdown = dropdown;
             });
           },
-          config: configuration(
-            isActive: activeDropdown == 'Configuration',
-            onOpen: () => setActiveDropdown('Configuration'),
-            onClose: () => setActiveDropdown(null),
-            titles: const ['Setting', 'Employee', 'Recruitment'],
-            options: const [
-              ['Setting', 'Activity Plan'],
-              ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
-              ['Job Positions', 'Employment Types']
-            ],
-            navigators: [
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-            ],
-          ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -273,168 +256,175 @@ class _EmployeeManageState extends State<EmployeeManage> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: widget.name != null && 
-            widget.role != null && 
-            widget.department != null && 
-            widget.mobile != null && 
-            widget.mail != null && 
-            widget.certification != null
-      ? EmployeeForm(
-          name: widget.name,
-          role: widget.role,
-          department: widget.department,
-          mobile: widget.mobile,
-          mail: widget.mail,
-          certification: widget.certification,
-        )
-      : showEmployeeForm
+      body:
+      // widget.name != null &&
+      //       widget.role != null &&
+      //       widget.department != null &&
+      //       widget.mobile != null &&
+      //       widget.mail != null &&
+      //       widget.certification != null
+      // ? EmployeeForm(
+      //     name: widget.name,
+      //     role: widget.role,
+      //     department: widget.department,
+      //     mobile: widget.mobile,
+      //     mail: widget.mail,
+      //     certification: widget.certification,
+      //   ) :
+        showEmployeeForm
           ? EmployeeForm()
-          : Row(
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: _isSidebarOpen ? 250 : 25,
-                  child: Material(
-                    color: snackBarColor,
-                    elevation: 4.0,
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: _isSidebarOpen
-                          ? <Widget>[
-                              const SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(width: 20),
-                                  const Icon(Icons.groups,
-                                      color: secondaryColor, size: 20),
-                                  const Text(' DEPARTMENT',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: textColor,
-                                          fontWeight: FontWeight.bold)),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _isSidebarOpen = !_isSidebarOpen;
-                                      });
-                                    },
-                                    child: const Icon(
-                                      Icons.keyboard_double_arrow_left,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              ListTile(
-                                title: const Text(
-                                  'All',
-                                  style: TextStyle(color: textColor),
-                                ),
-                                onTap: () {
-                                  filterEmployees('All');
-                                },
-                              ),
-                              ...departments
-                                  .map((department) => ListTile(
-                                        title: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              department.department,
-                                              style: const TextStyle(color: textColor, fontSize: 16)
-                                            ),
-                                            
-                                            Text(
-                                              '${countEmployeesInDepartment(employees, department.department)}',
-                                              style: const TextStyle(
-                                                color: termTextColor,
-                                                fontSize: 16,)
-                                              ),
-                                          ],
+          : FutureBuilder<List<EmployeeData>>(
+              future: fetchEmployees(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData) {
+                  return Center(child: Text('No data found'));
+                } else {
+                  return Row(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: _isSidebarOpen ? 250 : 25,
+                        child: Material(
+                          color: snackBarColor,
+                          elevation: 4.0,
+                          child: ListView(
+                            padding: EdgeInsets.zero,
+                            children: _isSidebarOpen
+                                ? <Widget>[
+                                    const SizedBox(height: 30),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(width: 20),
+                                        const Icon(Icons.groups,
+                                            color: secondaryColor, size: 20),
+                                        const Text(' DEPARTMENT',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: textColor,
+                                                fontWeight: FontWeight.bold)),
+                                        const Spacer(),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _isSidebarOpen = !_isSidebarOpen;
+                                            });
+                                          },
+                                          child: const Icon(
+                                            Icons.keyboard_double_arrow_left,
+                                            size: 20,
+                                            color: Colors.white,
+                                          ),
                                         ),
+                                        const SizedBox(width: 10),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    ListTile(
+                                      title: const Text(
+                                        'All',
+                                        style: TextStyle(color: textColor),
+                                      ),
+                                      onTap: () {
+                                        filterEmployeesAll();
+                                      },
+                                    ),
+                                    ...departmentNames.map((deptName) => ListTile(
+                                      title: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            deptName,
+                                            style: const TextStyle(
+                                              color: textColor,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        filterEmployeesByDepartment(deptName);
+                                      },
+                                    )).toList(),
+                              ]
+                                : [
+                                    const SizedBox(height: 30),
+                                    GestureDetector(
                                         onTap: () {
-                                          filterEmployees(
-                                              department.department);
+                                          setState(() {
+                                            _isSidebarOpen = !_isSidebarOpen;
+                                          });
                                         },
-                                      ))
-                                  .toList(),
-                            ]
-                          : [
-                              const SizedBox(height: 30),
-                              GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _isSidebarOpen = !_isSidebarOpen;
-                                    });
-                                  },
-                                  child: const Icon(
-                                    Icons.keyboard_double_arrow_right,
-                                    size: 20,
-                                    color: Colors.white,
-                                  )),
-                            ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      int crossAxisCount = (_isSidebarOpen) ? 3 : 4;
-                      return GridView.builder(
-                        padding: const EdgeInsets.all(10),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 2.4,
+                                        child: const Icon(
+                                          Icons.keyboard_double_arrow_right,
+                                          size: 20,
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                          ),
                         ),
-                        itemCount: filteredEmployees.length,
-                        itemBuilder: (context, index) {
-                          final employee = filteredEmployees[index];
-                          return EmployeeCard(
-                            name: employee.name,
-                            role: employee.role,
-                            mail: employee.mail,
-                            mobile: employee.mobile,
-                            department: employee.department,
-                            manager: employee.manager,
-                            onDelete: () => deleteEmployee(employee.name),
-                            isManager: employee.isManager,
-                            onUpdate: handleUpdate,
-                            workLocation: employee.workLocation ?? '',
-                            schedule: employee.schedule ?? '',
-                            salaryStructure: employee.salaryStructure ?? '',
-                            contractType: employee.contractType ?? '',
-                            cost: double.tryParse(employee.cost.toString()) ?? 0.0,
-                            personalAddress: employee.personalAddress ?? '',
-                            personalMail: employee.personalMail ?? '',
-                            personalMobile: employee.personalMobile ?? '',
-                            relativeName: employee.relativeName ?? '',
-                            relativeMobile: employee.relativeMobile ?? '',
-                            certification: employee.certification ?? '',
-                            school: employee.school ?? '',
-                            maritalStatus: employee.maritalStatus ?? '',
-                            child: int.tryParse(employee.child.toString()) ?? 0,
-                            nationality: employee.nationality ?? '',
-                            idNum: employee.idNum ?? '',
-                            ssNum: employee.ssNum ?? '',
-                            passport: employee.passport ?? '',
-                            sex: employee.sex ?? '',
-                            birthDate: employee.birthDate ?? '',
-                            birthPlace: employee.birthPlace ?? '',
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+                      ),
+                      Expanded(
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            int crossAxisCount = (_isSidebarOpen) ? 3 : 4;
+                            return GridView.builder(
+                              padding: const EdgeInsets.all(10),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 2.4,
+                              ),
+                              itemCount: filteredEmployees.length,
+                              itemBuilder: (context, index) {
+                                final employee = filteredEmployees[index];
+                                return EmployeeCard(
+                                  id: employee.id,
+                                  name: employee.name,
+                                  role: employee.role,
+                                  mail: employee.mail,
+                                  mobile: employee.mobile,
+                                  department: employee.department,
+                                  managerId: employee.managerId ?? '',
+                                  isManager: employee.isManager,
+                                  workLocation: employee.workLocation,
+                                  schedule: employee.contract?.schedule,
+                                  salaryStructure: employee.contract?.salaryStructure,
+                                  contractType: employee.contract?.contractType ?? '',
+                                  cost: double.tryParse(employee.contract!.cost.toString()) ?? 0.0,
+                                  personalAddress: employee.personalAddress,
+                                  personalMail: employee.personalMail,
+                                  personalMobile: employee.personalMobile,
+                                  relativeName: employee.relativeName,
+                                  relativeMobile: employee.relativeMobile,
+                                  certification: employee.certification,
+                                  school: employee.school,
+                                  maritalStatus: employee.maritalStatus,
+                                  child: int.tryParse(employee.child.toString()) ?? 0,
+                                  nationality: employee.nationality,
+                                  idNum: employee.idNum,
+                                  ssNum: employee.ssNum,
+                                  passport: employee.passport,
+                                  sex: employee.sex,
+                                  birthDate: employee.birthDate,
+                                  birthPlace: employee.birthPlace,
+                                  idContract: employee.contract?.id,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              }
+        )
     );
   }
 }

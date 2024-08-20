@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Component/Iconic/icon.dart';
 import 'package:hrm_application/Component/button/button.dart';
-import 'package:hrm_application/Views/Services/TimesheetManage/timesheet.dart';
-import 'package:hrm_application/Views/login/login.dart';
-import 'package:hrm_application/views/services/EmployeeManage/employee/employees.dart';
-import 'package:hrm_application/views/services/PayrollManage/Dashboard/payroll_manage.dart';
-import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class Home extends StatefulWidget {
@@ -48,7 +45,7 @@ class _HomeState extends State<Home> {
                 color: textColor,
                 iconSize: 30,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (ctx) => AuthScreen()));
+                  // Navigator.push(context, MaterialPageRoute(builder: (ctx) => AuthScreen()));
                 },
               ),
               const SizedBox(width: 8),
@@ -109,8 +106,10 @@ class _HomeState extends State<Home> {
                     final pages = [
                       EmployeeManage(),
                       RecruitmentManage(),
-                      PayrollManage(),
-                      TimeSheet()
+                      EmployeeManage(),
+                      RecruitmentManage(),
+                      // PayrollManage(),
+                      // TimeSheet()
                     ][index];
                     return serviceButton(context, iconData, labels, pages);
                   },

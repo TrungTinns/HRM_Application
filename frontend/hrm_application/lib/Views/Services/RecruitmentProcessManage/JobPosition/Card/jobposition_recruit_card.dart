@@ -1,43 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/application_manage.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/cadidate_inf.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Data/cadidate_data.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Detail/jobposition_detail.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/jobposition_inf.dart';
 import 'package:hrm_application/Widgets/colors.dart';
 
 
 class JobPositionCard extends StatelessWidget {
-  final String role;
+  final String id;
+  final String name;
   final String department;
   final String mail;
   final String jobLocation;
-  final String type;
+  final String empType;
   final int target;
-  bool isPublished;
-  final String recruiter;
-  final String interviewer;
+  final String recruiterId;
+  final String interviewerId;
   final String? details;
-  final VoidCallback onDelete;
-  final ValueChanged<JobPositionInf> onUpdate;
 
   JobPositionCard({
+    required this.id,
     required this.department,
     required this.mail,
     required this.jobLocation,
-    required this.role,
-    required this.type,
+    required this.name,
+    required this.empType,
     required this.target,
-    required this.isPublished,
-    required this.recruiter,
-    required this.interviewer,
+    required this.recruiterId,
+    required this.interviewerId,
     this.details,
-    required this.onDelete,
-    required this.onUpdate,
   });
+
+  Future<int> countCandidatesInDepartment(String jobPositionId) async {
+    List<CandidateData> candidates = await fetchCandidates();
+    int count = candidates.where((employee) => employee.jobPositionId == jobPositionId).length;
+    return count;
+  }
 
   @override
   Widget build(BuildContext context) {
-    int candidateCount = countCandidatesByRole(role);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -49,7 +49,7 @@ class JobPositionCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    role,
+                    name,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -59,19 +59,17 @@ class JobPositionCard extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (ctx) =>
                         JobPositionDetail(
-                          role: role,
+                          id: id,
+                          name: name,
                           department: department,
                           mail: mail,
                           jobLocation: jobLocation,
-                          type: type,
+                          empType: empType,
                           target: target,
-                          isPublished: isPublished,
-                          recruiter: recruiter,
-                          interviewer: interviewer,
+                          recruiterId: recruiterId,
+                          interviewerId: interviewerId,
                           details: details,
-                          onDelete: onDelete,
-                          onUpdate: onUpdate,
-                        )
+                       )
                       ));
                     },
                     icon: const Icon(Icons.more_vert)
@@ -89,7 +87,7 @@ class JobPositionCard extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (ctx) => ApplicationManage(
-                          initialRole: role,
+                          initialRole: id,
                         ),
                       ),
                     );
@@ -101,43 +99,25 @@ class JobPositionCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  child: Text('$candidateCount New Applications', style: const TextStyle(color: Colors.white, fontSize: 16)),
+                  child: FutureBuilder<int>(
+                    future: countCandidatesInDepartment(id),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Text(
+                          '${snapshot.data} New applications',
+                          style: const TextStyle(color: Colors.white, fontSize: 16),
+                        );
+                      }
+                    },
+                  ),
                 ),
                 Text('$target To Recruit', style: const TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
-            const SizedBox(height: 10,),
-            Divider(color: Colors.grey.shade300),
-            Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Switch(
-                  activeTrackColor: Colors.green,
-                  value: isPublished,
-                  onChanged: (value) {
-                    isPublished = value;
-                    onUpdate(
-                      JobPositionInf(
-                        role: role,
-                        department: department,
-                        mail: mail,
-                        jobLocation: jobLocation,
-                        type: type,
-                        target: target,
-                        recruiter: recruiter,
-                        interviewer: interviewer,
-                        details: details,
-                        isPublished: isPublished,
-                      ),
-                    );
-                  },
-                ),   
-                const SizedBox(width: 10),
-                const Text(
-                  'Is Published', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-              ],
-            ),            
           ],
         ),
       ),

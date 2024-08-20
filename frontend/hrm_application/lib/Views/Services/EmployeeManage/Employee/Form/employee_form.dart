@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
-import 'package:hrm_application/views/services/EmployeeManage/contract/contracts_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/employee/employees.dart';
-import 'package:hrm_application/views/services/EmployeeManage/employee/employees_inf.dart';
-import 'package:hrm_application/widgets/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Contract/Data/contracts_data.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
+import 'package:hrm_application/Widgets/colors.dart';
+import 'package:http/http.dart' as http;
+
 
 class EmployeeForm extends StatefulWidget {
   final String? name;
@@ -62,7 +62,20 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   FocusNode nameFocusNode = FocusNode();
   TabController? tabController;
   bool isNameFilled = false;
-  
+  List<DepartmentData> departments = [];
+  List<String> departmentNames = [];
+  List<JobPositionData> jobPositions = [];
+  List<String> roleNames = [];
+  List<EmployeeData> managers = [];
+  List<String> managerNames = [];
+  String selectedManagerId = '';
+
+  void _handleManagerSelection(String managerId) {
+    setState(() {
+      selectedManagerId = managerId;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -81,6 +94,45 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
       WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(nameFocusNode);
     });
+    fetchAndSetDepartments();
+    fetchAndSetManagers();
+    fetchAndSetjobPositions();
+  }
+
+  Future<void> fetchAndSetDepartments() async {
+    try {
+      departments = await fetchDepartments();
+      setState(() {
+        departmentNames = departments.map((dept) => dept.department).toList();
+        departmentNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching departments: $e');
+    }
+  }
+
+  Future<void> fetchAndSetjobPositions() async {
+    try {
+      jobPositions = await fetchJobPositions();
+      setState(() {
+        roleNames = jobPositions.map((dept) => dept.name).toList();
+        roleNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching departments: $e');
+    }
+  }
+
+  Future<void> fetchAndSetManagers() async {
+    try {
+      managers = await fetchManagers();
+      setState(() {
+        managerNames = managers.map((mgr) => mgr.name).toList();
+        managerNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching managers: $e');
+    }
   }
 
   @override
@@ -111,7 +163,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
     if (response.statusCode == 200) {
       final List<dynamic> countries = jsonDecode(response.body);
       List<String> countryNames = countries.map<String>((country) => country['name']['common'] as String).toList();
-      countryNames.sort(); // Sort country names alphabetically
+      countryNames.sort();
       return countryNames;
     } else {
       throw Exception('Failed to load countries');
@@ -212,7 +264,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
     );
   }
 
-  Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {  
+  Widget buildDropdownRow(String label, TextEditingController controller, List<String> items) {
     return Row(
       children: [
         SizedBox(
@@ -225,6 +277,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
         Expanded(
           child: DropdownButtonFormField<String>(
             dropdownColor: dropdownColor,
+            value: controller.text.isEmpty ? null : controller.text,
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -232,7 +285,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
               );
             }).toList(),
             onChanged: (value) {
-              controller.text = value!;
+              setState(() {
+                controller.text = value!;
+              });
             },
             decoration: const InputDecoration(
               filled: true,
@@ -243,6 +298,116 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
       ],
     );
   }
+
+  Widget buildDropdownRowAPI(String label, TextEditingController controller, List<Map<String, String>> items, {Function(String)? onChanged}) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 200,
+          child: Text(
+            label,
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+        ),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            dropdownColor: dropdownColor,
+            value: controller.text.isEmpty ? null : controller.text,
+            items: items.map((item) {
+              return DropdownMenuItem<String>(
+                value: item['id'],
+                child: Text(item['name']!, style: const TextStyle(color: textColor)),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                controller.text = value!;
+                if (onChanged != null) {
+                  onChanged(value);
+                }
+              });
+            },
+            decoration: const InputDecoration(
+              filled: true,
+              fillColor: snackBarColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> createEmployee() async {
+    final url = Uri.parse('http://localhost:9001/api/v1/employee');
+
+    final contract = {
+      'id': '',
+      'referenceName': '',
+      'department': departmentController.text.isNotEmpty ? departmentController.text : ' ',
+      'empName': nameController.text.isNotEmpty ? nameController.text : ' ',
+      'position': roleController.text.isNotEmpty ? roleController.text : ' ',
+      'status': '',
+      'schedule': scheduleController.text.isNotEmpty ? scheduleController.text : ' ',
+      'schedulePay': '',
+      'salaryStructure': salaryStructureController.text.isNotEmpty ? salaryStructureController.text : ' ',
+      'contractType': contractTypeController.text.isNotEmpty ? contractTypeController.text : ' ',
+      'cost': double.tryParse(costController.text) ?? 0.0,
+      'note': '',
+      'wageType': '',
+      'startDate':  DateTime.now().toIso8601String(),
+      'endDate':  DateTime.now().toIso8601String(),
+    };
+
+    final employee = {
+      'id': '',
+      'name': nameController.text.isNotEmpty ? nameController.text : ' ',
+      'role': roleController.text.isNotEmpty ? roleController.text : ' ',
+      'mail': mailController.text.isNotEmpty ? mailController.text : ' ',
+      'mobile': mobileController.text.isNotEmpty ? mobileController.text : ' ',
+      'department': departmentController.text.isNotEmpty ? departmentController.text : ' ',
+      'managerId': selectedManagerId.isNotEmpty ? selectedManagerId : ' ',
+      'isManager': isManager,
+      'workLocation': workLocationController.text.isNotEmpty ? workLocationController.text : ' ',
+      'personalAddress': personalAddressController.text.isNotEmpty ? personalAddressController.text : ' ',
+      'personalMail': personalMailController.text.isNotEmpty ? personalMailController.text : ' ',
+      'personalMobile': personalMobileController.text.isNotEmpty ? personalMobileController.text : ' ',
+      'relativeName': relativeNameController.text.isNotEmpty ? relativeNameController.text : ' ',
+      'relativeMobile': relativeMobileController.text.isNotEmpty ? relativeMobileController.text : ' ',
+      'certification': certificationController.text.isNotEmpty ? certificationController.text : ' ',
+      'school': schoolController.text.isNotEmpty ? schoolController.text : ' ',
+      'maritalStatus': maritalStatusController.text.isNotEmpty ? maritalStatusController.text : ' ',
+      'child': int.tryParse(childController.text) ?? 0,
+      'nationality': nationalityController.text.isNotEmpty ? nationalityController.text : ' ',
+      'idNum': idNumController.text.isNotEmpty ? idNumController.text : ' ',
+      'ssNum': ssNumController.text.isNotEmpty ? ssNumController.text : ' ',
+      'passport': passportController.text.isNotEmpty ? passportController.text : ' ',
+      'sex': sexController.text.isNotEmpty ? sexController.text : ' ',
+      'birthDate': birthDateController.text.isNotEmpty ? birthDateController.text : DateTime.now().toIso8601String(),
+      'birthPlace': birthPlaceController.text.isNotEmpty ? birthPlaceController.text : ' ',
+      'contract': contract,
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(employee),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Create employee successfully')),
+        );
+      } else {
+        print('Failed to create employee: ${response.body}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error creating employee: $e')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -332,11 +497,16 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                 Expanded(
                   child: Column(
                     children: [
-                      buildDropdownRow('Department', departmentController, getDepartments()),
+                      buildDropdownRow('Department', departmentController, departmentNames),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Position', roleController, getJobPositions(jobPositions)),
+                      buildDropdownRow('Position', roleController, roleNames),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Manager', managerController, getManagers(employees)),
+                      buildDropdownRowAPI(
+                        'Manager',
+                        managerController,
+                        managers.map((mgr) => {'id': mgr.id, 'name': mgr.name}).toList(),
+                        onChanged: _handleManagerSelection,
+                      ),
                     ],
                   ),
                 ),
@@ -362,7 +532,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        buildDropdownRow('Work Location', workLocationController, EmployeeInf.defaultWorkLocations),
+                        buildDropdownRow('Work Location', workLocationController, EmployeeData.defaultWorkLocations),
                         const SizedBox(height: 10),
                         buildDropdownRow('Working Schedule', scheduleController, ContractData.defaultSchedules),
                         const SizedBox(height: 10),
@@ -379,13 +549,13 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Column( 
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text('PERSONAL CONTACT', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                               const Divider(
                                 thickness: 0.5,
-                                color: textColor, 
+                                color: textColor,
                               ),
                               buildTextFieldRow('Personal Address', personalAddressController),
                               const SizedBox(height: 10),
@@ -396,16 +566,16 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                               const Text('EDUCATION', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                               const Divider(
                                 thickness: 0.5,
-                                color: textColor, 
+                                color: textColor,
                               ),
-                              buildDropdownRow('Certification', certificationController, EmployeeInf.defaultCertifications),
+                              buildDropdownRow('Certification', certificationController, EmployeeData.defaultCertifications),
                               const SizedBox(height: 10),
                               buildTextFieldRow('School', schoolController),
                               const SizedBox(height: 20),
                               const Text('CITIZEN', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                               const Divider(
                                 thickness: 0.5,
-                                color: textColor, 
+                                color: textColor,
                               ),
                               buildDropdownCountry('Nationality', nationalityController),
                               const SizedBox(height: 10),
@@ -415,7 +585,7 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                               const SizedBox(height: 10),
                               buildTextFieldRow('Passport', passportController),
                               const SizedBox(height: 10),
-                              buildDropdownRow('Sex', sexController, EmployeeInf.defaultSex),
+                              buildDropdownRow('Sex', sexController, EmployeeData.defaultSex),
                               const SizedBox(height: 10),
                               buildTextFieldRow('Date of Birth', birthDateController, isDateField: true),
                               // buildTextFieldRow('Date of Birth', birthDateController),
@@ -426,13 +596,13 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                               ),
                               const SizedBox(width: 20),
                               Expanded(
-                                child: Column( 
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text('EMERGENCY CONTACT ', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                                     const Divider(
                                       thickness: 0.5,
-                                      color: textColor, 
+                                      color: textColor,
                                     ),
                               buildTextFieldRow('Relative Contact Name', relativeNameController),
                               const SizedBox(height: 10),
@@ -441,9 +611,9 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
                               const Text('FAMILY STATUS', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                               const Divider(
                                 thickness: 0.5,
-                                color: textColor, 
+                                color: textColor,
                               ),
-                              buildDropdownRow('Marital Status', maritalStatusController, EmployeeInf.defaultMaritalStatus),
+                              buildDropdownRow('Marital Status', maritalStatusController, EmployeeData.defaultMaritalStatus),
                               const SizedBox(height: 10),
                               buildTextFieldRow('Number of children', childController),
                             ]
@@ -458,48 +628,15 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
           ],
         ),
       ),
-      floatingActionButton: isNameFilled
-          ? FloatingActionButton(
-              onPressed: () {
-                final newEmployee = EmployeeInf(
-                  name: nameController.text,
-                  role: roleController.text,
-                  mail: mailController.text,
-                  mobile: mobileController.text,
-                  department: departmentController.text,
-                  manager: managerController.text,
-                  isManager: isManager,
-                  workLocation: workLocationController.text.isEmpty ? null : workLocationController.text,
-                  schedule : scheduleController.text.isEmpty ? null : scheduleController.text,
-                  salaryStructure: salaryStructureController.text.isEmpty ? null : salaryStructureController.text,
-                  contractType: contractTypeController.text.isEmpty ? null : contractTypeController.text,
-                  cost: costController.text.isEmpty ? 0.0 : double.parse(costController.text),
-                  personalAddress: personalAddressController.text.isEmpty ? null : personalAddressController.text,
-                  personalMail: personalMailController.text.isEmpty ? null : personalMailController.text,
-                  personalMobile: personalMobileController.text.isEmpty ? null : personalMobileController.text,
-                  relativeName: relativeNameController.text.isEmpty ? null : relativeNameController.text,
-                  relativeMobile: relativeMobileController.text.isEmpty ? null : relativeMobileController.text,
-                  certification: certificationController.text.isEmpty ? null : certificationController.text,
-                  school: schoolController.text.isEmpty ? null : schoolController.text,
-                  maritalStatus: maritalStatusController.text.isEmpty ? null : maritalStatusController.text,
-                  child: childController.text.isEmpty ? 0 : int.parse(childController.text),
-                  nationality: nationalityController.text.isEmpty ? null : nationalityController.text,
-                  idNum: idNumController.text.isEmpty ? null : idNumController.text,
-                  ssNum: ssNumController.text.isEmpty ? null : ssNumController.text,
-                  passport: passportController.text.isEmpty ? null : passportController.text,
-                  sex: sexController.text.isEmpty ? null : sexController.text,
-                  // birthDate: DateTime.parse("${birthDateController.text} 00:00:00"),
-                  birthDate: birthDateController.text.isEmpty ? null : birthDateController.text,
-                  birthPlace: birthPlaceController.text.isEmpty ? null : birthPlaceController.text
-                );
-                setState(() {
-                  employees.add(newEmployee);
-                });
-                Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage()));
-              },
-              child: const Icon(Icons.create),
-            )
-          : null,
+    floatingActionButton: isNameFilled
+        ? FloatingActionButton(
+            onPressed: ()  async {
+              await createEmployee();
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage()));
+            },
+            child: const Icon(Icons.create),
+          )
+        : null,
     );
   }
 }

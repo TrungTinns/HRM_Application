@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Department/Detail/department_detail.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Department/Manage/department_manage.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
 import 'package:hrm_application/Widgets/colors.dart';
 
 
 class DepartmentCard extends StatelessWidget {
+  final String id;
   final String department;
-  final String manager;
+  final String managerId;
   final String superior;
-  final VoidCallback onDelete;
-  final ValueChanged<DepartmentInf> onUpdate;
 
   DepartmentCard({
+    required this.id,
     required this.department,
-    required this.manager,
+    required this.managerId,
     required this.superior,
-    required this.onDelete,
-    required this.onUpdate,
   });
+
+  Future<int> countEmployeesInDepartment(String department) async {
+    List<EmployeeData> employees = await fetchEmployees();
+    int count = employees.where((employee) => employee.department == department).length;
+    return count;
+  }
 
   @override
   Widget build(BuildContext context) {
-    int employeeCount = countEmployeesInDepartment(employees, department);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -45,11 +47,10 @@ class DepartmentCard extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (ctx) =>
                         DepartmentDetail(
+                          id: id,
                           department: department,
-                          manager: manager,
+                          managerId: managerId,
                           superior: superior,
-                          onDelete: onDelete,
-                          onUpdate: onUpdate,
                         )
                       ));
                     },
@@ -76,7 +77,21 @@ class DepartmentCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              child: Text('$employeeCount Employees', style: const TextStyle(color: Colors.white, fontSize: 16)),
+              child: FutureBuilder<int>(
+                future: countEmployeesInDepartment(department),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return Text(
+                      '${snapshot.data} Employees',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),
