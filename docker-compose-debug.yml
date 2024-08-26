@@ -23,6 +23,8 @@ services:
       - EUREKA_SERVER=http://discovery-server:8761/eureka
       - EMPLOYEE_SERVICE_URL=http://employee-service:9001
       - RECRUITMENT_SERVICE_URL=http://recruitment-service:9002
+      - TIMESHEET_SERVICE_URL= http://timesheet-service:9003
+      - PAYROLL_SERVICE_URL= http://payroll-service:9004
 
   employee-service:
     image: neit1803/hrm-application:employee-service
@@ -64,6 +66,43 @@ services:
     networks:
       - hrm-network
 
+  timesheet-service:
+    image: neit1803/hrm-application:timesheet-service
+    container_name: timesheet-service
+    ports:
+      - "9003:9003"
+    depends_on:
+      - discovery-server
+      - axon-server
+      - kafka
+      - employee-service
+    volumes:
+      - ./services/timesheetservice/src/main/resources/TimeSheetServiceAccessKey.json:/app/src/main/resources/TimeSheetServiceAccessKey.json
+    environment:
+      - EUREKA_SERVER=http://discovery-server:8761/eureka
+      - AXON_SERVER_HOST=axon-server
+      - AXON_SERVER_PORT=8124
+      - FIREBASE_CONFIG_PATH=/app/src/main/resources/TimeSheetServiceAccessKey.json
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    networks:
+      - hrm-network
+
+  payroll-service:
+    image: neit1803/hrm-application:payroll-service
+    container_name: payroll-service
+    ports:
+      - "9004:9004"
+    depends_on:
+      - discovery-server
+      - axon-server
+      - kafka
+      - employee-service
+      - recruitment-service
+    environment:
+      - EUREKA_SERVER=http://discovery-server:8761/eureka
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    networks:
+    
   axon-server:
     image: axoniq/axonserver
     container_name: axon-server

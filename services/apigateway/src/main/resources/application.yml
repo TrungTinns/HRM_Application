@@ -15,6 +15,14 @@ spring:
           uri: ${RECRUITMENT_SERVICE_URL}
           predicates:
             - Path=/api/v1/recruitment/**
+        - id: timesheet-service
+          uri: ${TIMESHEET_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/timesheet/**
+        - id: payroll-service
+          uri: ${PAYROLL_SERVICE_URL}
+          predicates:
+            - Path=/api/v1/payroll/**
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       globalcors:  
