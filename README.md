@@ -53,6 +53,29 @@ The project utilizes microservices architecture, divided into independent servic
 - **TimeSheet Service:** Tracks employee working hours, including clock-in/out times, overtime, and leave requests.
 - **Payroll Service:** Calculates and processes employee salaries, using data from both the Employee Service and TimeSheet Service.
 
+## Demo
+![image](https://github.com/user-attachments/assets/001d399b-d680-440e-82d3-b3e120f6999d)
+
+![image](https://github.com/user-attachments/assets/713018c8-0fde-4d30-ad86-c4cb4cf714ab)
+
+![image](https://github.com/user-attachments/assets/338ba2b0-c3a4-4cb4-86ec-ff40a7354848)
+
+![image](https://github.com/user-attachments/assets/75d09047-9008-4f3a-9087-73e463e3beba)
+
+![image](https://github.com/user-attachments/assets/8498ad00-a39c-41c9-be4f-e6ec2767bfef)
+
+![image](https://github.com/user-attachments/assets/5f6ce45e-e026-40f8-a152-65654449efe5)
+
+![image](https://github.com/user-attachments/assets/349321f6-82b8-41ce-885f-25548c6b5154)
+
+![image](https://github.com/user-attachments/assets/f85c87df-ba32-45aa-95b0-82a437de4163)
+
+![image](https://github.com/user-attachments/assets/052a43d0-d941-4796-8914-72b149848303)
+
+![image](https://github.com/user-attachments/assets/93dd1ebd-f4d3-4be4-9c7c-432181584141)
+
+![image](https://github.com/user-attachments/assets/0b580ff0-5d5a-4525-8c54-819357dbc3e4)
+
 ## Inter-Service Communication
 
 The project uses **Kafka** to facilitate communication between different services. Kafka allows services to publish and subscribe to data streams, enabling a **reliable, scalable, and loosely coupled** system.
