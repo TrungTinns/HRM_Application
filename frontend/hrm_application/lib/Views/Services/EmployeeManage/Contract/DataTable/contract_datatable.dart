@@ -14,104 +14,34 @@ class ContractDataTable extends StatefulWidget {
 }
 
 class _ContractDataTableState extends State<ContractDataTable> {
-  List<DepartmentData> departments = [];
-  List<String> departmentNames = [];
-  List<JobPositionData> jobPositions = [];
-  List<String> roleNames = [];
   List<PlutoRow> rows = [];
-  List<String> employees = [];
+  late Future<List<ContractData>> datas;
 
   @override
   void initState() {
     super.initState();
-    // rows = getContracts().map((contract) {
-    //   return PlutoRow(cells: {
-    //     'Employee': PlutoCell(value: contract['Employee']),
-    //     'Reference': PlutoCell(value: contract['Reference']),
-    //     'Department': PlutoCell(value: contract['Department']),
-    //     'Position': PlutoCell(value: contract['Position']),
-    //     'Start Date': PlutoCell(value: contract['Start Date'].toString()),
-    //     'End Date': PlutoCell(value: contract['End Date'].toString()),
-    //     'Salary Structure': PlutoCell(value: contract['Salary Structure']),
-    //     'Contract Type': PlutoCell(value: contract['Contract Type']),
-    //     'Schedule': PlutoCell(value: contract['Schedule']),
-    //     'Status': PlutoCell(value: contract['Status']),
-    //     'Salary': PlutoCell(value: contract['Salary']),
-    //     'Note': PlutoCell(value: contract['Note']),
-    //     'Wage Type': PlutoCell(value: contract['Wage Type']),
-    //     'Schedule Pay': PlutoCell(value: contract['Schedule Pay']),
-    //   });
-    // }).toList();
-    fetchAndSetDepartments();
-    fetchEmps();
-    fetchAndSetjobPositions();
+    datas = fetchContracts();
   }
 
-  Future<void> fetchEmps() async {
-    try {
-      List<EmployeeData> employeesData = await fetchEmployees();
-      setState(() {
-        employees = employeesData.map((employee) => employee.name).toList();
+  List<PlutoRow> loadContracts(List<ContractData> datas) {
+    return datas.map((contract) {
+      return PlutoRow(cells: {
+        'Employee': PlutoCell(value: contract.empName),
+        'Reference': PlutoCell(value: contract.reference),
+        'Department': PlutoCell(value: contract.department),
+        'Position': PlutoCell(value: contract.position),
+        'Start Date': PlutoCell(value: contract.startDate.toString()),
+        'End Date': PlutoCell(value: contract.endDate.toString()),
+        'Salary Structure': PlutoCell(value: contract.salaryStructure),
+        'Contract Type': PlutoCell(value: contract.contractType),
+        'Schedule': PlutoCell(value: contract.schedule),
+        'Status': PlutoCell(value: contract.status),
+        'Salary': PlutoCell(value: contract.schedulePay),
+        'Note': PlutoCell(value: contract.note),
+        'Wage Type': PlutoCell(value: contract.wageType),
+        'Schedule Pay': PlutoCell(value: contract.schedulePay),
       });
-    } catch (e) {
-      print('Error fetching employees: $e');
-    }
-  }
-
-  List<String> getEmployees() {
-    return employees;
-  }
-  
-  Future<void> fetchAndSetDepartments() async {
-    try {
-      departments = await fetchDepartments();
-      setState(() {
-        departmentNames = departments.map((dept) => dept.department).toList();
-        departmentNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching departments: $e');
-    }
-  }
-
-  Future<void> fetchAndSetjobPositions() async {
-    try {
-      jobPositions = await fetchJobPositions();
-      setState(() {
-        roleNames = jobPositions.map((dept) => dept.name).toList();
-        roleNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching departments: $e');
-    }
-  }
-
-  // void deleteRow(int index) {
-  //   setState(() {
-  //     rows.removeAt(index);
-  //     contracts.removeAt(index);
-  //   });
-  // }
-
-  void updateContract(int index, ContractData updatedContract) {
-    setState(() {
-      rows[index] = PlutoRow(cells: {
-        'Employee': PlutoCell(value: updatedContract.empName),
-        'Reference': PlutoCell(value: updatedContract.reference),
-        'Department': PlutoCell(value: updatedContract.department),
-        'Position': PlutoCell(value: updatedContract.position),
-        'Start Date': PlutoCell(value: updatedContract.startDate.toString()),
-        'End Date': PlutoCell(value: updatedContract.endDate.toString()),
-        'Salary Structure': PlutoCell(value: updatedContract.salaryStructure),
-        'Contract Type': PlutoCell(value: updatedContract.contractType),
-        'Schedule': PlutoCell(value: updatedContract.schedule),
-        'Status': PlutoCell(value: updatedContract.status),
-        'Salary': PlutoCell(value: updatedContract.cost),
-        'Note': PlutoCell(value: updatedContract.note),
-        'Wage Type': PlutoCell(value: updatedContract.wageType),
-        'Schedule Pay': PlutoCell(value: updatedContract.schedulePay),
-      });
-    });
+    }).toList();
   }
 
   @override
@@ -120,7 +50,7 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Employee',
         field: 'Employee',
-        type: PlutoColumnType.select(employees),
+        type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         title: 'Reference',
@@ -130,12 +60,12 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Department',
         field: 'Department',
-        type: PlutoColumnType.select(departmentNames),
+        type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         title: 'Position',
         field: 'Position',
-        type: PlutoColumnType.select(roleNames),
+        type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         title: 'Start Date',
@@ -169,59 +99,39 @@ class _ContractDataTableState extends State<ContractDataTable> {
       ),
     ];
 
-    return PlutoGrid(
-      columns: columns,
-      rows: rows,
-      onChanged: (PlutoGridOnChangedEvent event) {
 
+    return FutureBuilder<List<ContractData>>(
+      future: datas,
+      builder: (BuildContext context, AsyncSnapshot<List<ContractData>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          rows = loadContracts(snapshot.data!);
+        }
+
+        return PlutoGrid(
+          columns: columns,
+          rows: rows,
+          onChanged: (PlutoGridOnChangedEvent event) {
+          },
+          configuration: const PlutoGridConfiguration(
+            style: PlutoGridStyleConfig(
+              gridBorderColor: textColor,
+              menuBackgroundColor: snackBarColor,
+              iconColor: textColor,
+              cellColorInEditState: snackBarColor,
+              gridBackgroundColor: snackBarColor,
+              cellTextStyle: TextStyle(color: textColor),
+              columnTextStyle: TextStyle(color: textColor),
+              rowColor: dropdownColor,
+              activatedColor: Color.fromRGBO(38, 42, 54, 1),
+              activatedBorderColor: textColor,
+            ),
+          ),
+        );
       },
-      onRowDoubleTap: (event) {
-        final row = event.row;
-        final index = rows.indexOf(row);
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (ctx) => ContractDetail(
-        //       name: row.cells['Employee']!.value,
-        //       reference: row.cells['Reference']!.value,
-        //       department: row.cells['Department']!.value,
-        //       position: row.cells['Position']!.value,
-        //       startDate: row.cells['Start Date']!.value,
-        //       endDate: row.cells['End Date']!.value,
-        //       salaryStructure: row.cells['Salary Structure']!.value,
-        //       contractType: row.cells['Contract Type']!.value,
-        //       schedule: row.cells['Schedule']!.value,
-        //       status: row.cells['Status']!.value,
-        //       wageType: row.cells['Wage Type']!.value,
-        //       schedulePay: row.cells['Schedule Pay']!.value,
-        //       onDelete: () {
-        //         deleteRow(index);
-        //       }, 
-        //       onUpdate: (updatedContract) {
-        //         final updatedContractMap = updatedContract.toMap();
-        //         final updatedContractData = ContractData.fromMap(updatedContractMap);
-        //         updateContract(index, updatedContractData);
-        //       },
-        //       salary: row.cells['Salary']!.value,
-        //       note: row.cells['Note']!.value,
-        //     ),
-        //   ),
-        // );
-      },
-      configuration: const PlutoGridConfiguration(
-        style: PlutoGridStyleConfig(
-          gridBorderColor: textColor,
-          menuBackgroundColor: snackBarColor,
-          iconColor: textColor,
-          cellColorInEditState: snackBarColor,
-          gridBackgroundColor: snackBarColor,
-          cellTextStyle: TextStyle(color: textColor),
-          columnTextStyle: TextStyle(color: textColor),
-          rowColor: dropdownColor,
-          activatedColor: Color.fromRGBO(38, 42, 54, 1),
-          activatedBorderColor: textColor,
-        ),
-      ),
     );
   }
 }

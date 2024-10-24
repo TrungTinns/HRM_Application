@@ -6,6 +6,7 @@ import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/empl
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
 import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:hrm_application/widgets/platform_options.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -183,7 +184,11 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
   }
 
   Future<void> createjobPosition() async {
-    final url = Uri.parse('http://localhost:9002/api/v1/recruitment/jobPosition');
+    final platformOptions = PlatformOptions.currentPlatform;
+    final apiUrl =
+        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/recruitment/jobPosition';
+        
+    final url = Uri.parse(apiUrl);
 
     final jobPosition = {
       'id': '',

@@ -1,4 +1,5 @@
 import 'package:hrm_application/API/api.dart';
+import 'package:hrm_application/widgets/platform_options.dart';
 
 class DepartmentData {
   final String id;
@@ -25,8 +26,11 @@ class DepartmentData {
 
 Future<List<DepartmentData>> fetchDepartments() async {
   try {
+    final platformOptions = PlatformOptions.currentPlatform;
+    final apiUrl =
+        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/employee/department';
     List<DepartmentData> departments= await fetchAPI<DepartmentData>(
-      apiUrl: 'http://localhost:9001/api/v1/employee/department',
+      apiUrl: apiUrl,
       fromJson: (json) {
         return DepartmentData(
           id: json['id'] ?? " ",

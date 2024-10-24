@@ -6,6 +6,7 @@ import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
 import 'package:hrm_application/Widgets/colors.dart';
+import 'package:hrm_application/widgets/platform_options.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -338,7 +339,11 @@ class _EmployeeFormState extends State<EmployeeForm> with SingleTickerProviderSt
   }
 
   Future<void> createEmployee() async {
-    final url = Uri.parse('http://localhost:9001/api/v1/employee');
+    final platformOptions = PlatformOptions.currentPlatform;
+    final apiUrl =
+        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/employee';
+        
+    final url = Uri.parse(apiUrl);
 
     final contract = {
       'id': '',

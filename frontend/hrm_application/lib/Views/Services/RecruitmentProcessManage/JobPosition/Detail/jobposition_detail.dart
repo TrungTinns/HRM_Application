@@ -13,6 +13,7 @@
   import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Form/jobposition_form.dart';
   import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/recruitment.dart';
   import 'package:hrm_application/Widgets/colors.dart';
+import 'package:hrm_application/widgets/platform_options.dart';
   import 'package:http/http.dart' as http;
   import 'dart:convert';
 
@@ -174,7 +175,10 @@
     }
 
   Future<void> _saveChanges() async {
-    final url = Uri.parse('http://localhost:9002/api/v1/recruitment/jobPosition');
+    final platformOptions = PlatformOptions.currentPlatform;
+    final apiUrl =
+        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/recruitment/jobPosition';
+    final url = Uri.parse(apiUrl);
 
     final jobPositionData = {
       "id": widget.id,
@@ -217,7 +221,10 @@
 
   Future<void> deleteJob(String jobPositionId) async {
     try {
-      final url = Uri.parse('http://localhost:9002/api/v1/recruitment/jobPosition/$jobPositionId');
+      final platformOptions = PlatformOptions.currentPlatform;
+      final apiUrl =
+        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/jobPosition/$jobPositionId';
+      final url = Uri.parse(apiUrl);
       final response = await http.delete(
         url,
         headers: <String, String>{
