@@ -6,6 +6,7 @@ import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/empl
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/application_manage.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:hrm_application/widgets/platform_options.dart';
 import 'package:progress_stepper/progress_stepper.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -43,8 +44,8 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
   List<DepartmentData> departments = [];
   List<String> departmentNames = [];
   String selectedIId = '';
-String selectedJPId = '';
-String selectedRId = '';
+  String selectedJPId = '';
+  String selectedRId = '';
 
   List<EmployeeData> employees = [];
   List<String> employeeNames = [];
@@ -138,7 +139,11 @@ String selectedRId = '';
   }
 
   Future<void> createCandidate() async {
-    final url = Uri.parse('http://localhost:9002/api/v1/recruitment/candidate');
+    final platformOptions = PlatformOptions.currentPlatform;
+    final apiUrl =
+        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/recruitment/candidate';
+        
+    final url = Uri.parse(apiUrl);
 
     final candidate = {
       'id': '',

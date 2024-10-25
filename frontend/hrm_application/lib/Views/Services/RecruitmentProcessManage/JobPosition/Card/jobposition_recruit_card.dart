@@ -33,6 +33,7 @@ class JobPositionCard extends StatelessWidget {
   Future<int> countCandidatesInDepartment(String jobPositionId) async {
     List<CandidateData> candidates = await fetchCandidates();
     int count = candidates.where((employee) => employee.jobPositionId == jobPositionId).length;
+    print(jobPositionId + " - " + count.toString());
     return count;
   }
 

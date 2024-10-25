@@ -11,6 +11,7 @@ import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Form/empl
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/OrgChart/orgchart.dart';
 import 'package:hrm_application/Widgets/colors.dart';
+import 'package:hrm_application/widgets/platform_options.dart';
 
 class EmployeeManage extends StatefulWidget {
   // final String? name;
@@ -121,8 +122,11 @@ class _EmployeeManageState extends State<EmployeeManage> {
 
   void filterEmployeesByDepartment(String department) async {
     try {
+      final platformOptions = PlatformOptions.currentPlatform;
+      final apiUrl =
+        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/employee?department=$department';
       List<EmployeeData> employees = await fetchAPI<EmployeeData>(
-        apiUrl: 'http://localhost:9001/api/v1/employee?department=$department',
+        apiUrl: apiUrl,
         fromJson: EmployeeData.fromJson,
       );
       setState(() {

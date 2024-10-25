@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/department.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees.dart';
-import 'package:hrm_application/Views/Services/PayrollManage/Dashboard/payroll_manage.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/recruitment.dart';
-import 'package:hrm_application/Views/Services/TimesheetManage/timesheet.dart';
+import 'package:hrm_application/Views/home/home.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: SignIn(),
-      home: RecruitmentManage(),
+      home: Home(),
     );
   }
 }
