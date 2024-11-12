@@ -6,10 +6,10 @@ import 'package:hrm_application/Component/Search/searchBox.dart';
 import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Department/department.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Detail/employee_detail.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Form/employee_form.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
 import 'package:hrm_application/Widgets/colors.dart';
 import 'package:org_chart/org_chart.dart';
 
@@ -18,38 +18,11 @@ class OrgChartManage extends StatefulWidget {
   _OrgChartState createState() => _OrgChartState();
 }
 
-class _OrgChartState extends State<OrgChartManage> {
+class _OrgChartState extends State<OrgChartManage> {  
   String pageName = 'Org Chart';
   bool showEmployeeForm = false;
   String? activeDropdown;
   final TextEditingController nameController = TextEditingController();
-  List<EmployeeData> employees = [];
-
-  late OrgChartController<EmployeeData> orgChartController;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchAndSetEmployees();
-  }
-
-  Future<void> fetchAndSetEmployees() async {
-    try {
-      List<EmployeeData> fetchedEmployees = await fetchEmployees();
-      setState(() {
-        employees = fetchedEmployees;
-        orgChartController = OrgChartController<EmployeeData>(
-          boxSize: const Size(300, 200),
-          items: employees,
-          idProvider: (employee) => employee.id,
-          toProvider: (employee) =>
-              employee.managerId == employee.id ? null : employee.managerId,
-        );
-      });
-    } catch (e) {
-      print('Error fetching employees: $e');
-    }
-  }
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -94,6 +67,31 @@ class _OrgChartState extends State<OrgChartManage> {
       showEmployeeForm = false;
     });
   }
+  
+  void deleteEmployee(String name) {
+    setState(() {
+      employees.removeWhere((employee) => employee.name == name );
+    });
+  }
+
+  void handleUpdate(EmployeeInf updatedEmployee) {
+    setState(() {
+      final index = employees.indexWhere((emp) => emp.name == updatedEmployee.name);
+      if (index != -1) {
+        employees[index] = updatedEmployee;
+      }
+    });
+  }
+
+  final OrgChartController<EmployeeInf> orgChartController =
+      OrgChartController<EmployeeInf>(
+    boxSize: const Size(300, 200),
+    items: employees,
+    idProvider: (employee) => employee.name,
+    toProvider: (employee) => employee.manager == employee.name
+        ? null 
+        : employee.manager,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -103,22 +101,21 @@ class _OrgChartState extends State<OrgChartManage> {
         title: CustomTitleAppbar(
           ctx: context,
           service: 'Employees',
-          titles: const ['Employees', 'Department'],
+          titles: const ['Employees', 'Reporting'],
           options: const [
-            ['Employees', 'Contracts', 'Org Chart'],
-            ['Department', 'Position']
+            ['Employees', 'Department', 'Contracts', 'Org Chart'],
+            ['Contracts', 'Skills']
           ],
           optionNavigations: [
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              // () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage())),
             ],
             [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
-              // () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],
@@ -127,6 +124,34 @@ class _OrgChartState extends State<OrgChartManage> {
               activeDropdown = dropdown;
             });
           },
+          config: configuration(
+            isActive: activeDropdown == 'Configuration',
+            onOpen: () => setActiveDropdown('Configuration'),
+            onClose: () => setActiveDropdown(null),
+            titles: const ['Setting', 'Employee', 'Recruitment'],
+            options: const [
+              ['Setting', 'Activity Plan'],
+              ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
+              ['Job Positions', 'Employment Types']
+            ],
+            navigators: [
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+            ],
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -171,7 +196,7 @@ class _OrgChartState extends State<OrgChartManage> {
                         onPressed: () {
                           clearEmployeeForm();
                         },
-                      ),
+                    ),
                   ],
                 ),
               ),
@@ -188,16 +213,16 @@ class _OrgChartState extends State<OrgChartManage> {
                   ],
                   navigators: [
                     [
-                      () => Navigator.pushNamed(context, '/my_team'),
-                      () => Navigator.pushNamed(context, '/my_department'),
-                      () => Navigator.pushNamed(context, '/newly_hired'),
+                      () => Navigator.pushNamed(context, '/my_team'), 
+                      () => Navigator.pushNamed(context, '/my_department'), 
+                      () => Navigator.pushNamed(context, '/newly_hired'), 
                       () => Navigator.pushNamed(context, '/achieved')],
                     [
-                      () => Navigator.pushNamed(context, '/manager'),
-                      () => Navigator.pushNamed(context, '/department'),
-                      () => Navigator.pushNamed(context, '/job'),
-                      () => Navigator.pushNamed(context, '/skill'),
-                      () => Navigator.pushNamed(context, '/start_date'),
+                      () => Navigator.pushNamed(context, '/manager'), 
+                      () => Navigator.pushNamed(context, '/department'), 
+                      () => Navigator.pushNamed(context, '/job'), 
+                      () => Navigator.pushNamed(context, '/skill'), 
+                      () => Navigator.pushNamed(context, '/start_date'), 
                       () => Navigator.pushNamed(context, '/tags')],
                     [() => print('Save Current Search')],
                   ],)
@@ -215,19 +240,20 @@ class _OrgChartState extends State<OrgChartManage> {
                 Container(
                   child: Scaffold(
                     backgroundColor: snackBarColor,
-                    body: employees.isEmpty
-                        ? Center(child: CircularProgressIndicator())
-                        : OrgChart(
+                    body: Stack(
+                      children: [
+                        Center(
+                          child: OrgChart(
                             linePaint: Paint()
                               ..color = Colors.white
                               ..strokeWidth = 5
                               ..style = PaintingStyle.stroke,
                             controller: orgChartController,
-                            curve: Curves.linear,
-                            duration: 500,
-                            isDraggable: true,
+                            curve: Curves.linear, 
+                            duration: 500, 
+                            isDraggable: true, 
                             builder: (details) {
-                              EmployeeData employee = details.item;
+                              EmployeeInf employee = details.item;
                               return GestureDetector(
                                 onTap: () {
                                   details.hideNodes(!details.nodesHidden);
@@ -237,40 +263,42 @@ class _OrgChartState extends State<OrgChartManage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => EmployeeDetail(
-                                        id: employee.id,
                                         name: employee.name,
                                         role: employee.role,
                                         mail: employee.mail,
                                         mobile: employee.mobile,
                                         department: employee.department,
-                                        managerId: employee.managerId ?? '',
-                                        isManager: employee.isManager ?? false,
-                                        workLocation: employee.workLocation,
-                                        schedule: employee.contract?.schedule ?? '',
-                                        salaryStructure: employee.contract?.salaryStructure ?? '',
-                                        contractType: employee.contract?.contractType ?? '',
-                                        cost: employee.contract?.cost ?? 0.0,
-                                        personalAddress: employee.personalAddress,
-                                        personalMail: employee.personalMail,
-                                        personalMobile: employee.personalMobile,
+                                        manager: employee.manager,
+                                        onDelete:  () => deleteEmployee(employee.name),
+                                        isManager: employee.isManager, 
+                                        onUpdate: handleUpdate,
+                                        workLocation: employee.workLocation ?? '',
+                                        schedule: employee.schedule ?? '',
+                                        salaryStructure: employee.salaryStructure ?? '',
+                                        contractType: employee.contractType ?? '',
+                                        cost: employee.cost ?? 0.0,  
+                                        personalAddress: employee.personalAddress ?? '',
+                                        personalMail: employee.personalMail ?? '',
+                                        personalMobile: employee.personalMobile ?? '',
                                         relativeName: employee.relativeName ?? '',
-                                        relativeMobile: employee.relativeMobile ?? '',
+                                        relativeMobile: employee.relativeMobile ?? '', 
                                         certification: employee.certification ?? '',
                                         school: employee.school ?? '',
-                                        maritalStatus: employee.maritalStatus ?? '',
-                                        child: employee.child ?? 0,
-                                        nationality: employee.nationality ?? '',
-                                        idNum: employee.idNum ?? '',
-                                        ssNum: employee.ssNum ?? '',
-                                        passport: employee.passport ?? '',
-                                        sex: employee.sex ?? '',
-                                        birthDate: employee.birthDate?.toString() ?? '',
+                                        maritalStatus: employee.maritalStatus ?? '', 
+                                        child: employee.child ?? 0, 
+                                        nationality: employee.nationality ?? '', 
+                                        idNum: employee.idNum ?? '', 
+                                        ssNum: employee.ssNum ?? '', 
+                                        passport: employee.passport ?? '', 
+                                        sex: employee.sex ?? '', 
+                                        birthDate: employee.birthDate ?? '', 
                                         birthPlace: employee.birthPlace ?? '',
-                                        idContract: employee.contract?.id ?? '',
                                       ),
                                     ),
                                   ).then((_) {
-                                    fetchAndSetEmployees(); // Refresh employees list after returning
+                                    setState(() {
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => OrgChartManage()));
+                                    });
                                   });
                                 },
                                 child: Card(
@@ -302,7 +330,7 @@ class _OrgChartState extends State<OrgChartManage> {
                                           employee.role,
                                           style: const TextStyle(fontSize: 18, color: textColor),
                                         ),
-                                        Container(
+                                        Container(  
                                           padding: const EdgeInsets.all(8.0),
                                           color: authThemeColor,
                                           child: const Row(
@@ -326,8 +354,8 @@ class _OrgChartState extends State<OrgChartManage> {
                               );
                             },
                           ),
-                          ),
-          )],
+                        ),
+                      ],
                     ),
                     floatingActionButton: FloatingActionButton.extended(
                         label: const Text('Change Orientation'),
@@ -340,8 +368,10 @@ class _OrgChartState extends State<OrgChartManage> {
                           orgChartController.calculatePosition();
                           setState(() {});
                         }),
-
+                  ),
+                ),
+              ],
+            )
     );
   }
 }
-

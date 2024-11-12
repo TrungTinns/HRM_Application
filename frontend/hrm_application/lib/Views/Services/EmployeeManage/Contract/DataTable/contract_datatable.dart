@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Contract/Data/contracts_data.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
+import 'package:hrm_application/views/services/EmployeeManage/contract/contracts_inf.dart';
+import 'package:hrm_application/views/services/EmployeeManage/contract/detail/contract_detail.dart';
+import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
+import 'package:hrm_application/views/services/EmployeeManage/employee/employees_inf.dart';
+import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class ContractDataTable extends StatefulWidget {
   @override
@@ -14,34 +13,58 @@ class ContractDataTable extends StatefulWidget {
 }
 
 class _ContractDataTableState extends State<ContractDataTable> {
+
   List<PlutoRow> rows = [];
-  late Future<List<ContractData>> datas;
 
   @override
   void initState() {
     super.initState();
-    datas = fetchContracts();
-  }
-
-  List<PlutoRow> loadContracts(List<ContractData> datas) {
-    return datas.map((contract) {
+    rows = getContracts().map((contract) {
       return PlutoRow(cells: {
-        'Employee': PlutoCell(value: contract.empName),
-        'Reference': PlutoCell(value: contract.reference),
-        'Department': PlutoCell(value: contract.department),
-        'Position': PlutoCell(value: contract.position),
-        'Start Date': PlutoCell(value: contract.startDate.toString()),
-        'End Date': PlutoCell(value: contract.endDate.toString()),
-        'Salary Structure': PlutoCell(value: contract.salaryStructure),
-        'Contract Type': PlutoCell(value: contract.contractType),
-        'Schedule': PlutoCell(value: contract.schedule),
-        'Status': PlutoCell(value: contract.status),
-        'Salary': PlutoCell(value: contract.schedulePay),
-        'Note': PlutoCell(value: contract.note),
-        'Wage Type': PlutoCell(value: contract.wageType),
-        'Schedule Pay': PlutoCell(value: contract.schedulePay),
+        'Employee': PlutoCell(value: contract['Employee']),
+        'Reference': PlutoCell(value: contract['Reference']),
+        'Department': PlutoCell(value: contract['Department']),
+        'Position': PlutoCell(value: contract['Position']),
+        'Start Date': PlutoCell(value: contract['Start Date'].toString()), 
+        'End Date': PlutoCell(value: contract['End Date'].toString()),   
+        'Salary Structure': PlutoCell(value: contract['Salary Structure']),
+        'Contract Type': PlutoCell(value: contract['Contract Type']),
+        'Schedule': PlutoCell(value: contract['Schedule']),
+        'Status': PlutoCell(value: contract['Status']),
+        'Salary': PlutoCell(value: contract['Salary']),
+        'Note': PlutoCell(value: contract['Note']),
+        'Wage Type': PlutoCell(value: contract['Wage Type']),
+        'Schedule Pay': PlutoCell(value: contract['Schedule Pay']),
       });
     }).toList();
+  }
+
+  void deleteRow(int index) {
+    setState(() {
+      rows.removeAt(index);
+      contracts.removeAt(index); 
+    });
+  }
+
+  void updateContract(int index, ContractData updatedContract) {
+    setState(() {
+      rows[index] = PlutoRow(cells: {
+        'Employee': PlutoCell(value: updatedContract.name),
+        'Reference': PlutoCell(value: updatedContract.reference),
+        'Department': PlutoCell(value: updatedContract.department),
+        'Position': PlutoCell(value: updatedContract.position),
+        'Start Date': PlutoCell(value: updatedContract.startDate.toString()), 
+        'End Date': PlutoCell(value: updatedContract.endDate.toString()),    
+        'Salary Structure': PlutoCell(value: updatedContract.salaryStructure),
+        'Contract Type': PlutoCell(value: updatedContract.contractType),
+        'Schedule': PlutoCell(value: updatedContract.schedule),
+        'Status': PlutoCell(value: updatedContract.status),
+        'Salary': PlutoCell(value: updatedContract.salary),
+        'Note': PlutoCell(value: updatedContract.note),
+        'Wage Type': PlutoCell(value: updatedContract.wageType),
+        'Schedule Pay': PlutoCell(value: updatedContract.schedulePay),
+      });
+    });
   }
 
   @override
@@ -50,7 +73,7 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Employee',
         field: 'Employee',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.select(getNameEmp(employees)),
       ),
       PlutoColumn(
         title: 'Reference',
@@ -60,12 +83,12 @@ class _ContractDataTableState extends State<ContractDataTable> {
       PlutoColumn(
         title: 'Department',
         field: 'Department',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.select(getDepartments()),
       ),
       PlutoColumn(
         title: 'Position',
         field: 'Position',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.select(getJobPositions(jobPositions)),
       ),
       PlutoColumn(
         title: 'Start Date',
@@ -99,39 +122,59 @@ class _ContractDataTableState extends State<ContractDataTable> {
       ),
     ];
 
+    return PlutoGrid(
+      columns: columns,
+      rows: rows,
+      onChanged: (PlutoGridOnChangedEvent event) {
 
-    return FutureBuilder<List<ContractData>>(
-      future: datas,
-      builder: (BuildContext context, AsyncSnapshot<List<ContractData>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          rows = loadContracts(snapshot.data!);
-        }
-
-        return PlutoGrid(
-          columns: columns,
-          rows: rows,
-          onChanged: (PlutoGridOnChangedEvent event) {
-          },
-          configuration: const PlutoGridConfiguration(
-            style: PlutoGridStyleConfig(
-              gridBorderColor: textColor,
-              menuBackgroundColor: snackBarColor,
-              iconColor: textColor,
-              cellColorInEditState: snackBarColor,
-              gridBackgroundColor: snackBarColor,
-              cellTextStyle: TextStyle(color: textColor),
-              columnTextStyle: TextStyle(color: textColor),
-              rowColor: dropdownColor,
-              activatedColor: Color.fromRGBO(38, 42, 54, 1),
-              activatedBorderColor: textColor,
+      },
+      onRowDoubleTap: (event) {
+        final row = event.row;
+        final index = rows.indexOf(row);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => ContractDetail(
+              name: row.cells['Employee']!.value,
+              reference: row.cells['Reference']!.value,
+              department: row.cells['Department']!.value,
+              position: row.cells['Position']!.value,
+              startDate: row.cells['Start Date']!.value,
+              endDate: row.cells['End Date']!.value,
+              salaryStructure: row.cells['Salary Structure']!.value,
+              contractType: row.cells['Contract Type']!.value,
+              schedule: row.cells['Schedule']!.value,
+              status: row.cells['Status']!.value,
+              wageType: row.cells['Wage Type']!.value,
+              schedulePay: row.cells['Schedule Pay']!.value,
+              onDelete: () {
+                deleteRow(index);
+              }, 
+              onUpdate: (updatedContract) {
+                final updatedContractMap = updatedContract.toMap();
+                final updatedContractData = ContractData.fromMap(updatedContractMap);
+                updateContract(index, updatedContractData);
+              },
+              salary: row.cells['Salary']!.value,
+              note: row.cells['Note']!.value,
             ),
           ),
         );
       },
+      configuration: const PlutoGridConfiguration(
+        style: PlutoGridStyleConfig(
+          gridBorderColor: textColor,
+          menuBackgroundColor: snackBarColor,
+          iconColor: textColor,
+          cellColorInEditState: snackBarColor,
+          gridBackgroundColor: snackBarColor,
+          cellTextStyle: TextStyle(color: textColor),
+          columnTextStyle: TextStyle(color: textColor),
+          rowColor: dropdownColor,
+          activatedColor: Color.fromRGBO(38, 42, 54, 1),
+          activatedBorderColor: textColor,
+        ),
+      ),
     );
   }
 }

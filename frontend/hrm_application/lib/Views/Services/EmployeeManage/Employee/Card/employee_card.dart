@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Detail/employee_detail.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/employees_inf.dart';
 
 class EmployeeCard extends StatelessWidget {
-  final String id;
   final String name;
   final String? role;
   final String mail;
   final String mobile;
   final String department;
-  final String managerId;
-  final bool? isManager;
+  final String manager;
+  final VoidCallback onDelete;
+  final bool isManager;
+  final ValueChanged<EmployeeInf> onUpdate;
   final String? workLocation;
   final String? schedule;
   final String? salaryStructure;
@@ -30,19 +31,20 @@ class EmployeeCard extends StatelessWidget {
   final String? ssNum;
   final String? passport;
   final String? sex;
-  final DateTime? birthDate;
+  // final DateTime? birthDate;
+  final String? birthDate;
   final String? birthPlace;
-  final String? idContract; 
 
   EmployeeCard({
-    required this.id,
     required this.name,
     required this.role,
     required this.mail,
     required this.mobile,
     required this.department,
-    required this.managerId,
-    this.isManager,
+    required this.manager,
+    required this.onDelete,
+    required this.isManager,
+    required this.onUpdate,
     this.workLocation,
     this.schedule,
     this.salaryStructure,
@@ -64,9 +66,8 @@ class EmployeeCard extends StatelessWidget {
     this.sex,
     this.birthDate,
     this.birthPlace,
-    this.idContract,
   });
-
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -75,36 +76,36 @@ class EmployeeCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => EmployeeDetail(
-              id: id,
               name: name,
               role: role,
               mail: mail,
               mobile: mobile,
               department: department,
-              managerId: managerId,
-              isManager: isManager ?? false,
+              manager: manager,
+              onDelete: onDelete,
+              isManager: isManager,
+              onUpdate: onUpdate,
               workLocation: workLocation ?? '',
               schedule: schedule ?? '',
               salaryStructure: salaryStructure ?? '',
               contractType: contractType ?? '',
-              cost: double.tryParse(cost.toString()) ?? 0.0,
+              cost: double.tryParse(cost.toString()) ?? 0.0,  
               personalAddress: personalAddress ?? '',
               personalMail: personalMail ?? '',
               personalMobile: personalMobile ?? '',
               relativeName: relativeName ?? '',
-              relativeMobile: relativeMobile ?? '',
-              certification: certification ?? '',
-              school: school ?? '',
-              maritalStatus: maritalStatus ?? '',
+              relativeMobile: relativeMobile ?? '',  
+              certification: certification ?? '', 
+              school: school ?? '', 
+              maritalStatus: maritalStatus ?? '', 
               child: int.tryParse(child.toString()) ?? 0,
-              nationality: nationality ?? '',
-              idNum: idNum ?? '',
-              ssNum: ssNum ?? '',
-              passport: passport ?? '',
-              sex: sex ?? '',
-              birthDate: birthDate?.toString() ?? '',
+              nationality: nationality ?? '', 
+              idNum: idNum ?? '', 
+              ssNum: ssNum ?? '', 
+              passport: passport ?? '', 
+              sex: sex ?? '', 
+              birthDate: birthDate ?? '', 
               birthPlace: birthPlace ?? '',
-              idContract: idContract,
             ),
           ),
         );

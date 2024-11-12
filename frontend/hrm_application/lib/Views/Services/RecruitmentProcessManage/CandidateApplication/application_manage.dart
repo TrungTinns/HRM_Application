@@ -6,9 +6,8 @@ import 'package:hrm_application/Component/Search/searchBox.dart';
 import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Application/candidate_application.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Data/cadidate_data.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Progress/application_progress.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/cadidate_inf.dart';
 import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
@@ -25,21 +24,14 @@ class _ApplicationManageState extends State<ApplicationManage> {
   String pageName = 'Applications';
   bool showCandidateApplication = false;
   String? activeDropdown;
-  bool showAllApplication = true;
-  String? selectedRole;
-  late Future<List<CandidateData>>? candidates;
-  List<String> candidateNames = [];
-  List<JobPositionData> jobPositions = [];
-  List<String> jobPositionNames = [];
+  bool showAllApplication = true; 
+  String? selectedRole; 
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selectedRole = widget.initialRole;
     showAllApplication = selectedRole == null;
-    candidates = fetchCandidates();
-    fetchAndSetjobPositions();
   }
 
   void setActiveDropdown(String? dropdown) {
@@ -48,21 +40,9 @@ class _ApplicationManageState extends State<ApplicationManage> {
     });
   }
 
-  Future<void> fetchAndSetjobPositions() async {
-    try {
-      jobPositions = await fetchJobPositions();
-      setState(() {
-        jobPositionNames = jobPositions.map((dept) => dept.name).toList();
-        jobPositionNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching job position: $e');
-    }
-  }
-
   void toggleCandidateApplication() {
     if (showCandidateApplication) {
-      if (introRoleController.text.isEmpty) {
+      if(introRoleController.text.isEmpty) {
         showDialog(
           context: context,
           builder: (context) {
@@ -74,7 +54,7 @@ class _ApplicationManageState extends State<ApplicationManage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('OK'),
+                  child: Text('OK'),
                 ),
               ],
             );
@@ -91,20 +71,21 @@ class _ApplicationManageState extends State<ApplicationManage> {
       });
     }
   }
-
+  
   void clearCandidateApplication() {
     setState(() {
       showCandidateApplication = false;
     });
   }
-
-  Future<List<CandidateData>> getRoleApplications(List<CandidateData> candidates) async {
+  
+  List<CandidateInf> get roleApplications {
     if (showAllApplication) {
       return candidates;
     } else if (selectedRole != null) {
-      return candidates.where((app) => app.jobPositionId == selectedRole).toList();
+      return candidates.where((app) => app.role == selectedRole).toList();
+    } else {
+      return [];
     }
-    return [];
   }
 
   @override
@@ -112,7 +93,8 @@ class _ApplicationManageState extends State<ApplicationManage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: CustomTitleAppbar(
+        title: 
+        CustomTitleAppbar(
           ctx: context,
           service: 'Recruitment',
           titles: const ['Applications', 'Reporting'],
@@ -126,8 +108,8 @@ class _ApplicationManageState extends State<ApplicationManage> {
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage())),
             ],
             [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
             ],
@@ -137,7 +119,39 @@ class _ApplicationManageState extends State<ApplicationManage> {
             setState(() {
               activeDropdown = dropdown;
             });
-          },
+          }, 
+          config: configuration(
+            isActive: activeDropdown == 'Configuration',
+            onOpen: () => setActiveDropdown('Configuration'),
+            onClose: () => setActiveDropdown(null),
+            titles: const ['', 'Job Positons', 'Applications', 'Employees', 'Activities'],
+            options: const [
+              ['Setting'],
+              ['Employment Types'],
+              ['Refuse Reasons'],
+              ['Departments', 'Skill Types'],
+              ['Activities Types', 'Activity Plans'],
+            ],
+            navigators: [
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+            ],
+          )
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -150,10 +164,10 @@ class _ApplicationManageState extends State<ApplicationManage> {
                     toggleCandidateApplication();
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
+                    foregroundColor: Colors.white, 
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(5), 
                     ),
                   ),
                   child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
@@ -182,7 +196,7 @@ class _ApplicationManageState extends State<ApplicationManage> {
                         onPressed: () {
                           clearCandidateApplication();
                         },
-                      ),
+                    ),
                   ],
                 ),
               ),
@@ -199,48 +213,31 @@ class _ApplicationManageState extends State<ApplicationManage> {
                   ],
                   navigators: [
                     [
-                      () => Navigator.pushNamed(context, '/my_team'),
-                      () => Navigator.pushNamed(context, '/my_department'),
-                      () => Navigator.pushNamed(context, '/newly_hired'),
+                      () => Navigator.pushNamed(context, '/my_team'), 
+                      () => Navigator.pushNamed(context, '/my_department'), 
+                      () => Navigator.pushNamed(context, '/newly_hired'), 
                       () => Navigator.pushNamed(context, '/achieved')],
                     [
-                      () => Navigator.pushNamed(context, '/manager'),
-                      () => Navigator.pushNamed(context, '/department'),
-                      () => Navigator.pushNamed(context, '/job'),
-                      () => Navigator.pushNamed(context, '/skill'),
-                      () => Navigator.pushNamed(context, '/start_date'),
+                      () => Navigator.pushNamed(context, '/manager'), 
+                      () => Navigator.pushNamed(context, '/department'), 
+                      () => Navigator.pushNamed(context, '/job'), 
+                      () => Navigator.pushNamed(context, '/skill'), 
+                      () => Navigator.pushNamed(context, '/start_date'), 
                       () => Navigator.pushNamed(context, '/tags')],
                     [() => print('Save Current Search')],
                   ],
-                )),
+                )
+              ),
               const Spacer(),
             ],
           ),
         ),
         backgroundColor: snackBarColor,
       ),
-      body: FutureBuilder<List<CandidateData>>(
-        future: candidates, // Chờ cho danh sách candidates được tải
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading candidates.'));
-          } else if (snapshot.hasData) {
-            // Gọi phương thức getRoleApplications để lọc danh sách dựa trên role
-            final filteredCandidates = getRoleApplications(snapshot.data!);
-            // return showCandidateApplication
-            //     ? showAllApplication
-            //         ? CandidateApplication()
-            //         : CandidateApplication(initialRole: selectedRole)
-            //     : ProgressBoard(initialRole: selectedRole);
-            return showCandidateApplication? CandidateApplication(initialRole: selectedRole,) : ProgressBoard(initialRole: selectedRole);
-          } else {
-            return Center(child: Text('No data available.'));
-          }
-        },
-      ),
-      backgroundColor: snackBarColor,
-    );
+      body: showCandidateApplication
+          ? showAllApplication ? CandidateApplication() : CandidateApplication(initialRole: selectedRole,)
+          : ProgressBoard(initialRole: selectedRole),
+          backgroundColor: snackBarColor,
+        );
   }
 }

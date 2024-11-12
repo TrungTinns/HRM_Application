@@ -1,15 +1,19 @@
-
-import 'package:custom_rating_bar/custom_rating_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
+import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Application/candidate_application.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/application_manage.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/recruitment.dart';
-import 'package:hrm_application/Views/home/home.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/cadidate_inf.dart';
+import 'package:hrm_application/views/services/EmployeeManage/employee/employees.dart';
+import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
+import 'package:hrm_application/views/services/EmployeeManage/contract/contracts.dart';
+import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
+import 'package:hrm_application/views/services/EmployeeManage/employee/employees_inf.dart';
+import 'package:hrm_application/views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:progress_stepper/progress_stepper.dart';
 
@@ -30,6 +34,7 @@ class CandidateDetail extends StatefulWidget {
   final double? expectedSalary;
   final double? proposedSalary;
   final String? summary;
+  final VoidCallback onDelete;
   final int stage;
   final bool isRefused;
 
@@ -45,11 +50,12 @@ class CandidateDetail extends StatefulWidget {
     this.degree,
     this.interviewer,
     this.recruiter,
-    this.elevation = 0,
+    this.elevation,
     this.availability,
     this.expectedSalary,
     this.proposedSalary,
     this.summary,
+    required this.onDelete,
     required this.stage,
     required this.isRefused,
   });
@@ -83,13 +89,6 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
   int currentStep = 0;
   String? selectedRole; 
   bool isRefused = false; 
-
-  List<JobPositionData> jobPositions = [];
-  List<String> roleNames = [];
-  List<DepartmentData> departments = [];
-  List<String> departmentNames = [];
-  List<EmployeeData> employees = [];
-  List<String> employeeNames = [];
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
@@ -136,41 +135,15 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
     });
   }
 
-  Future<void> fetchAndSetjobPositions() async {
-    try {
-      jobPositions = await fetchJobPositions();
-      setState(() {
-        roleNames = jobPositions.map((dept) => dept.name).toList();
-        roleNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching departments: $e');
-    }
+  void deleteCandidate() {
+  int index = candidates.indexWhere((candidate) => candidate.name == widget.name);
+  if (index != -1) {
+    setState(() {
+      candidates.removeAt(index);
+    });
+    Navigator.pop(context);
   }
-
-  Future<void> fetchAndSetDepartments() async {
-    try {
-      departments = await fetchDepartments();
-      setState(() {
-        departmentNames = departments.map((dept) => dept.department).toList();
-        departmentNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching departments: $e');
-    }
-  }
-
-  Future<void> fetchAndSetEmployees() async {
-    try {
-      employees = await fetchEmployees();
-      setState(() {
-        employeeNames = employees.map((mgr) => mgr.name).toList();
-        employeeNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching managers: $e');
-    }
-  }
+}
 
   @override
   void initState() {
@@ -192,9 +165,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
     proposedSalaryController.text = widget.proposedSalary?.toString() ?? '';
     summaryController.text = widget.summary ?? '';
     currentStep = widget.stage;
-    isRefused = widget.isRefused;
-    fetchAndSetDepartments(); 
-    fetchAndSetjobPositions();
+    isRefused = widget.isRefused; 
   }
 
   @override
@@ -203,7 +174,33 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
   }
 
   void saveCandidateChanges() {
-
+    int index = candidates.indexWhere((candidate) => candidate.name == widget.name);
+    if (index != -1) {
+      setState(() {
+        candidates[index] = CandidateInf(
+          introRole: introRoleController.text,
+          role: roleController.text,
+          name: nameController.text,
+          mail: mailController.text,
+          mobile: mobileController.text,
+          department: departmentController.text,
+          profile: profileController.text,
+          degree: degreeController.text,
+          interviewer: interviewerController.text,
+          recruiter: recruiterController.text,
+          elevation: double.tryParse(elevationController.text),
+          availability: availabilityController.text,
+          expectedSalary: double.tryParse(expectedSalaryController.text),
+          proposedSalary: double.tryParse(proposedSalaryController.text),
+          summary: summaryController.text,
+          stage: currentStep,
+          isRefused: isRefused, 
+        );
+        isChanged = false; 
+      });
+      Navigator.pop(context); 
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage(initialRole: selectedRole,)));
+    }
   }
 
   void showRefuseDialog() {
@@ -389,6 +386,38 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
               activeDropdown = dropdown;
             });
           }, 
+          config: configuration(
+            isActive: activeDropdown == 'Configuration',
+            onOpen: () => setActiveDropdown('Configuration'),
+            onClose: () => setActiveDropdown(null),
+            titles: const ['', 'Job Positons', 'Applications', 'Employees', 'Activities'],
+            options: const [
+              ['Setting'],
+              ['Employment Types'],
+              ['Refuse Reasons'],
+              ['Departments', 'Skill Types'],
+              ['Activities Types', 'Activity Plans'],
+            ],
+            navigators: [
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+              [
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              ],
+            ],
+          )
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -453,7 +482,7 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    // deleteCandidate();
+                                    deleteCandidate();
                                     Navigator.push(context, MaterialPageRoute(builder: (ctx) => RecruitmentManage()));
                                   },
                                   child: const Text('Delete'),
@@ -553,19 +582,19 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                             height: 50,
                             child: ElevatedButton(
                               onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => EmployeeManage(                  
-                                //       name: widget.name,
-                                //       role: widget.role,
-                                //       department: widget.department,
-                                //       mobile: widget.mobile,
-                                //       mail: widget.mail,
-                                //       certification: widget.degree, 
-                                //     ),
-                                //   ),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EmployeeManage(                  
+                                      name: widget.name,
+                                      role: widget.role,
+                                      department: widget.department,
+                                      mobile: widget.mobile,
+                                      mail: widget.mail,
+                                      certification: widget.degree, 
+                                    ),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 side: const BorderSide(color: Colors.green),
@@ -662,16 +691,16 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                       const SizedBox(height: 10),
                       buildTextFieldRow('LinkedIn Profile', profileController),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Degree', degreeController, EmployeeData.defaultCertifications),
+                      buildDropdownRow('Degree', degreeController, EmployeeInf.defaultCertifications),
                       const SizedBox(height: 40),
                       const Text('JOB', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                       const Divider(
                         thickness: 0.5,
                         color: textColor, 
                       ),
-                      buildDropdownRow('Applied Job', roleController, roleNames),
+                      buildDropdownRow('Applied Job', roleController, getJobPositions(jobPositions)),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Department', departmentController, departmentNames),
+                      buildDropdownRow('Department', departmentController, getDepartments()),
                     ],
                   ),
                 ),
@@ -680,9 +709,9 @@ class _CandidateDetailState extends State<CandidateDetail> with SingleTickerProv
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      buildDropdownRow('Interviewer', interviewerController, employeeNames),
+                      buildDropdownRow('Interviewer', interviewerController, employees.map((employee) => employee.name).toList()),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Recruiter', recruiterController, employeeNames),
+                      buildDropdownRow('Recruiter', recruiterController, employees.map((employee) => employee.name).toList()),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,

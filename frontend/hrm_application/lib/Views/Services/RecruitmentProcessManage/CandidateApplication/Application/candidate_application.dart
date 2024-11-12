@@ -1,15 +1,13 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/application_manage.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/cadidate_inf.dart';
+import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
+import 'package:hrm_application/views/services/EmployeeManage/employee/employees_inf.dart';
+import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
 import 'package:hrm_application/widgets/colors.dart';
-import 'package:hrm_application/widgets/platform_options.dart';
 import 'package:progress_stepper/progress_stepper.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class CandidateApplication extends StatefulWidget {
   final String? initialRole;
@@ -21,105 +19,53 @@ class CandidateApplication extends StatefulWidget {
 }
 
 class _CandidateApplicationState extends State<CandidateApplication> with SingleTickerProviderStateMixin {
-  TextEditingController subjectController = TextEditingController();
+  TextEditingController introRoleController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController mailController = TextEditingController();
   TextEditingController mobileController= TextEditingController();
+  TextEditingController departmentController = TextEditingController();
+  TextEditingController profileController = TextEditingController();
   TextEditingController degreeController = TextEditingController();
   TextEditingController interviewerController = TextEditingController();
   TextEditingController recruiterController = TextEditingController();
-  TextEditingController introRoleController = TextEditingController();
-  TextEditingController departmentController = TextEditingController();
-  TextEditingController sourceController = TextEditingController();
-  TextEditingController evaluationController = TextEditingController();
+  TextEditingController elevationController = TextEditingController();
   TextEditingController availabilityController = TextEditingController();
   TextEditingController expectedSalaryController = TextEditingController();
   TextEditingController proposedSalaryController = TextEditingController();
   TextEditingController summaryController = TextEditingController();
-  TextEditingController jobController = TextEditingController();
   TextEditingController stageController = TextEditingController();
   int currentStep = 1;
   bool isNameFilled = false;
-  String? selectedRole;
-  List<DepartmentData> departments = [];
-  List<String> departmentNames = [];
-  String selectedIId = '';
-  String selectedJPId = '';
-  String selectedRId = '';
-
-  List<EmployeeData> employees = [];
-  List<String> employeeNames = [];
-  List<JobPositionData> jobPositions = [];
-  List<String> jobPositionNames = [];
+  String? selectedRole; 
 
   void initState() {
     super.initState();
     selectedRole = widget.initialRole;
-    introRoleController.addListener(() {
+    roleController.addListener(() {
       setState(() {
-        isNameFilled = introRoleController.text.isNotEmpty;
+        isNameFilled = roleController.text.isNotEmpty;
       });
     });
-    fetchAndSetDepartments();
-    fetchAndSetEmployees();
-  }
-
-  void _handleSelectionRecruiterId(String recruiterId) {
-    setState(() {
-      selectedRId = recruiterId;
-    });
-  }
-
-  void _handleSelectionJobId(String jobPositionId) {
-    setState(() {
-      selectedJPId = jobPositionId;
-    });
-  }
-
-  void _handleSelectionInterviewerId(String interviewerId) {
-    setState(() {
-      selectedIId = interviewerId;
-    });
-  }
-
-  Future<void> fetchAndSetDepartments() async {
-    try {
-      departments = await fetchDepartments();
-      setState(() {
-        departmentNames = departments.map((dept) => dept.department).toList();
-        departmentNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching departments: $e');
-    }
-  }
-
-    Future<void> fetchAndSetEmployees() async {
-    try {
-      employees = await fetchEmployees();
-      setState(() {
-        employeeNames = employees.map((emp) => emp.name).toList();
-        employeeNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching employees: $e');
-    }
-  }
-
-  Future<void> fetchAndSetJobs() async {
-    try {
-      jobPositions = await fetchJobPositions();
-      setState(() {
-        jobPositionNames = jobPositions.map((jp) => jp.name).toList();
-        jobPositionNames.sort((a, b) => a.compareTo(b));
-      });
-    } catch (e) {
-      print('Error fetching employees: $e');
-    }
   }
 
   @override
   void dispose() {
+    introRoleController.dispose();
+    roleController.dispose();
+    nameController.dispose();
+    mailController.dispose();
+    mobileController.dispose();
+    departmentController.dispose();
+    profileController.dispose();
+    degreeController.dispose();
+    interviewerController.dispose();
+    recruiterController.dispose();
+    elevationController.dispose();
+    availabilityController.dispose();
+    expectedSalaryController.dispose();
+    proposedSalaryController.dispose();
+    summaryController.dispose();
     super.dispose();
   }
 
@@ -135,56 +81,6 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
       setState(() {
         controller.text = picked.toString().substring(0, 10);
       });
-    }
-  }
-
-  Future<void> createCandidate() async {
-    final platformOptions = PlatformOptions.currentPlatform;
-    final apiUrl =
-        'http://${PlatformOptions.host}:${PlatformOptions.port}/api/v1/recruitment/candidate';
-        
-    final url = Uri.parse(apiUrl);
-
-    final candidate = {
-      'id': '',
-      'name': nameController.text.isNotEmpty ? nameController.text : '',
-      'subject': subjectController.text.isNotEmpty ? subjectController.text : '',
-      'mail': mailController.text.isNotEmpty ? mailController.text : '',
-      'mobile': mobileController.text.isNotEmpty ? mobileController.text : '',
-      'profileAddress': '',
-      'degree': degreeController.text.isNotEmpty ? degreeController.text : '',
-      'interviewerId': selectedIId.isNotEmpty ? selectedIId : '',
-      'recruiterId': selectedRId.isNotEmpty ? selectedRId : '',
-      'appliedJob': introRoleController.text.isEmpty ? introRoleController : '',
-      'department': departmentController.text.isNotEmpty ? departmentController.text : '',
-      'source': sourceController.text.isNotEmpty ? sourceController.text : '',
-      'medium': '',
-      'availability': availabilityController.text.isNotEmpty ? availabilityController.text : DateTime.now().toIso8601String(),
-      'evaluation': double.tryParse(evaluationController.text) ?? 0.0,
-      'expectedSalary': double.tryParse(expectedSalaryController.text) ?? 0.0,
-      'proposedSalary': double.tryParse(proposedSalaryController.text) ?? 0.0,
-      'applicationSummary': summaryController.text.isNotEmpty ? summaryController.text : '',
-      'jobPositionId': selectedJPId.isNotEmpty ? selectedJPId : '',
-      'stage': int.tryParse(stageController.text) ?? 0,
-    };
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(candidate),
-      );
-
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Create job position successfully')),
-        );
-      } else {
-        print('Failed to create job position: ${response.body}');
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error creating job position: $e')),
-      );
     }
   }
 
@@ -251,44 +147,6 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
             }).toList(),
             onChanged: (value) {
               controller.text = value!;
-            },
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: snackBarColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildDropdownRowAPI(String label, TextEditingController controller, List<Map<String, String>> items, {Function(String)? onChanged}) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 200,
-          child: Text(
-            label,
-            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-        ),
-        Expanded(
-          child: DropdownButtonFormField<String>(
-            dropdownColor: dropdownColor,
-            value: controller.text.isEmpty ? null : controller.text,
-            items: items.map((item) {
-              return DropdownMenuItem<String>(
-                value: item['id'],
-                child: Text(item['name']!, style: const TextStyle(color: textColor)),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                controller.text = value!;
-                if (onChanged != null) {
-                  onChanged(value);
-                }
-              });
             },
             decoration: const InputDecoration(
               filled: true,
@@ -383,25 +241,18 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
                       const SizedBox(height: 10),
                       buildTextFieldRow('Mobile', mobileController),
                       const SizedBox(height: 10),
-                      buildTextFieldRow('Subject', subjectController),
+                      buildTextFieldRow('LinkedIn Profile', profileController),
                       const SizedBox(height: 10),
-                      buildTextFieldRow('LinkedIn Profile', sourceController),
-                      const SizedBox(height: 10),
-                      buildDropdownRow('Degree', degreeController, EmployeeData.defaultCertifications),
+                      buildDropdownRow('Degree', degreeController, EmployeeInf.defaultCertifications),
                       const SizedBox(height: 40),
                       const Text('JOB', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
                       const Divider(
                         thickness: 0.5,
-                        color: textColor,
+                        color: textColor, 
                       ),
-                      buildDropdownRowAPI(
-                                'Applied Job',
-                                jobController,
-                                jobPositions.map((mgr) => {'id': mgr.id, 'name': mgr.name}).toList(),
-                                onChanged: _handleSelectionJobId
-                              ),
+                      buildDropdownRow('Applied Job', roleController, getJobPositions(jobPositions)),
                       const SizedBox(height: 10),
-                      buildDropdownRow('Department', departmentController, departmentNames),
+                      buildDropdownRow('Department', departmentController, getDepartments()),
                     ],
                   ),
                 ),
@@ -410,19 +261,9 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      buildDropdownRowAPI(
-                                'Recruiter',
-                                recruiterController,
-                                employees.map((mgr) => {'id': mgr.id, 'name': mgr.name}).toList(),
-                                onChanged: _handleSelectionRecruiterId
-                              ),
-                              const SizedBox(height: 10),
-                              buildDropdownRowAPI(
-                                'Interviewer',
-                                interviewerController,
-                                employees.map((mgr) => {'id': mgr.id, 'name': mgr.name}).toList(),
-                                onChanged: _handleSelectionInterviewerId,
-                              ),
+                      buildDropdownRow('Interviewer', interviewerController, employees.map((employee) => employee.name).toList()),
+                      const SizedBox(height: 10),
+                      buildDropdownRow('Recruiter', recruiterController, employees.map((employee) => employee.name).toList()),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -435,10 +276,10 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
                           RatingBar(
                             filledIcon: Icons.star,
                             emptyIcon: Icons.star_border,
-                            initialRating: double.tryParse(evaluationController.text) ?? 0.0,
+                            initialRating: double.tryParse(elevationController.text) ?? 0.0,
                             onRatingChanged: (initialRating) {
                               setState(() {
-                                evaluationController.text = initialRating.toString();
+                                elevationController.text = initialRating.toString();
                               });
                             },
                             maxRating: 3,
@@ -480,8 +321,28 @@ class _CandidateApplicationState extends State<CandidateApplication> with Single
       ),
       floatingActionButton: isNameFilled
           ? FloatingActionButton(
-              onPressed: () async {
-                await createCandidate();
+              onPressed: () {
+                final newApplication = CandidateInf(
+                  introRole: introRoleController.text,
+                  role: roleController.text,
+                  department: departmentController.text,
+                  name: nameController.text,
+                  mail: mailController.text,
+                  mobile: mobileController.text,
+                  profile: profileController.text,
+                  degree: degreeController.text,
+                  interviewer: interviewerController.text,
+                  recruiter: recruiterController.text,
+                  elevation: double.tryParse(elevationController.text),
+                  availability: availabilityController.text,
+                  summary: summaryController.text,
+                  expectedSalary: double.tryParse(expectedSalaryController.text),
+                  proposedSalary: double.tryParse(proposedSalaryController.text),
+                  stage: currentStep,
+                );
+                setState(() {
+                  candidates.add(newApplication);
+                });
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage(initialRole: selectedRole,)));
               },
               child: const Icon(Icons.create),
