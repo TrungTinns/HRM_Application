@@ -103,40 +103,16 @@ class _ContractsState extends State<Contracts> {
             ],
             [
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Department())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => EmployeeManage())),
+              // () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => PositionManage())),
             ],
           ],
           activeDropdowns: const ['Employees', 'Reporting'],
           setActiveDropdown: (dropdown) {
+            setState(() {
+              activeDropdown = dropdown;
+            });
           },
-          config: configuration(
-            isActive: activeDropdown == 'Configuration',
-            onOpen: () => setActiveDropdown('Configuration'),
-            onClose: () => setActiveDropdown(null),
-            titles: const ['Setting', 'Employee', 'Recruitment'],
-            options: const [
-              ['Setting', 'Activity Plan'],
-              ['Departments', 'Work Locations', 'Working Schedules', 'Departure Reasons', 'Skill Types'],
-              ['Job Positions', 'Employment Types']
-            ],
-            navigators: [
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-            ],
-          )
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -198,16 +174,16 @@ class _ContractsState extends State<Contracts> {
                   ],
                   navigators: [
                     [
-                      () => Navigator.pushNamed(context, '/my_team'), 
-                      () => Navigator.pushNamed(context, '/my_department'), 
-                      () => Navigator.pushNamed(context, '/newly_hired'), 
+                      () => Navigator.pushNamed(context, '/my_team'),
+                      () => Navigator.pushNamed(context, '/my_department'),
+                      () => Navigator.pushNamed(context, '/newly_hired'),
                       () => Navigator.pushNamed(context, '/achieved')],
                     [
-                      () => Navigator.pushNamed(context, '/manager'), 
-                      () => Navigator.pushNamed(context, '/department'), 
-                      () => Navigator.pushNamed(context, '/job'), 
-                      () => Navigator.pushNamed(context, '/skill'), 
-                      () => Navigator.pushNamed(context, '/start_date'), 
+                      () => Navigator.pushNamed(context, '/manager'),
+                      () => Navigator.pushNamed(context, '/department'),
+                      () => Navigator.pushNamed(context, '/job'),
+                      () => Navigator.pushNamed(context, '/skill'),
+                      () => Navigator.pushNamed(context, '/start_date'),
                       () => Navigator.pushNamed(context, '/tags')],
                     [() => print('Save Current Search')],
                   ],)
@@ -218,21 +194,23 @@ class _ContractsState extends State<Contracts> {
         ),
         backgroundColor: snackBarColor,
       ),
-      body: widget.name != null 
-            // widget.role != null ||
-            // widget.department != null ||
-            // widget.contractTypeController != null ||
-            // widget.salaryStructureController != null
-      ? ContractForm(
-          name: widget.name,
-          // role: widget.role,
-          // department: widget.department,
-          // contractTypeController: widget.contractTypeController,
-          // salaryStructureController: widget.salaryStructureController
-        )
-      : showContractForm
-          ? ContractForm()
-          : ContractDataTable(),
+      body: 
+      // widget.name != null
+      //       // widget.role != null ||
+      //       // widget.department != null ||
+      //       // widget.contractTypeController != null ||
+      //       // widget.salaryStructureController != null
+      // ? ContractForm(
+      //     name: widget.name,
+      //     // role: widget.role,
+      //     // department: widget.department,
+      //     // contractTypeController: widget.contractTypeController,
+      //     // salaryStructureController: widget.salaryStructureController
+      //   )
+      // : showContractForm
+      //     ? ContractForm()
+      //     : 
+          ContractDataTable(),
     );
   }
 }

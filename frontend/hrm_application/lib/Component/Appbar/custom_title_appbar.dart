@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hrm_application/views/home/home.dart';
+import 'package:hrm_application/Views/home/home.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
 class CustomTitleAppbar extends StatelessWidget {
@@ -11,7 +11,6 @@ class CustomTitleAppbar extends StatelessWidget {
   final List<List<Function>> optionNavigations;
   final List<String> activeDropdowns;
   final Function(String) setActiveDropdown;
-  final Widget config;
 
   CustomTitleAppbar({
     required this.ctx,
@@ -21,7 +20,6 @@ class CustomTitleAppbar extends StatelessWidget {
     required this.optionNavigations,
     required this.activeDropdowns,
     required this.setActiveDropdown,
-    required this.config,
   });
 
   @override
@@ -61,7 +59,6 @@ class CustomTitleAppbar extends StatelessWidget {
           ),
           const SizedBox(width: 10),
         ],
-        config,  
         const Spacer(),
         IconButton(
           icon: const Icon(Icons.wechat),

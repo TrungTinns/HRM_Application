@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hrm_application/views/services/EmployeeManage/contract/contracts_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/department/department_inf.dart';
-import 'package:hrm_application/views/services/EmployeeManage/employee/employees_inf.dart';
-import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/jobposition_inf.dart';
+import 'package:hrm_application/API/api.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Contract/Data/contracts_data.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Employee/Data/employees_data.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
 import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class JobPositionForm extends StatefulWidget {
   @override
@@ -24,6 +28,11 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
   bool isPublished = false;
   TabController? tabController;
   bool isNameFilled = false;
+  List<DepartmentData> departments = [];
+  List<String> departmentNames = [];
+  String selectedId = '';
+  List<EmployeeData> employees = [];
+  List<String> employeeNames = [];
 
   void initState() {
     super.initState();
@@ -33,6 +42,44 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
         isNameFilled = roleController.text.isNotEmpty;
       });
     });
+    fetchAndSetDepartments();
+    fetchAndSetEmployees();
+  }
+
+  void _handleSelectionRecruiterId(String recruiterId) {
+    setState(() {
+      selectedId = recruiterId;
+    });
+  }
+
+  void _handleSelectionInterviewerId(String interviewerId) {
+    setState(() {
+      selectedId = interviewerId;
+    });
+  }
+
+  Future<void> fetchAndSetDepartments() async {
+    try {
+      departments = await fetchDepartments();
+      setState(() {
+        departmentNames = departments.map((dept) => dept.department).toList();
+        departmentNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching departments: $e');
+    }
+  }
+
+    Future<void> fetchAndSetEmployees() async {
+    try {
+      employees = await fetchEmployees();
+      setState(() {
+        employeeNames = employees.map((emp) => emp.name).toList();
+        employeeNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching employees: $e');
+    }
   }
 
   @override
@@ -96,6 +143,80 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
       ],
     );
   }
+
+  Widget buildDropdownRowAPI(String label, TextEditingController controller, List<Map<String, String>> items, {Function(String)? onChanged}) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 200,
+          child: Text(
+            label,
+            style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+        ),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            dropdownColor: dropdownColor,
+            value: controller.text.isEmpty ? null : controller.text,
+            items: items.map((item) {
+              return DropdownMenuItem<String>(
+                value: item['id'],
+                child: Text(item['name']!, style: const TextStyle(color: textColor)),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                controller.text = value!;
+                if (onChanged != null) {
+                  onChanged(value);
+                }
+              });
+            },
+            decoration: const InputDecoration(
+              filled: true,
+              fillColor: snackBarColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> createjobPosition() async {
+    final url = Uri.parse('http://localhost:9002/api/v1/recruitment/jobPosition');
+
+    final jobPosition = {
+      'id': '',
+      'name': roleController.text.isNotEmpty ? roleController.text : '',
+      'department': departmentController.text.isNotEmpty ? departmentController.text : '',
+      'jobLocation': jobLocationController.text.isNotEmpty? jobLocationController.text : '',
+      'empType': typeController.text.isNotEmpty? typeController.text : '',
+      'mailAlias': mailController.text.isNotEmpty? mailController.text : '',
+      'target': int.tryParse(targetController.text) ?? 0,
+      'recruiterId':  selectedId.isNotEmpty? selectedId : '',
+      'interviewers': selectedId.isNotEmpty? selectedId : '',
+      'description': detailsController.text.isNotEmpty? detailsController.text : '',
+    };
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(jobPosition),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Create job position successfully')),
+        );
+      } else {
+        print('Failed to create job position: ${response.body}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error creating job position: $e')),
+      );
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -148,12 +269,12 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Column( 
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              buildDropdownRow('Department', departmentController, getDepartments()),
+                              buildDropdownRow('Department', departmentController, departmentNames),
                               const SizedBox(height: 10),
-                              buildDropdownRow('Job Location', jobLocationController, JobPositionInf.defaultJobLocations),
+                              buildDropdownRow('Job Location', jobLocationController, JobPositionData.defaultJobLocations),
                               const SizedBox(height: 10),
                               buildTextFieldRow('Email Alias', mailController),
                               const SizedBox(height: 10),
@@ -163,38 +284,29 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
                         ),
                         const SizedBox(width: 20),
                         Expanded(
-                          child: Column( 
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               buildTextFieldRow('Target', targetController),
                               const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Is Published',
-                                    style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
-                                  ),
-                                  const SizedBox(width: 100),
-                                  Checkbox(
-                                    value: isPublished,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isPublished = value!;
-                                      });
-                                    },
-                                  ),
-                                ],
+                              buildDropdownRowAPI(
+                                'Recruiter',
+                                recruiterController,
+                                employees.map((mgr) => {'id': mgr.id, 'name': mgr.name}).toList(),
+                                onChanged: _handleSelectionRecruiterId
                               ),
                               const SizedBox(height: 10),
-                              buildDropdownRow('Recruiter', recruiterController, employees.map((employee) => employee.name).toList()),
-                              const SizedBox(height: 10),
-                              buildDropdownRow('Interviewers', interviewerController, employees.map((employee) => employee.name).toList()),
+                              buildDropdownRowAPI(
+                                'Interviewer',
+                                interviewerController,
+                                employees.map((mgr) => {'id': mgr.id, 'name': mgr.name}).toList(),
+                                onChanged: _handleSelectionInterviewerId,
+                              ),
                             ]
                           ),
-                        ),  
+                        ),
                       ],
-                    ),                   
+                    ),
                   ),
                   SingleChildScrollView(
                     child: Column(
@@ -212,22 +324,8 @@ class _JobPositionFormState extends State<JobPositionForm> with SingleTickerProv
       ),
       floatingActionButton: isNameFilled
           ? FloatingActionButton(
-              onPressed: () {
-                final newJobPosition = JobPositionInf(
-                  role: roleController.text,
-                  department: departmentController.text,
-                  jobLocation: jobLocationController.text,
-                  mail: mailController.text,
-                  type: typeController.text,
-                  target: targetController.text.isEmpty ? 0 : int.parse(targetController.text),
-                  isPublished: isPublished,
-                  recruiter: recruiterController.text,
-                  interviewer: interviewerController.text,
-                  details: detailsController.text,
-                );
-                setState(() {
-                  jobPositions.add(newJobPosition);
-                });
+              onPressed: () async {
+                await createjobPosition();
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) => RecruitmentManage()));
               },
               child: const Icon(Icons.create),

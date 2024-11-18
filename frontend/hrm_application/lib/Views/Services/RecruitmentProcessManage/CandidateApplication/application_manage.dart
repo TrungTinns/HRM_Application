@@ -6,8 +6,9 @@ import 'package:hrm_application/Component/Search/searchBox.dart';
 import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Application/candidate_application.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Data/cadidate_data.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Progress/application_progress.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/cadidate_inf.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
 import 'package:hrm_application/views/services/RecruitmentProcessManage/jobPosition/recruitment.dart';
 import 'package:hrm_application/widgets/colors.dart';
 
@@ -24,20 +25,49 @@ class _ApplicationManageState extends State<ApplicationManage> {
   String pageName = 'Applications';
   bool showCandidateApplication = false;
   String? activeDropdown;
-  bool showAllApplication = true; 
-  String? selectedRole; 
+  bool showAllApplication = true;
+  String? selectedRole;
+  List<CandidateData> candidates = [];
+  List<String> candidateNames = [];
+  List<JobPositionData> jobPositions = [];
+  List<String> jobPositionNames = [];
 
   @override
   void initState() {
     super.initState();
     selectedRole = widget.initialRole;
     showAllApplication = selectedRole == null;
+    fetchAndSetCandidates();
   }
 
   void setActiveDropdown(String? dropdown) {
     setState(() {
       activeDropdown = dropdown;
     });
+  }
+
+  Future<void> fetchAndSetjobPositions() async {
+    try {
+      jobPositions = await fetchJobPositions();
+      setState(() {
+        jobPositionNames = jobPositions.map((dept) => dept.name).toList();
+        jobPositionNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching job position: $e');
+    }
+  }
+
+  Future<void> fetchAndSetCandidates() async {
+    try {
+      candidates = await fetchCandidates();
+      setState(() {
+        candidateNames = candidates.map((cdd) => cdd.name).toList();
+        candidateNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching candidates: $e');
+    }
   }
 
   void toggleCandidateApplication() {
@@ -78,11 +108,11 @@ class _ApplicationManageState extends State<ApplicationManage> {
     });
   }
   
-  List<CandidateInf> get roleApplications {
+  List<CandidateData> get roleApplications {
     if (showAllApplication) {
       return candidates;
     } else if (selectedRole != null) {
-      return candidates.where((app) => app.role == selectedRole).toList();
+      return candidates.where((app) => app.jobPositionId == selectedRole).toList();
     } else {
       return [];
     }
@@ -93,7 +123,7 @@ class _ApplicationManageState extends State<ApplicationManage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: 
+        title:
         CustomTitleAppbar(
           ctx: context,
           service: 'Recruitment',
@@ -108,8 +138,8 @@ class _ApplicationManageState extends State<ApplicationManage> {
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage())),
             ],
             [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
             ],
@@ -119,39 +149,7 @@ class _ApplicationManageState extends State<ApplicationManage> {
             setState(() {
               activeDropdown = dropdown;
             });
-          }, 
-          config: configuration(
-            isActive: activeDropdown == 'Configuration',
-            onOpen: () => setActiveDropdown('Configuration'),
-            onClose: () => setActiveDropdown(null),
-            titles: const ['', 'Job Positons', 'Applications', 'Employees', 'Activities'],
-            options: const [
-              ['Setting'],
-              ['Employment Types'],
-              ['Refuse Reasons'],
-              ['Departments', 'Skill Types'],
-              ['Activities Types', 'Activity Plans'],
-            ],
-            navigators: [
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-            ],
-          )
+          },
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -164,10 +162,10 @@ class _ApplicationManageState extends State<ApplicationManage> {
                     toggleCandidateApplication();
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, 
+                    foregroundColor: Colors.white,
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), 
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                   child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),

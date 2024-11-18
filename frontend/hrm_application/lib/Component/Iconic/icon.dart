@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget appIcon(BuildContext context) {
+Widget appIcon() {
   return RichText(
     text: TextSpan(
       children: <TextSpan>[
@@ -29,7 +29,7 @@ Widget appIcon(BuildContext context) {
 
 AppBar customAppBar(BuildContext context) {
   return AppBar(
-    title: appIcon(context),
+    title: appIcon(),
     backgroundColor: Colors.transparent,
     iconTheme: const IconThemeData(color: Colors.black87),
     centerTitle: true,

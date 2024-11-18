@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hrm_application/API/api.dart';
 import 'package:hrm_application/Component/Appbar/custom_title_appbar.dart';
 import 'package:hrm_application/Component/Configuration/configuration.dart';
 import 'package:hrm_application/Component/FilterSearch/filter_search.dart';
 import 'package:hrm_application/Component/Search/searchBox.dart';
 import 'package:hrm_application/Views/Home/home.dart';
 import 'package:hrm_application/Views/Services/EmployeeManage/Contract/contracts.dart';
-import 'package:hrm_application/Views/Services/EmployeeManage/Department/department_inf.dart';
+import 'package:hrm_application/Views/Services/EmployeeManage/Department/Data/department_data.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/application_manage.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Card/jobposition_recruit_card.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
 import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Form/jobposition_form.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/jobposition_inf.dart';
 import 'package:hrm_application/Widgets/colors.dart';
 
 
@@ -25,12 +26,54 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
   bool showAllJobPositions = true;
   String? activeDropdown;
   bool _isSidebarOpen = true;
-  List<JobPositionInf> filteredJobPositions = [];
+  List<JobPositionData> filteredJobPositions = [];
+  List<JobPositionData> jobPositions= [];
+  List<String> jobPositionNames = [];
+  List<DepartmentData> departments = [];
+  List<String> departmentNames = [];
   String? selectedDepartment;
 
   void initState() {
     super.initState();
     filteredJobPositions = List.from(jobPositions);
+    fetchAndSetjobPositions();
+    fetchAndSetDepartments();
+  }
+
+  Future<void> fetchAndSetjobPositions() async {
+    try {
+      jobPositions = await fetchJobPositions();
+      setState(() {
+        jobPositionNames = jobPositions.map((jp) => jp.name).toList();
+        jobPositionNames.sort((a, b) => a.compareTo(b));
+        filteredJobPositions = jobPositions;
+      });
+    } catch (e) {
+      print('Error fetching departments: $e');
+    }
+  }
+
+  Future<void> fetchAndSetDepartments() async {
+    try {
+      departments = await fetchDepartments();
+      setState(() {
+        departmentNames = departments.map((dept) => dept.department).toList();
+        departmentNames.sort((a, b) => a.compareTo(b));
+      });
+    } catch (e) {
+      print('Error fetching departments: $e');
+    }
+  }
+
+  void filterjobPositionsAll() async {
+    try {
+      List<JobPositionData> jobPositions = await fetchJobPositions();
+      setState(() {
+        filteredJobPositions = jobPositions;
+      });
+    } catch (e) {
+      print('Error fetching all job positions: $e');
+    }
   }
 
   void setActiveDropdown(String? dropdown) {
@@ -77,40 +120,16 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
     });
   }
 
-  void deleteJobPosition(String role) {
-    setState(() {
-      jobPositions.removeWhere((jobPosition) => jobPosition.role == role);
-      filteredJobPositions.removeWhere((jobPosition) => jobPosition.role == role);
-    });
-  }
-
-  void handleUpdate(JobPositionInf updatedJobPosition) {
-    setState(() {
-      final index =
-          jobPositions.indexWhere((jp) => jp.role == updatedJobPosition.role);
-      if (index != -1) {
-        jobPositions[index] = updatedJobPosition;
-        if (selectedDepartment == null ||
-            updatedJobPosition.department == selectedDepartment) {
-          final filteredIndex = filteredJobPositions
-              .indexWhere((jp) => jp.role == updatedJobPosition.role);
-          if (filteredIndex != -1) {
-            filteredJobPositions[filteredIndex] = updatedJobPosition;
-          }
-        }
-      }
-    });
-  }
-
   void filterJobPositions(String? department) {
     setState(() {
       if (department == null || department.isEmpty || department == 'All') {
         filteredJobPositions = List.from(jobPositions);
         selectedDepartment = null;
       } else {
-        filteredJobPositions =
-            jobPositions.where((emp) => emp.department == department).toList();
-        selectedDepartment = department;
+        filteredJobPositions = jobPositions
+          .where((jobPosition) => jobPosition.department == department)
+          .toList();
+      selectedDepartment = department;
       }
     });
   }
@@ -135,8 +154,8 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => ApplicationManage())),
             ],
             [
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
+              () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
               () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Contracts())),
             ],
@@ -146,39 +165,7 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
             setState(() {
               activeDropdown = dropdown;
             });
-          }, 
-          config: configuration(
-            isActive: activeDropdown == 'Configuration',
-            onOpen: () => setActiveDropdown('Configuration'),
-            onClose: () => setActiveDropdown(null),
-            titles: const ['', 'Job Positons', 'Applications', 'Employees', 'Activities'],
-            options: const [
-              ['Setting'],
-              ['Employment Types'],
-              ['Refuse Reasons'],
-              ['Departments', 'Skill Types'],
-              ['Activities Types', 'Activity Plans'],
-            ],
-            navigators: [
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-              [
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-                () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => Home())),
-              ],
-            ],
-          )
+          },
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -191,10 +178,10 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
                     toggleJobPositionForm();
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, 
+                    foregroundColor: Colors.white,
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), 
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                   child: const Text('New', style: TextStyle(color: Colors.white, fontSize: 16)),
@@ -263,97 +250,101 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
       ),
       body: showJobPositionForm
           ? JobPositionForm()
-          : Row(
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: _isSidebarOpen ? 250 : 25,
-                  child: Material(
-                    color: snackBarColor,
-                    elevation: 4.0,
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: _isSidebarOpen
-                          ? <Widget>[
-                              const SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(width: 20),
-                                  const Icon(Icons.groups,
-                                      color: secondaryColor, size: 20),
-                                  const Text(' DEPARTMENT',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: textColor,
-                                          fontWeight: FontWeight.bold)),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _isSidebarOpen = !_isSidebarOpen;
-                                      });
-                                    },
-                                    child: const Icon(
-                                      Icons.keyboard_double_arrow_left,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              ListTile(
-                                title: const Text(
-                                  'All',
-                                  style: TextStyle(color: textColor),
-                                ),
-                                onTap: () {
-                                  filterJobPositions('All');
-                                },
-                              ),
-                              ...departments
-                                  .map((department) => ListTile(
-                                        title: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              department.department,
-                                              style: const TextStyle(color: textColor, fontSize: 16)
-                                            ),
-                                            Text(
-                                              '${countJobPositionsInDepartment(jobPositions, department.department)}',
-                                              style: const TextStyle(
-                                                color: termTextColor,
-                                                fontSize: 16,)
-                                              ),
-                                          ],
+          : FutureBuilder<List<JobPositionData>>(
+              future: fetchJobPositions(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData) {
+                  return Center(child: Text('No data found'));
+                } else {
+                  return Row(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: _isSidebarOpen ? 250 : 25,
+                        child: Material(
+                          color: snackBarColor,
+                          elevation: 4.0,
+                          child: ListView(
+                            padding: EdgeInsets.zero,
+                            children: _isSidebarOpen
+                                ? <Widget>[
+                                    const SizedBox(height: 30),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(width: 20),
+                                        const Icon(Icons.groups,
+                                            color: secondaryColor, size: 20),
+                                        const Text(' DEPARTMENT',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: textColor,
+                                                fontWeight: FontWeight.bold)),
+                                        const Spacer(),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _isSidebarOpen = !_isSidebarOpen;
+                                            });
+                                          },
+                                          child: const Icon(
+                                            Icons.keyboard_double_arrow_left,
+                                            size: 20,
+                                            color: Colors.white,
+                                          ),
                                         ),
+                                        const SizedBox(width: 10),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    ListTile(
+                                      title: const Text(
+                                        'All',
+                                        style: TextStyle(color: textColor),
+                                      ),
+                                      onTap: () {
+                                        filterjobPositionsAll();
+                                      },
+                                    ),
+                                    ...departmentNames.map((deptName) => ListTile(
+                                      title: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            deptName,
+                                            style: const TextStyle(
+                                              color: textColor,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        filterJobPositions(deptName);
+                                      },
+                                    )).toList(),
+                              ]
+                                : [
+                                    const SizedBox(height: 30),
+                                    GestureDetector(
                                         onTap: () {
-                                          filterJobPositions(
-                                              department.department);
+                                          setState(() {
+                                            _isSidebarOpen = !_isSidebarOpen;
+                                          });
                                         },
-                                      ))
-                                  .toList(),
-                            ]
-                          : [
-                              const SizedBox(height: 30),
-                              GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _isSidebarOpen = !_isSidebarOpen;
-                                    });
-                                  },
-                                  child: const Icon(
-                                    Icons.keyboard_double_arrow_right,
-                                    size: 20,
-                                    color: Colors.white,
-                                  )),
-                            ],
-                    ),
-                  ),
-                ),
+                                        child: const Icon(
+                                          Icons.keyboard_double_arrow_right,
+                                          size: 20,
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                          ),
+                        ),
+                      ),
                 Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -380,18 +371,16 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
                   itemBuilder: (context, index) {
                     final jobPosition = filteredJobPositions[index];
                     return JobPositionCard(
+                      id: jobPosition.id,
                       department: jobPosition.department,
                       mail: jobPosition.mail,
                       jobLocation: jobPosition.jobLocation,
-                      role: jobPosition.role,
-                      type: jobPosition.type,
+                      name: jobPosition.name,
+                      empType: jobPosition.empType,
                       target: jobPosition.target,
-                      isPublished: jobPosition.isPublished,
-                      recruiter: jobPosition.recruiter,
-                      interviewer: jobPosition.interviewer,
+                      recruiterId: jobPosition.recruiterId,
+                      interviewerId: jobPosition.interviewerId,
                       details: jobPosition.details,
-                      onDelete: () => deleteJobPosition(jobPosition.role),
-                      onUpdate: handleUpdate,
                     );
                   },
                 );
@@ -399,7 +388,8 @@ class _RecruitmentManageState extends State<RecruitmentManage> {
             ),
           ),
               ],
-            ),
+            );
+                }})
     );
   }
 }

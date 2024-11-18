@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appflowy_board/appflowy_board.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Detail/candidate_detail.dart';
-import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/cadidate_inf.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/CandidateApplication/Data/cadidate_data.dart';
+import 'package:hrm_application/Views/Services/RecruitmentProcessManage/JobPosition/Data/jobposition_data.dart';
 import 'package:hrm_application/widgets/colors.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
@@ -20,6 +20,9 @@ class ProgressBoard extends StatefulWidget {
 class _ProgressBoardState extends State<ProgressBoard> {
   final AppFlowyBoardController controller = AppFlowyBoardController();
   late AppFlowyBoardScrollController boardController;
+  late List<CandidateData> candidates;
+  // List<CandidateData> candidates = [];
+  // List<String> candidateNames = [];
 
   @override
   void initState() {
@@ -27,6 +30,18 @@ class _ProgressBoardState extends State<ProgressBoard> {
     boardController = AppFlowyBoardScrollController();
     initializeGroups();
   }
+
+  // Future<void> fetchAndSetCandidates() async {
+  //   try {
+  //     candidates = await fetchCandidates();
+  //     setState(() {
+  //       candidateNames = candidates.map((cdd) => cdd.name).toList();
+  //       candidateNames.sort((a, b) => a.compareTo(b));
+  //     });
+  //   } catch (e) {
+  //     print('Error fetching employees: $e');
+  //   }
+  // }
 
   void refreshBoard() {
     setState(() {
@@ -37,7 +52,7 @@ class _ProgressBoardState extends State<ProgressBoard> {
 
   void initializeGroups() {
     controller.clear();
-    final stages = CandidateInf.defaultStages;
+    final stages = CandidateData.defaultStages;
     for (var i = 0; i < stages.length; i++) {
       String stageName = stages[i];
       List<CandidateItem> items = getCandidatesByStageAndRole(i + 1, widget.initialRole)
@@ -54,6 +69,7 @@ class _ProgressBoardState extends State<ProgressBoard> {
       );
       controller.addGroup(group);
     }
+    print(candidates);
   }
 
   @override
@@ -110,7 +126,7 @@ class _ProgressBoardState extends State<ProgressBoard> {
             fontWeight: FontWeight.bold,
           ),
         );
-      } else if (item.candidate.isRefused) {
+      } else if (!item.candidate.isOffered) {
         badgeColor = Colors.red;
         textSpan = const TextSpan(
           text: 'Refused',
@@ -156,38 +172,38 @@ class _ProgressBoardState extends State<ProgressBoard> {
                         ),
                         IconButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (ctx) => CandidateDetail(
-                                  introRole: item.candidate.introRole,
-                                  role: item.candidate.role,
-                                  name: item.candidate.name,
-                                  mail: item.candidate.mail,
-                                  mobile: item.candidate.mobile,
-                                  department: item.candidate.department,
-                                  profile: item.candidate.profile,
-                                  degree: item.candidate.degree,
-                                  interviewer: item.candidate.interviewer,
-                                  recruiter: item.candidate.recruiter,
-                                  availability: item.candidate.availability,
-                                  expectedSalary: item.candidate.expectedSalary,
-                                  proposedSalary: item.candidate.proposedSalary,
-                                  summary: item.candidate.summary,
-                                  elevation: item.candidate.elevation,
-                                  stage: item.candidate.stage,
-                                  onDelete: item.deleteCandidate,
-                                  isRefused: item.candidate.isRefused,
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (ctx) => CandidateDetail(
+                            //       introRole: item.candidate.introRole,
+                            //       role: item.candidate.role,
+                            //       name: item.candidate.name,
+                            //       mail: item.candidate.mail,
+                            //       mobile: item.candidate.mobile,
+                            //       department: item.candidate.department,
+                            //       profile: item.candidate.profile,
+                            //       degree: item.candidate.degree,
+                            //       interviewer: item.candidate.interviewer,
+                            //       recruiter: item.candidate.recruiter,
+                            //       availability: item.candidate.availability,
+                            //       expectedSalary: item.candidate.expectedSalary,
+                            //       proposedSalary: item.candidate.proposedSalary,
+                            //       summary: item.candidate.summary,
+                            //       elevation: item.candidate.elevation,
+                            //       stage: item.candidate.stage,
+                            //       onDelete: item.deleteCandidate,
+                            //       isRefused: item.candidate.isRefused,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           icon: const Icon(Icons.more_vert),
                         )
                       ],
                     ),
                   ),
-                  Text(item.candidate.role),
+                  Text(item.candidate.jobPositionId),
                   const SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,10 +211,10 @@ class _ProgressBoardState extends State<ProgressBoard> {
                       RatingBar(
                         filledIcon: Icons.star,
                         emptyIcon: Icons.star_border,
-                        initialRating: item.candidate.elevation!,
+                        initialRating: item.candidate.evaluation!,
                         onRatingChanged: (value) {
                           setState(() {
-                            item.candidate.elevation = value;
+                            item.candidate.evaluation = value;
                           });
                         },
                         maxRating: 3,
@@ -221,24 +237,33 @@ class _ProgressBoardState extends State<ProgressBoard> {
 
 }
 
-List<CandidateInf> getCandidatesByStageAndRole(int stage, String? role) {
+List<CandidateData> getCandidatesByStageAndRole(int stage, String? role) {
+  List<CandidateData> candidates = [];
   if (role == null) {
     return candidates.where((candidate) => candidate.stage == stage).toList();
   } else {
-    return candidates.where((candidate) => candidate.stage == stage && candidate.role == role).toList();
+    return candidates.where((candidate) => candidate.stage == stage && candidate.jobPositionId == role).toList();
   }
 }
 
 class CandidateItem extends AppFlowyGroupItem {
-  final CandidateInf candidate;
+  final CandidateData candidate;
   final VoidCallback onDelete;
 
   CandidateItem(this.candidate, {required this.onDelete});
 
   @override
-  String get id => candidate.name;
+  String get id => candidate.id;
 
   void deleteCandidate() {
     onDelete();
   }
+}
+
+Future<List<JobPositionData>> _jobPositions = fetchJobPositions();
+
+Future<String> getRoleById(String id) async {
+  final jobPositions = await _jobPositions;
+  final jobPosition = jobPositions.firstWhere((job) => job.id == id);
+  return jobPosition.name;
 }
